@@ -1,0 +1,14 @@
+.RData
+.Rhistory
+*.results
+.png
+.mov
+*cache/
+presentations/
+movies/
+summer_credit_pool_app/
+.Rproj.user
+packrat/lib*/
+experiments/
+.DS_store
+*.icloud
