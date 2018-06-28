@@ -75,12 +75,12 @@ distractor_set_lex4 <- setdiff(novel_obj_imgs,
 df_distractors <- data_frame(
   order_lex1 = c(sample(distractor_set_lex1, size = n_distractors_block, replace = F), 
                  sample(distractor_set_lex1, size = n_distractors_block, replace = F)),
-  order_lex2 = c(sample(distractor_set_lex1, size = n_distractors_block, replace = F), 
-                 sample(distractor_set_lex1, size = n_distractors_block, replace = F)),
-  order_lex3 = c(sample(distractor_set_lex1, size = n_distractors_block, replace = F), 
-                 sample(distractor_set_lex1, size = n_distractors_block, replace = F)),
-  order_lex4 = c(sample(distractor_set_lex1, size = n_distractors_block, replace = F), 
-                 sample(distractor_set_lex1, size = n_distractors_block, replace = F))
+  order_lex2 = c(sample(distractor_set_lex2, size = n_distractors_block, replace = F), 
+                 sample(distractor_set_lex2, size = n_distractors_block, replace = F)),
+  order_lex3 = c(sample(distractor_set_lex3, size = n_distractors_block, replace = F), 
+                 sample(distractor_set_lex3, size = n_distractors_block, replace = F)),
+  order_lex4 = c(sample(distractor_set_lex4, size = n_distractors_block, replace = F), 
+                 sample(distractor_set_lex4, size = n_distractors_block, replace = F))
 ) 
 
 df_distractors %>% write_csv(here::here("experiment/orders/speed_acc_novel_distractor_imgs_rand.csv"))
