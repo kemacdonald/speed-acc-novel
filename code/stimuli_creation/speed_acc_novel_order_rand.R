@@ -1,8 +1,5 @@
-library(here)
-library(stringr)
-library(tidyverse)
-
 ## This code hnadles randomization for the Speed-Acc-Novel experiment
+library(here); library(tidyverse)
 
 ## global variables
 set.seed(10)
