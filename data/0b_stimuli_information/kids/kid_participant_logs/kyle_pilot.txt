@@ -1,0 +1,76 @@
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:00:00:000	Calibration	
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:01:15:468	Validation accuracy: LeftDevX = 0.2443 LeftDevY = 0.3440 RightDevX = 0.2357 RightDevY = 0.4364
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:01:16:671	Movie	mika_intro.avi
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:01:30:629	Composite	gr_sa_cookie_nonoise_look_0
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:01:39:463	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:01:40:102	Composite	gr_sa_bosa_nonoise_hey_1
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:01:48:533	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:01:49:013	Composite	gr_sa_bosa_nonoise_hey_2
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:01:57:372	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:01:57:841	Composite	gr_sa_bosa_nonoise_look_3
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:06:076	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:06:534	Composite	gr_sa_bosa_nonoise_look_4
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:14:719	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:15:195	Composite	gr_sa_bosa_nonoise_hey_5
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:23:626	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:24:090	Composite	gr_sa_bosa_nonoise_look_6
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:32:300	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:32:768	Composite	gr_sa_bosa_nonoise_hey_7
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:41:084	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:41:545	Composite	gr_sa_bosa_nonoise_look_8
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:49:783	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:50:256	Composite	gr_sa_pifo_nonoise_hey_9
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:58:343	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:02:58:801	Composite	gr_sa_pifo_nonoise_hey_10
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:06:933	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:07:395	Composite	gr_sa_pifo_nonoise_look_11
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:15:505	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:15:972	Composite	gr_sa_pifo_nonoise_look_12
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:24:046	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:24:500	Composite	gr_sa_pifo_nonoise_hey_13
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:32:609	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:33:094	Composite	gr_sa_pifo_nonoise_look_14
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:41:240	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:41:705	Composite	gr_sa_pifo_nonoise_hey_15
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:49:840	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:50:301	Composite	gr_sa_pifo_nonoise_look_16
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:58:432	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:03:58:911	Composite	great_job_gr
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:04:144	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:04:624	Composite	ol_sa_bottle_nonoise_look_16.5
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:12:668	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:13:135	Composite	ol_dr_modi_nonoise_hey_17
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:25:209	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:25:677	Composite	ol_sa_modi_nonoise_hey_18
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:33:797	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:34:255	Composite	ol_dr_modi_nonoise_look_19
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:45:477	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:45:930	Composite	ol_sa_modi_nonoise_look _20
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:53:948	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:04:54:425	Composite	ol_dl_modi_nonoise_hey_21
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:06:473	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:06:933	Composite	ol_sa_modi_nonoise_look _22
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:14:937	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:15:411	Composite	ol_dr_modi_nonoise_hey _23
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:27:437	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:27:903	Composite	ol_sa_modi_nonoise_look_24
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:35:896	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:36:365	Composite	ol_dr_toma_nonoise_hey_25
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:48:255	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:48:722	Composite	ol_sa_toma_nonoise_hey_26
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:58:624	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:05:59:099	Composite	ol_dr_toma_nonoise_look_27
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:10:512	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:10:975	Composite	ol_sa_toma_nonoise_look_28
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:20:249	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:20:719	Composite	ol_dl_toma_nonoise_hey_29
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:32:653	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:33:110	Composite	ol_sa_toma_nonoise_look_30
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:42:388	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:42:854	Composite	ol_dr_toma_nonoise_hey_31
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:54:747	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:06:55:212	Composite	ol_sa_toma_nonoise_look_32
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:07:04:452	Image	black_background2.png
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:07:04:923	Composite	all_done_ol
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:07:08:268	Movie	elmo_quiet_curtains.avi
+speed-acc-novel-child-gaze-order1	kyle_pilot	00:07:35:044	End of Experiment
