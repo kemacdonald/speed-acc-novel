@@ -1,0 +1,2106 @@
+15093407	2	1	NewSession
+15093422	0	1	Thursday, July 12, 2018  8:31:05 AM
+15093620	0	1	SMI Experiment Center 3.7.60.6203 SHA 271a4e93
+15093624	0	1	LoadExperiment speed-acc-novel-child-gaze-order1
+15258947	0	1	Experiment.IsChanged = true
+15260814	0	1	Experiment.IsChanged = true
+15390918	0	1	SceneRecordingController.Stop
+15408910	0	1	LoadExperiment end
+16427157	0	5	, MEM Free 5.24 GB, Used 34.03 %
+21457793	0	5	, MEM Free 5.24 GB, Used 34.07 %
+26475420	0	5	, MEM Free 5.23 GB, Used 34.14 %
+31490253	0	5	, MEM Free 5.23 GB, Used 34.11 %
+36504701	0	5	, MEM Free 5.23 GB, Used 34.10 %
+41537635	0	5	, MEM Free 5.23 GB, Used 34.16 %
+46664070	0	5	, MEM Free 5.18 GB, Used 34.80 %
+51708685	0	5	, MEM Free 5.20 GB, Used 34.48 %
+56724181	0	5	, MEM Free 5.22 GB, Used 34.25 %
+61749149	0	5	, MEM Free 5.21 GB, Used 34.43 %
+62934739	0	1	CmdExecuted : ExecuteSlideShow
+64452316	0	1	ArrangeWithIViewX
+64452732	0	1	IViewX found
+64454192	0	1	DryRun the Experiment speed-acc-novel-child-gaze-order1
+64454630	0	1	MainForm intersects with StimulusWindow
+64456386	0	1	ApplicationController.PrepareStimulusWindow
+64466905	0	1	AddStimulusControl ImageStimulusControl
+64572029	0	1	AddStimulusControl PdfStimulusControl
+64576225	0	1	AddStimulusControl QuestionStimulusControl
+64580002	0	1	MoviePlayerStimulusControl.Clear()
+64580009	0	1	AddStimulusControl MoviePlayerStimulusControl
+64584397	0	1	AddStimulusControl CalibrationStimulusControl
+64591049	0	1	AddPreviewControl SMI_Experiment_Center.Views.StimulusMonitor
+64593902	0	1	AddStimulusControl ExternalVideoStimulusControl
+64600353	0	1	Keyboard: @keyboard.inf,%*pnp0303.devicedesc%;Standard PS/2 Keyboard
+64620979	0	1	BuildRandomList
+64651967	0	1	ScreenSaverController.StoreData
+64784474	0	1	m_isCalibrationQualityUsed = True
+64786942	0	1	ExecuteCurrentObject Movie
+64789298	0	4	DoTheWork Start Movie
+64790347	0	4	AddProtocolLine mika_intro2.avi
+64790744	0	4	Movie : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\mika_intro2.avi
+64799052	0	1	Show StimulusWindow
+64799809	0	4	PutDataIntoStimulusControl - MovieObject
+64820191	0	1	ShowSlideShowWindow_Loaded Left=0, Top=0, ActualWidth=1920, ActualHeight=1080
+65235081	0	11	MediaOpened - RemarkMessage 9a1eafb691bc4dcde05f00e87cd82e99.avi
+65235934	0	4	Recording disabled for this stimulus
+67271437	0	5	, MEM Free 5.15 GB, Used 35.16 %
+68383773	0	1	StopExecution Movie
+68384368	0	4	StopStimulus Movie
+68488485	0	4	OnStimulusCompleted
+68495171	0	1	Hide StimulusWindow
+68495349	0	4	Experiment Execution Completed
+68563898	0	4	ScreenSaverController.LoadData
+68565488	0	4	ScreenSaverController.StoreData
+68578468	0	4	stopExecutionEvent set after 3148.35753962117 ms
+68578473	0	4	DoTheWork End Movie
+72619013	0	5	, MEM Free 5.20 GB, Used 34.50 %
+77655605	0	5	, MEM Free 5.16 GB, Used 35.05 %
+82659078	0	5	, MEM Free 5.16 GB, Used 35.02 %
+87673652	0	5	, MEM Free 5.17 GB, Used 34.94 %
+92688546	0	5	, MEM Free 5.17 GB, Used 34.92 %
+97705237	0	5	, MEM Free 5.16 GB, Used 34.98 %
+102719251	0	5	, MEM Free 5.16 GB, Used 34.97 %
+107737225	0	5	, MEM Free 5.17 GB, Used 34.95 %
+112751069	0	5	, MEM Free 5.18 GB, Used 34.80 %
+117766377	0	5	, MEM Free 5.11 GB, Used 35.64 %
+122783172	0	5	, MEM Free 5.09 GB, Used 35.85 %
+126267643	0	1	SelectedMonitor = 1
+128284597	0	5	, MEM Free 4.92 GB, Used 37.99 %
+133314194	0	5	, MEM Free 4.91 GB, Used 38.14 %
+138325747	0	5	, MEM Free 4.92 GB, Used 38.08 %
+143339551	0	5	, MEM Free 4.93 GB, Used 37.92 %
+148354851	0	5	, MEM Free 4.92 GB, Used 38.06 %
+153382371	0	5	, MEM Free 4.92 GB, Used 38.03 %
+158408970	0	5	, MEM Free 4.93 GB, Used 37.97 %
+163417007	0	5	, MEM Free 4.93 GB, Used 37.91 %
+168439845	0	5	, MEM Free 4.93 GB, Used 37.92 %
+173450747	0	5	, MEM Free 4.93 GB, Used 37.94 %
+178469692	0	5	, MEM Free 4.94 GB, Used 37.75 %
+183485409	0	5	, MEM Free 4.96 GB, Used 37.57 %
+188509250	0	5	, MEM Free 4.94 GB, Used 37.76 %
+193524462	0	5	, MEM Free 5.15 GB, Used 35.12 %
+198547991	0	5	, MEM Free 4.94 GB, Used 37.75 %
+203572151	0	5	, MEM Free 5.15 GB, Used 35.14 %
+208591410	0	5	, MEM Free 4.95 GB, Used 37.69 %
+213615006	0	5	, MEM Free 4.88 GB, Used 38.59 %
+218629185	0	5	, MEM Free 4.94 GB, Used 37.80 %
+223663668	0	5	, MEM Free 4.96 GB, Used 37.51 %
+228690500	0	5	, MEM Free 4.95 GB, Used 37.71 %
+233706139	0	5	, MEM Free 4.95 GB, Used 37.62 %
+238721860	0	5	, MEM Free 4.96 GB, Used 37.51 %
+243734766	0	5	, MEM Free 4.95 GB, Used 37.68 %
+248752192	0	5	, MEM Free 4.95 GB, Used 37.64 %
+253769642	0	5	, MEM Free 4.95 GB, Used 37.66 %
+258776878	0	5	, MEM Free 5.09 GB, Used 35.84 %
+263809322	0	5	, MEM Free 4.96 GB, Used 37.58 %
+268828891	0	5	, MEM Free 4.88 GB, Used 38.48 %
+273854350	0	5	, MEM Free 4.96 GB, Used 37.57 %
+278875523	0	5	, MEM Free 4.97 GB, Used 37.36 %
+283891038	0	5	, MEM Free 4.96 GB, Used 37.60 %
+288902904	0	5	, MEM Free 4.95 GB, Used 37.60 %
+293918831	0	5	, MEM Free 4.96 GB, Used 37.52 %
+298936428	0	5	, MEM Free 4.96 GB, Used 37.56 %
+304081506	0	5	, MEM Free 4.95 GB, Used 37.61 %
+309198256	0	5	, MEM Free 4.95 GB, Used 37.67 %
+314286189	0	5	, MEM Free 4.95 GB, Used 37.66 %
+319344457	0	5	, MEM Free 4.95 GB, Used 37.61 %
+324419844	0	5	, MEM Free 5.04 GB, Used 36.52 %
+329468794	0	5	, MEM Free 5.06 GB, Used 36.25 %
+334521409	0	5	, MEM Free 5.05 GB, Used 36.37 %
+339582702	0	5	, MEM Free 5.05 GB, Used 36.38 %
+344597410	0	5	, MEM Free 5.06 GB, Used 36.23 %
+349604743	0	5	, MEM Free 5.04 GB, Used 36.58 %
+354620693	0	5	, MEM Free 4.98 GB, Used 37.29 %
+359643332	0	5	, MEM Free 5.05 GB, Used 36.42 %
+364652520	0	5	, MEM Free 5.06 GB, Used 36.32 %
+369670370	0	5	, MEM Free 5.05 GB, Used 36.38 %
+374685364	0	5	, MEM Free 5.06 GB, Used 36.30 %
+379707679	0	5	, MEM Free 5.07 GB, Used 36.18 %
+384727202	0	5	, MEM Free 5.25 GB, Used 33.94 %
+389735352	0	5	, MEM Free 5.23 GB, Used 34.17 %
+394760257	0	5	, MEM Free 5.23 GB, Used 34.20 %
+399767881	0	5	, MEM Free 5.24 GB, Used 34.06 %
+404780615	0	5	, MEM Free 5.44 GB, Used 31.50 %
+409806431	0	5	, MEM Free 5.23 GB, Used 34.13 %
+414815325	0	5	, MEM Free 5.23 GB, Used 34.10 %
+419852589	0	5	, MEM Free 5.23 GB, Used 34.09 %
+424872549	0	5	, MEM Free 5.24 GB, Used 34.02 %
+429892714	0	5	, MEM Free 5.15 GB, Used 35.14 %
+434912402	0	5	, MEM Free 5.23 GB, Used 34.14 %
+439931221	0	5	, MEM Free 5.25 GB, Used 33.83 %
+444938659	0	5	, MEM Free 5.24 GB, Used 34.07 %
+449961493	0	5	, MEM Free 5.23 GB, Used 34.15 %
+454973302	0	5	, MEM Free 5.24 GB, Used 34.06 %
+459986579	0	5	, MEM Free 5.24 GB, Used 34.04 %
+465003683	0	5	, MEM Free 5.16 GB, Used 34.96 %
+470026874	0	5	, MEM Free 5.23 GB, Used 34.08 %
+475033163	0	5	, MEM Free 5.34 GB, Used 32.81 %
+480048387	0	5	, MEM Free 5.25 GB, Used 33.84 %
+485075804	0	5	, MEM Free 5.23 GB, Used 34.11 %
+490080170	0	5	, MEM Free 5.23 GB, Used 34.08 %
+495101799	0	5	, MEM Free 5.23 GB, Used 34.12 %
+500127947	0	5	, MEM Free 5.23 GB, Used 34.09 %
+505140693	0	5	, MEM Free 5.45 GB, Used 31.37 %
+510157024	0	5	, MEM Free 5.45 GB, Used 31.36 %
+512693013	0	1	CmdExecuted : iViewXSettingsDlg 
+513428492	0	1	SceneRecordingController.LoadData 
+515434963	0	5	, MEM Free 5.44 GB, Used 31.51 %
+520452929	0	5	, MEM Free 5.46 GB, Used 31.27 %
+525468753	0	5	, MEM Free 5.47 GB, Used 31.13 %
+530499420	0	5	, MEM Free 5.41 GB, Used 31.91 %
+535516749	0	5	, MEM Free 5.44 GB, Used 31.53 %
+540537150	0	5	, MEM Free 5.34 GB, Used 32.73 %
+545561935	0	5	, MEM Free 5.35 GB, Used 32.67 %
+547268177	0	9	iV_GetSystemInfo
+547274061	0	9	iV_GetSpeedModes
+547279978	0	9	Get Speed Modes failed: 1
+547439035	0	9	Connection to IViewX established
+547439054	0	9	MainFrame.OnConnectionChanged to True
+547461307	0	9	connection state is now connected-->versions timer started
+549565075	0	1	connected with iView 4.2.1 device REDn Scientific
+550573292	0	5	, MEM Free 5.40 GB, Used 31.94 %
+555589847	0	5	, MEM Free 5.37 GB, Used 32.43 %
+560608482	0	5	, MEM Free 5.31 GB, Used 33.16 %
+565630355	0	5	, MEM Free 5.32 GB, Used 33.05 %
+569270674	0	9	iV_GetSystemInfo
+569276717	0	9	iV_GetSpeedModes
+569282832	0	9	Get Speed Modes failed: 1
+571304853	0	5	, MEM Free 5.31 GB, Used 33.18 %
+576330270	0	5	, MEM Free 5.30 GB, Used 33.21 %
+581353319	0	5	, MEM Free 5.31 GB, Used 33.19 %
+586376720	0	5	, MEM Free 5.31 GB, Used 33.16 %
+591403154	0	5	, MEM Free 5.31 GB, Used 33.09 %
+596430682	0	5	, MEM Free 5.31 GB, Used 33.11 %
+601454743	0	5	, MEM Free 5.22 GB, Used 34.32 %
+606477734	0	5	, MEM Free 5.24 GB, Used 34.04 %
+611502705	0	5	, MEM Free 5.24 GB, Used 34.05 %
+616524609	0	5	, MEM Free 5.24 GB, Used 34.04 %
+621547073	0	5	, MEM Free 5.24 GB, Used 34.03 %
+626567846	0	5	, MEM Free 5.24 GB, Used 34.02 %
+631593280	0	5	, MEM Free 5.24 GB, Used 34.05 %
+636616431	0	5	, MEM Free 5.17 GB, Used 34.83 %
+641638028	0	5	, MEM Free 5.21 GB, Used 34.33 %
+646662642	0	5	, MEM Free 5.21 GB, Used 34.33 %
+651685441	0	5	, MEM Free 5.22 GB, Used 34.26 %
+656709008	0	5	, MEM Free 5.22 GB, Used 34.31 %
+661740580	0	5	, MEM Free 5.22 GB, Used 34.31 %
+666766819	0	5	, MEM Free 5.20 GB, Used 34.47 %
+667350037	0	1	CmdExecuted : ExecuteSlideShow
+672190666	0	1	CmdExecuted : RecordSlideShow
+672207882	0	5	, MEM Free 5.21 GB, Used 34.39 %
+672703191	0	1	ExternalVideoController.Stop
+673136899	0	1	Keyboard: @keyboard.inf,%*pnp0303.devicedesc%;Standard PS/2 Keyboard
+677880296	0	1	Record the Experiment speed-acc-novel-child-gaze-order1
+677880344	0	1	MainForm intersects with StimulusWindow
+677881855	0	1	ApplicationController.PrepareStimulusWindow
+677882320	0	1	AddStimulusControl ImageStimulusControl
+677882373	0	1	AddStimulusControl PdfStimulusControl
+677882677	0	1	AddStimulusControl QuestionStimulusControl
+677882818	0	1	MoviePlayerStimulusControl.Clear()
+677882823	0	1	AddStimulusControl MoviePlayerStimulusControl
+677882871	0	1	AddStimulusControl CalibrationStimulusControl
+677883884	0	1	AddStimulusControl ExternalVideoStimulusControl
+677893377	0	1	BuildRandomList
+677923912	0	1	ScreenSaverController.StoreData
+677924120	0	5	, MEM Free 5.03 GB, Used 36.69 %
+677939350	0	1	NameController::create participant folder::C:\Users\iView X\Desktop\Results\speed-acc-novel-child-gaze-order1\test5-[45154d96-5acd-4da5-bdf4-7579de779987]
+677940168	0	1	Execution of Experiment speed-acc-novel-child-gaze-order1
+677949448	0	1	Eye Tracker Source End
+677950914	0	1	Eye Tracker Source Begin
+678002931	0	1	Screen DPI is 1
+678005648	0	1	m_isCalibrationQualityUsed = True
+678005728	0	1	ExecuteCurrentObject Calibration
+678005806	0	29	DoTheWork Start Calibration
+678005882	0	29	AddProtocolLine 
+678007650	0	29	Calibration : StartStimulus
+678025372	0	1	Show StimulusWindow
+678026540	0	29	PutDataIntoStimulusControl - CalibrationObject
+678032656	0	1	ShowSlideShowWindow_Loaded Left=0, Top=0, ActualWidth=1920, ActualHeight=1080
+678076257	0	34	Calibration : NextPoint = 1  X=953  Y=459
+678117147	0	29	Recording disabled for this stimulus
+681684841	0	34	Calibration : NextPoint = 2  X=446  Y=109
+683704514	0	5	, MEM Free 5.09 GB, Used 35.92 %
+684674951	0	34	Calibration : NextPoint = 3  X=1774  Y=282
+684847148	0	1	StopExecution Calibration
+684849578	0	29	Calibration : StopStimulus
+685584871	0	29	OnStimulusCompleted
+685585204	0	1	Hide StimulusWindow
+685585238	0	29	Experiment Execution Completed
+685590146	0	29	Eye Tracker Source End
+685604934	0	1	SceneRecordingController.Stop
+687385699	0	1	User decided not to store results
+687386892	2	1	Return
+687419774	0	29	ScreenSaverController.LoadData
+687421373	0	29	ScreenSaverController.StoreData
+687482144	0	29	stopExecutionEvent set after 6729.26978800738 ms
+687482148	0	29	DoTheWork End Calibration
+689501001	0	5	, MEM Free 5.15 GB, Used 35.14 %
+689556659	0	1	SelectedMonitor = 1
+692089456	0	1	CmdExecuted : ExecuteSlideShow
+692089679	0	1	Experiment.IsChanged = true
+692093917	0	1	Copy movie file from C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\mika_intro2.avi to C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1
+692101054	0	1	Copy movie file from C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\elmo_quiet_curtains.avi to C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1
+695125568	0	5	, MEM Free 5.17 GB, Used 34.90 %
+695549264	0	1	ArrangeWithIViewX
+695549319	0	1	IViewX found
+695549333	0	1	DryRun the Experiment speed-acc-novel-child-gaze-order1
+695549407	0	1	MainForm does not intersect with StimulusWindow
+695549840	0	1	ApplicationController.PrepareStimulusWindow
+695550345	0	1	AddStimulusControl ImageStimulusControl
+695550404	0	1	AddStimulusControl PdfStimulusControl
+695550693	0	1	AddStimulusControl QuestionStimulusControl
+695550789	0	1	MoviePlayerStimulusControl.Clear()
+695550793	0	1	AddStimulusControl MoviePlayerStimulusControl
+695550825	0	1	AddStimulusControl CalibrationStimulusControl
+695551658	0	1	AddStimulusControl ExternalVideoStimulusControl
+695551816	0	1	Keyboard: @keyboard.inf,%*pnp0303.devicedesc%;Standard PS/2 Keyboard
+695552245	0	1	BuildRandomList
+695579457	0	1	ScreenSaverController.StoreData
+695614215	0	1	m_isCalibrationQualityUsed = True
+695614225	0	1	ExecuteCurrentObject Movie
+695614339	0	4	DoTheWork Start Movie
+695614352	0	4	AddProtocolLine mika_intro2.avi
+695614354	0	4	Movie : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\mika_intro2.avi
+695617464	0	1	Show StimulusWindow
+695617877	0	4	PutDataIntoStimulusControl - MovieObject
+695627787	0	1	ShowSlideShowWindow_Loaded Left=1920, Top=0, ActualWidth=3072, ActualHeight=1728
+695975853	0	27	MediaOpened - RemarkMessage 9a1eafb691bc4dcde05f00e87cd82e99.avi
+695975867	0	4	Recording disabled for this stimulus
+695976058	0	4	Start Pause failed: 191
+701001964	0	5	, MEM Free 5.13 GB, Used 35.36 %
+704158541	0	1	CmdExecuted : RecordSlideShow
+704158875	0	1	StopExecution Movie
+704158891	0	4	StopStimulus Movie
+704332838	0	4	OnStimulusCompleted
+704340690	0	1	Hide StimulusWindow
+704340816	0	4	Experiment Execution Completed
+704397549	0	4	ScreenSaverController.LoadData
+704399242	0	4	ScreenSaverController.StoreData
+704405807	0	4	stopExecutionEvent set after 8183.02889016926 ms
+704405811	0	4	DoTheWork End Movie
+706430853	0	5	, MEM Free 5.15 GB, Used 35.08 %
+711454907	0	5	, MEM Free 5.12 GB, Used 35.53 %
+714256427	0	1	CmdExecuted : RecordSlideShow
+714754359	0	1	ExternalVideoController.Stop
+714787804	0	1	Keyboard: @keyboard.inf,%*pnp0303.devicedesc%;Standard PS/2 Keyboard
+716813191	0	5	, MEM Free 5.11 GB, Used 35.61 %
+721838936	0	5	, MEM Free 5.14 GB, Used 35.33 %
+724511293	0	1	Record the Experiment speed-acc-novel-child-gaze-order1
+724511333	0	1	MainForm does not intersect with StimulusWindow
+724511487	0	1	ApplicationController.PrepareStimulusWindow
+724511851	0	1	AddStimulusControl ImageStimulusControl
+724511889	0	1	AddStimulusControl PdfStimulusControl
+724512104	0	1	AddStimulusControl QuestionStimulusControl
+724512197	0	1	MoviePlayerStimulusControl.Clear()
+724512201	0	1	AddStimulusControl MoviePlayerStimulusControl
+724512231	0	1	AddStimulusControl CalibrationStimulusControl
+724512667	0	1	AddStimulusControl ExternalVideoStimulusControl
+724540238	0	1	BuildRandomList
+724575720	0	1	ScreenSaverController.StoreData
+724614631	0	1	NameController::create participant folder::C:\Users\iView X\Desktop\Results\speed-acc-novel-child-gaze-order1\test5-[a7ebcaeb-b35f-40ac-aee4-d0c242d2d158]
+724615096	0	1	Execution of Experiment speed-acc-novel-child-gaze-order1
+724618189	0	1	Eye Tracker Source End
+724618498	0	1	Stop Recording failed: ERR_EMPTY_DATA_BUFFER
+724618514	0	1	Eye Tracker Source Begin
+724633253	0	1	Screen DPI is 1
+724633337	0	1	m_isCalibrationQualityUsed = True
+724633356	0	1	ExecuteCurrentObject Calibration
+724633442	0	29	DoTheWork Start Calibration
+724633459	0	29	AddProtocolLine 
+724633462	0	29	Calibration : StartStimulus
+724650535	0	1	Show StimulusWindow
+724650639	0	29	PutDataIntoStimulusControl - CalibrationObject
+724678171	0	1	ShowSlideShowWindow_Loaded Left=1920, Top=0, ActualWidth=3072, ActualHeight=1728
+725020552	0	34	Calibration : NextPoint = 1  X=1525  Y=734
+725058421	0	29	Recording disabled for this stimulus
+727084400	0	5	, MEM Free 5.16 GB, Used 35.00 %
+729327511	0	34	Calibration : NextPoint = 2  X=714  Y=174
+731663137	0	34	Calibration : NextPoint = 3  X=2838  Y=451
+732682048	0	5	, MEM Free 5.16 GB, Used 34.96 %
+733620529	0	34	Calibration : NextPoint = 4  X=2445  Y=1552
+736604676	0	34	Calibration : NextPoint = 5  X=222  Y=1131
+738571174	0	9	Calibration : CaliFinnished
+738583964	0	5	, MEM Free 5.16 GB, Used 34.98 %
+738806299	0	20	Calibration : ShowNextValidationPoint
+740762637	0	20	Calibration : ShowNextValidationPoint
+742719983	0	20	Calibration : ShowNextValidationPoint
+743741360	0	5	, MEM Free 5.16 GB, Used 34.98 %
+744677353	0	20	Calibration : ShowNextValidationPoint
+746683036	0	20	iv_GetAccuracy: RET_SUCCESS
+749197583	0	1	StopExecution Calibration
+749197607	0	29	Calibration : StopStimulus
+749211884	0	5	, MEM Free 5.15 GB, Used 35.10 %
+750398312	0	29	OnStimulusCompleted
+750398854	0	29	ExecuteCurrentObject Movie
+750398916	0	32	DoTheWork Start Movie
+750398917	0	29	stopExecutionEvent set after 24139.1301610848 ms
+750398921	0	29	DoTheWork End Calibration
+750398933	0	32	AddProtocolLine mika_intro2.avi
+750398935	0	32	Movie : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\mika_intro2.avi
+750398996	0	32	PauseDataRecording while movie is loading
+750399582	0	1	Show StimulusWindow
+750399646	0	32	PutDataIntoStimulusControl - MovieObject
+750739566	0	27	MediaOpened - RemarkMessage 9a1eafb691bc4dcde05f00e87cd82e99.avi
+750750015	0	27	ContinueMessage 9a1eafb691bc4dcde05f00e87cd82e99.avi
+754772920	0	5	, MEM Free 5.12 GB, Used 35.46 %
+759794287	0	5	, MEM Free 5.12 GB, Used 35.46 %
+763215606	0	1	CmdExecuted : RecordSlideShow
+763215706	0	1	StopExecution Movie
+763215741	0	32	StopStimulus Movie
+763376234	0	32	OnStimulusCompleted
+763377107	0	1	Hide StimulusWindow
+763377171	0	32	Experiment Execution Completed
+763381953	0	32	Eye Tracker Source End
+763394795	0	1	SceneRecordingController.Stop
+765342327	0	1	User decided not to store results
+765342662	2	1	Return
+765369736	0	32	ScreenSaverController.LoadData
+765372231	0	32	ScreenSaverController.StoreData
+765424658	0	5	, MEM Free 5.15 GB, Used 35.08 %
+765429189	0	32	stopExecutionEvent set after 12465.6362173325 ms
+765429193	0	32	DoTheWork End Movie
+770454221	0	5	, MEM Free 5.16 GB, Used 35.06 %
+775475106	0	5	, MEM Free 5.16 GB, Used 35.07 %
+780496605	0	5	, MEM Free 5.16 GB, Used 35.07 %
+785518507	0	5	, MEM Free 5.16 GB, Used 35.04 %
+790539728	0	5	, MEM Free 5.17 GB, Used 34.91 %
+795562293	0	5	, MEM Free 5.18 GB, Used 34.77 %
+800584180	0	5	, MEM Free 5.19 GB, Used 34.68 %
+805606619	0	5	, MEM Free 5.19 GB, Used 34.70 %
+810629159	0	5	, MEM Free 5.18 GB, Used 34.74 %
+815653426	0	5	, MEM Free 5.18 GB, Used 34.79 %
+816256822	0	1	CmdExecuted : ExecuteSlideShow
+817611314	0	1	ArrangeWithIViewX
+817611382	0	1	IViewX found
+817611412	0	1	DryRun the Experiment speed-acc-novel-child-gaze-order1
+817611487	0	1	MainForm does not intersect with StimulusWindow
+817611926	0	1	ApplicationController.PrepareStimulusWindow
+817612392	0	1	AddStimulusControl ImageStimulusControl
+817612443	0	1	AddStimulusControl PdfStimulusControl
+817612734	0	1	AddStimulusControl QuestionStimulusControl
+817612868	0	1	MoviePlayerStimulusControl.Clear()
+817612875	0	1	AddStimulusControl MoviePlayerStimulusControl
+817612908	0	1	AddStimulusControl CalibrationStimulusControl
+817613736	0	1	AddStimulusControl ExternalVideoStimulusControl
+817613903	0	1	Keyboard: @keyboard.inf,%*pnp0303.devicedesc%;Standard PS/2 Keyboard
+817614322	0	1	BuildRandomList
+817641640	0	1	ScreenSaverController.StoreData
+817676495	0	1	m_isCalibrationQualityUsed = True
+817676506	0	1	ExecuteCurrentObject Movie
+817676575	0	27	DoTheWork Start Movie
+817676589	0	27	AddProtocolLine mika_intro2.avi
+817676590	0	27	Movie : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\mika_intro2.avi
+817678431	0	1	Show StimulusWindow
+817678489	0	27	PutDataIntoStimulusControl - MovieObject
+817686947	0	1	ShowSlideShowWindow_Loaded Left=1920, Top=0, ActualWidth=3072, ActualHeight=1728
+818129212	0	26	MediaOpened - RemarkMessage 9a1eafb691bc4dcde05f00e87cd82e99.avi
+818129229	0	27	Recording disabled for this stimulus
+821150047	0	5	, MEM Free 5.13 GB, Used 35.42 %
+826177787	0	5	, MEM Free 5.13 GB, Used 35.43 %
+831201604	0	5	, MEM Free 5.14 GB, Used 35.28 %
+831678171	0	1	StimulusList OnMediaEnded
+831678211	0	1	StopExecution Movie
+831678226	0	27	StopStimulus Movie
+831678532	0	27	OnStimulusCompleted
+831678549	0	27	ExecuteCurrentObject Composite
+831678626	0	22	DoTheWork Start Composite
+831678773	0	22	AddProtocolLine gr_sa_cookie_nonoise_look_0
+831679169	0	27	stopExecutionEvent set after 13549.0059296625 ms
+831679172	0	27	DoTheWork End Movie
+831679212	0	22	Composite : StartStimulus 66679fe1-e159-4a21-b9a0-8c44f6382836
+831680545	0	22	PutDataIntoStimulusControl - Composite - Video
+832137206	0	21	MediaOpened - RemarkMessage ef177c1276275662048244274d3df8cf_3072x1728.avi
+832137227	0	22	Recording disabled for this stimulus
+837161069	0	5	, MEM Free 5.10 GB, Used 35.76 %
+840676319	0	1	StimulusList OnMediaEnded
+840676338	0	1	StopExecution Composite
+840676717	0	22	StopStimulus Composite
+840676946	4	22	ShowImage expected : Manual
+840677143	0	22	OnStimulusCompleted
+840677156	0	22	ExecuteCurrentObject Image
+840677221	0	22	stopExecutionEvent set after 8539.14151954269 ms
+840677228	0	22	DoTheWork End Composite
+840677272	0	22	DoTheWork Start Image
+840677338	0	22	AddProtocolLine black_background2.png
+840679277	0	22	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+840680677	0	1	Show StimulusWindow
+840682623	0	22	PutDataIntoStimulusControl - ImageObject
+840799046	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+840799058	0	22	Recording disabled for this stimulus
+841199892	4	22	ShowImage expected : 400
+841199960	0	22	OnStimulusCompleted
+841199978	0	22	ExecuteCurrentObject Composite
+841200050	0	22	stopExecutionEvent set after 400.541990029097 ms
+841200053	0	22	DoTheWork End Image
+841200055	0	32	DoTheWork Start Composite
+841200075	0	32	AddProtocolLine gr_sa_bosa_nonoise_hey_1
+841200077	0	32	Composite : StartStimulus c433ed3a-ea42-41bf-89cf-e8112816f2fc
+841200516	0	1	Show StimulusWindow
+841203090	0	32	PutDataIntoStimulusControl - Composite - Video
+841696897	0	21	MediaOpened - RemarkMessage 24188a4a8010b56ab8ec7d89ca523c41_3072x1728.avi
+841697022	0	32	Recording disabled for this stimulus
+842724399	0	5	, MEM Free 5.13 GB, Used 35.37 %
+847757011	0	5	, MEM Free 5.13 GB, Used 35.41 %
+849759095	0	1	StimulusList OnMediaEnded
+849759103	0	1	StopExecution Composite
+849759119	0	32	StopStimulus Composite
+849759126	4	32	ShowImage expected : Manual
+849759494	0	32	OnStimulusCompleted
+849759507	0	32	ExecuteCurrentObject Image
+849759580	0	24	DoTheWork Start Image
+849759597	0	24	AddProtocolLine black_background2.png
+849759599	0	24	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+849760101	0	32	stopExecutionEvent set after 8062.21047906697 ms
+849760108	0	32	DoTheWork End Composite
+849760194	0	1	Show StimulusWindow
+849761875	0	24	PutDataIntoStimulusControl - ImageObject
+849825611	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+849825613	0	24	Recording disabled for this stimulus
+850225876	4	24	ShowImage expected : 400
+850225893	0	24	OnStimulusCompleted
+850225906	0	24	ExecuteCurrentObject Composite
+850225966	0	24	stopExecutionEvent set after 400.262818293452 ms
+850225968	0	24	DoTheWork End Image
+850225973	0	22	DoTheWork Start Composite
+850225992	0	22	AddProtocolLine gr_sa_bosa_nonoise_hey_2
+850225994	0	22	Composite : StartStimulus aebae3ad-e890-463d-a497-5921ae0a6893
+850226357	0	1	Show StimulusWindow
+850229431	0	22	PutDataIntoStimulusControl - Composite - Video
+850691210	0	21	MediaOpened - RemarkMessage c0590f8304863a2c62a3a1606860018f_3072x1728.avi
+850691836	0	22	Recording disabled for this stimulus
+853721771	0	5	, MEM Free 5.13 GB, Used 35.42 %
+858745979	0	1	StimulusList OnMediaEnded
+858745988	0	1	StopExecution Composite
+858746005	0	22	StopStimulus Composite
+858746013	4	22	ShowImage expected : Manual
+858746100	0	22	OnStimulusCompleted
+858746112	0	22	ExecuteCurrentObject Image
+858746160	0	22	stopExecutionEvent set after 8054.78232131302 ms
+858746164	0	22	DoTheWork End Composite
+858746170	0	26	DoTheWork Start Image
+858746187	0	26	AddProtocolLine black_background2.png
+858746189	0	26	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+858746585	0	1	Show StimulusWindow
+858747520	0	5	, MEM Free 5.15 GB, Used 35.09 %
+858748421	0	26	PutDataIntoStimulusControl - ImageObject
+858819967	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+858819970	0	26	Recording disabled for this stimulus
+859220244	4	26	ShowImage expected : 400
+859220267	0	26	OnStimulusCompleted
+859220285	0	26	ExecuteCurrentObject Composite
+859220365	0	26	stopExecutionEvent set after 400.272055593491 ms
+859220368	0	31	DoTheWork Start Composite
+859220369	0	26	DoTheWork End Image
+859220387	0	31	AddProtocolLine gr_sa_bosa_nonoise_look_3
+859220390	0	31	Composite : StartStimulus 96b22915-158d-4fb3-aa47-9f80f445c34d
+859220953	0	1	Show StimulusWindow
+859223901	0	31	PutDataIntoStimulusControl - Composite - Video
+859668569	0	4	MediaOpened - RemarkMessage 42118acd7dd4f5ab7d18ace7fd7f4ccf_3072x1728.avi
+859668631	0	31	Recording disabled for this stimulus
+864694496	0	5	, MEM Free 5.13 GB, Used 35.39 %
+867547267	0	1	StimulusList OnMediaEnded
+867547275	0	1	StopExecution Composite
+867547289	0	31	StopStimulus Composite
+867547296	4	31	ShowImage expected : Manual
+867547858	0	31	OnStimulusCompleted
+867547875	0	31	ExecuteCurrentObject Image
+867547945	0	31	stopExecutionEvent set after 7878.70569688237 ms
+867547952	0	31	DoTheWork End Composite
+867547953	0	24	DoTheWork Start Image
+867547979	0	24	AddProtocolLine black_background2.png
+867547983	0	24	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+867548120	0	1	Show StimulusWindow
+867550246	0	24	PutDataIntoStimulusControl - ImageObject
+867631191	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+867631193	0	24	Recording disabled for this stimulus
+868031469	4	24	ShowImage expected : 400
+868031485	0	24	OnStimulusCompleted
+868031498	0	24	ExecuteCurrentObject Composite
+868031558	0	24	stopExecutionEvent set after 400.271713471293 ms
+868031560	0	26	DoTheWork Start Composite
+868031560	0	24	DoTheWork End Image
+868031577	0	26	AddProtocolLine gr_sa_bosa_nonoise_look_4
+868031579	0	26	Composite : StartStimulus 35aca129-739e-4138-8042-e9d1dd444365
+868031925	0	1	Show StimulusWindow
+868034177	0	26	PutDataIntoStimulusControl - Composite - Video
+868546842	0	11	MediaOpened - RemarkMessage 4830de28c71d6173462bb53ebf757049_3072x1728.avi
+868546872	0	26	Recording disabled for this stimulus
+870567815	0	5	, MEM Free 5.13 GB, Used 35.36 %
+875594015	0	5	, MEM Free 5.13 GB, Used 35.40 %
+876433077	0	1	StimulusList OnMediaEnded
+876433088	0	1	StopExecution Composite
+876433103	0	26	StopStimulus Composite
+876433110	4	26	ShowImage expected : Manual
+876433551	0	26	OnStimulusCompleted
+876433565	0	26	ExecuteCurrentObject Image
+876433627	0	26	stopExecutionEvent set after 7886.24504435956 ms
+876433632	0	26	DoTheWork End Composite
+876433667	0	24	DoTheWork Start Image
+876433684	0	24	AddProtocolLine black_background2.png
+876433687	0	24	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+876434026	0	1	Show StimulusWindow
+876435700	0	24	PutDataIntoStimulusControl - ImageObject
+876508467	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+876508469	0	24	Recording disabled for this stimulus
+876908745	4	24	ShowImage expected : 400
+876908761	0	24	OnStimulusCompleted
+876908776	0	24	ExecuteCurrentObject Composite
+876908842	0	4	DoTheWork Start Composite
+876908860	0	4	AddProtocolLine gr_sa_bosa_nonoise_hey_5
+876908862	0	4	Composite : StartStimulus 7f205a39-5e27-48a4-a3e9-5edd602dabd8
+876908882	0	24	stopExecutionEvent set after 400.27445044899 ms
+876908884	0	24	DoTheWork End Image
+876909303	0	1	Show StimulusWindow
+876911968	0	4	PutDataIntoStimulusControl - Composite - Video
+877424127	0	11	MediaOpened - RemarkMessage 7fee44bd1be51d262545ba13c97ad322_3072x1728.avi
+877424591	0	4	Recording disabled for this stimulus
+881454874	0	5	, MEM Free 5.13 GB, Used 35.42 %
+885456978	0	1	StimulusList OnMediaEnded
+885456988	0	1	StopExecution Composite
+885457005	0	4	StopStimulus Composite
+885457014	4	4	ShowImage expected : Manual
+885457142	0	4	OnStimulusCompleted
+885457161	0	4	ExecuteCurrentObject Image
+885457236	0	4	stopExecutionEvent set after 8032.86426095438 ms
+885457243	0	4	DoTheWork End Composite
+885457304	0	4	DoTheWork Start Image
+885457330	0	4	AddProtocolLine black_background2.png
+885457334	0	4	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+885458106	0	1	Show StimulusWindow
+885464190	0	4	PutDataIntoStimulusControl - ImageObject
+885535848	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+885535853	0	4	Recording disabled for this stimulus
+885936139	4	4	ShowImage expected : 400
+885936159	0	4	OnStimulusCompleted
+885936176	0	4	ExecuteCurrentObject Composite
+885936250	0	24	DoTheWork Start Composite
+885936267	0	24	AddProtocolLine gr_sa_bosa_nonoise_look_6
+885936270	0	24	Composite : StartStimulus 213ed684-ffe4-4d65-b13f-e16557573934
+885936802	0	4	stopExecutionEvent set after 400.283003504753 ms
+885936805	0	4	DoTheWork End Image
+885937427	0	1	Show StimulusWindow
+885939434	0	24	PutDataIntoStimulusControl - Composite - Video
+886435484	0	11	MediaOpened - RemarkMessage 4de9452045516e9d50846ef0621f5a29_3072x1728.avi
+886435510	0	24	Recording disabled for this stimulus
+886494686	0	5	, MEM Free 5.08 GB, Used 36.07 %
+891522563	0	5	, MEM Free 5.11 GB, Used 35.61 %
+893171070	0	1	CmdExecuted : RecordSlideShow
+893171172	0	1	StopExecution Composite
+893171189	0	24	StopStimulus Composite
+893171198	4	24	ShowImage expected : Manual
+893312448	0	24	OnStimulusCompleted
+893314125	0	1	Hide StimulusWindow
+893314186	0	24	Experiment Execution Completed
+893407726	0	24	ScreenSaverController.LoadData
+893409312	0	24	ScreenSaverController.StoreData
+893417033	0	24	stopExecutionEvent set after 6735.68936944139 ms
+893417041	0	24	DoTheWork End Composite
+897450028	0	5	, MEM Free 5.14 GB, Used 35.31 %
+902474012	0	5	, MEM Free 5.13 GB, Used 35.35 %
+907501230	0	5	, MEM Free 5.09 GB, Used 35.88 %
+912525862	0	5	, MEM Free 5.09 GB, Used 35.90 %
+917549792	0	5	, MEM Free 5.12 GB, Used 35.51 %
+922575502	0	5	, MEM Free 5.13 GB, Used 35.44 %
+927597663	0	5	, MEM Free 5.12 GB, Used 35.47 %
+932621003	0	5	, MEM Free 5.12 GB, Used 35.47 %
+937642252	0	5	, MEM Free 5.12 GB, Used 35.48 %
+942668577	0	5	, MEM Free 5.12 GB, Used 35.47 %
+947694744	0	5	, MEM Free 5.13 GB, Used 35.42 %
+952722560	0	5	, MEM Free 5.13 GB, Used 35.44 %
+957744386	0	5	, MEM Free 5.13 GB, Used 35.43 %
+962766792	0	5	, MEM Free 5.13 GB, Used 35.41 %
+967790427	0	5	, MEM Free 5.13 GB, Used 35.38 %
+972815721	0	5	, MEM Free 5.13 GB, Used 35.37 %
+977838691	0	5	, MEM Free 5.14 GB, Used 35.32 %
+982860828	0	5	, MEM Free 5.13 GB, Used 35.34 %
+987885921	0	5	, MEM Free 5.13 GB, Used 35.36 %
+992908302	0	5	, MEM Free 5.13 GB, Used 35.34 %
+997929796	0	5	, MEM Free 5.13 GB, Used 35.44 %
+1002952901	0	5	, MEM Free 5.13 GB, Used 35.35 %
+1007976647	0	5	, MEM Free 5.13 GB, Used 35.35 %
+1013001122	0	5	, MEM Free 5.14 GB, Used 35.27 %
+1018024734	0	5	, MEM Free 5.14 GB, Used 35.27 %
+1023048141	0	5	, MEM Free 5.14 GB, Used 35.33 %
+1028070304	0	5	, MEM Free 5.13 GB, Used 35.35 %
+1033094836	0	5	, MEM Free 5.13 GB, Used 35.36 %
+1038117293	0	5	, MEM Free 5.13 GB, Used 35.35 %
+1043145327	0	5	, MEM Free 5.13 GB, Used 35.37 %
+1048171079	0	5	, MEM Free 5.13 GB, Used 35.37 %
+1053195890	0	5	, MEM Free 5.13 GB, Used 35.38 %
+1058218656	0	5	, MEM Free 5.13 GB, Used 35.39 %
+1063242831	0	5	, MEM Free 5.13 GB, Used 35.36 %
+1068265072	0	5	, MEM Free 5.13 GB, Used 35.36 %
+1073290382	0	5	, MEM Free 5.13 GB, Used 35.33 %
+1078314003	0	5	, MEM Free 5.14 GB, Used 35.28 %
+1083337927	0	5	, MEM Free 5.14 GB, Used 35.31 %
+1088360801	0	5	, MEM Free 5.14 GB, Used 35.29 %
+1093387228	0	5	, MEM Free 5.14 GB, Used 35.26 %
+1098410720	0	5	, MEM Free 5.14 GB, Used 35.29 %
+1103436950	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1108459968	0	5	, MEM Free 5.15 GB, Used 35.19 %
+1113483973	0	5	, MEM Free 5.15 GB, Used 35.18 %
+1118509506	0	5	, MEM Free 5.14 GB, Used 35.21 %
+1123532959	0	5	, MEM Free 5.15 GB, Used 35.19 %
+1128553935	0	5	, MEM Free 5.15 GB, Used 35.19 %
+1133574782	0	5	, MEM Free 5.15 GB, Used 35.16 %
+1138598977	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1143622569	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1148647111	0	5	, MEM Free 5.14 GB, Used 35.30 %
+1153671895	0	5	, MEM Free 5.14 GB, Used 35.31 %
+1158697203	0	5	, MEM Free 5.14 GB, Used 35.29 %
+1163720339	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1168742411	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1173764693	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1178786694	0	5	, MEM Free 5.15 GB, Used 35.19 %
+1183812122	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1188833390	0	5	, MEM Free 5.15 GB, Used 35.18 %
+1193856919	0	5	, MEM Free 5.16 GB, Used 34.99 %
+1198879260	0	5	, MEM Free 5.16 GB, Used 35.00 %
+1203903907	0	5	, MEM Free 5.16 GB, Used 35.07 %
+1208928206	0	5	, MEM Free 5.16 GB, Used 35.06 %
+1213949755	0	5	, MEM Free 5.16 GB, Used 35.04 %
+1218971717	0	5	, MEM Free 5.16 GB, Used 35.05 %
+1223995472	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1229023826	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1234048311	0	5	, MEM Free 5.16 GB, Used 35.08 %
+1239069725	0	5	, MEM Free 5.16 GB, Used 35.07 %
+1244094192	0	5	, MEM Free 5.15 GB, Used 35.10 %
+1249117165	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1254138422	0	5	, MEM Free 5.16 GB, Used 34.98 %
+1259160512	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1264186457	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1269212213	0	5	, MEM Free 5.16 GB, Used 35.00 %
+1274234103	0	5	, MEM Free 5.16 GB, Used 34.99 %
+1279255258	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1284277124	0	5	, MEM Free 5.15 GB, Used 35.09 %
+1289304985	0	5	, MEM Free 5.16 GB, Used 35.04 %
+1294326229	0	5	, MEM Free 5.16 GB, Used 35.04 %
+1299348707	0	5	, MEM Free 5.16 GB, Used 35.04 %
+1304369816	0	5	, MEM Free 5.16 GB, Used 35.06 %
+1309397756	0	5	, MEM Free 5.15 GB, Used 35.09 %
+1314419456	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1319443909	0	5	, MEM Free 5.15 GB, Used 35.10 %
+1324464762	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1329489247	0	5	, MEM Free 5.15 GB, Used 35.09 %
+1334512836	0	5	, MEM Free 5.15 GB, Used 35.09 %
+1339532219	0	5	, MEM Free 5.16 GB, Used 34.98 %
+1344554886	0	5	, MEM Free 5.16 GB, Used 34.98 %
+1349578717	0	5	, MEM Free 5.16 GB, Used 35.05 %
+1354602159	0	5	, MEM Free 5.16 GB, Used 35.04 %
+1359625131	0	5	, MEM Free 5.16 GB, Used 35.04 %
+1364648657	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1369670560	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1374696280	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1379717068	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1384741333	0	5	, MEM Free 5.15 GB, Used 35.14 %
+1389762194	0	5	, MEM Free 5.15 GB, Used 35.12 %
+1394788316	0	5	, MEM Free 5.15 GB, Used 35.14 %
+1399810995	0	5	, MEM Free 5.15 GB, Used 35.14 %
+1404831175	0	5	, MEM Free 5.15 GB, Used 35.12 %
+1409853670	0	5	, MEM Free 5.15 GB, Used 35.08 %
+1414878024	0	5	, MEM Free 5.15 GB, Used 35.11 %
+1419902036	0	5	, MEM Free 5.15 GB, Used 35.18 %
+1424923187	0	5	, MEM Free 5.15 GB, Used 35.19 %
+1429944533	0	5	, MEM Free 5.14 GB, Used 35.25 %
+1434967474	0	5	, MEM Free 5.14 GB, Used 35.21 %
+1439993293	0	5	, MEM Free 5.15 GB, Used 35.18 %
+1445017225	0	5	, MEM Free 5.15 GB, Used 35.16 %
+1450039590	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1455059369	0	5	, MEM Free 5.15 GB, Used 35.18 %
+1460083912	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1465105377	0	5	, MEM Free 5.14 GB, Used 35.21 %
+1470127827	0	5	, MEM Free 5.15 GB, Used 35.16 %
+1475148832	0	5	, MEM Free 5.15 GB, Used 35.18 %
+1480171722	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1485194014	0	5	, MEM Free 5.15 GB, Used 35.18 %
+1490214900	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1495236345	0	5	, MEM Free 5.15 GB, Used 35.16 %
+1500259769	0	5	, MEM Free 5.15 GB, Used 35.19 %
+1505283793	0	5	, MEM Free 5.15 GB, Used 35.19 %
+1510310248	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1515332437	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1520353998	0	5	, MEM Free 5.15 GB, Used 35.13 %
+1525378132	0	5	, MEM Free 5.15 GB, Used 35.14 %
+1530399655	0	5	, MEM Free 5.15 GB, Used 35.14 %
+1535423375	0	5	, MEM Free 5.15 GB, Used 35.10 %
+1540443392	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1545466817	0	5	, MEM Free 5.15 GB, Used 35.11 %
+1550489826	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1555511171	0	5	, MEM Free 5.16 GB, Used 34.99 %
+1560532538	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1565554640	0	5	, MEM Free 5.15 GB, Used 35.09 %
+1570578475	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1575605440	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1580627472	0	5	, MEM Free 5.16 GB, Used 35.04 %
+1585648672	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1590674004	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1595695857	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1600717341	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1605737782	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1610766353	0	5	, MEM Free 5.16 GB, Used 35.00 %
+1615789739	0	5	, MEM Free 5.16 GB, Used 34.96 %
+1620813173	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1625834232	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1630857403	0	5	, MEM Free 5.16 GB, Used 34.99 %
+1635880535	0	5	, MEM Free 5.16 GB, Used 34.98 %
+1640900188	0	5	, MEM Free 5.16 GB, Used 34.98 %
+1645920226	0	5	, MEM Free 5.16 GB, Used 34.98 %
+1650941509	0	5	, MEM Free 5.16 GB, Used 34.98 %
+1655969126	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1660992397	0	5	, MEM Free 5.16 GB, Used 35.00 %
+1666015230	0	5	, MEM Free 5.16 GB, Used 34.99 %
+1671035735	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1676063046	0	5	, MEM Free 5.16 GB, Used 35.07 %
+1681087999	0	5	, MEM Free 5.16 GB, Used 35.05 %
+1686110585	0	5	, MEM Free 5.16 GB, Used 34.99 %
+1691132747	0	5	, MEM Free 5.16 GB, Used 34.97 %
+1696158335	0	5	, MEM Free 5.16 GB, Used 35.05 %
+1701180727	0	5	, MEM Free 5.17 GB, Used 34.91 %
+1706201883	0	5	, MEM Free 5.17 GB, Used 34.92 %
+1711223086	0	5	, MEM Free 5.17 GB, Used 34.89 %
+1716246290	0	5	, MEM Free 5.17 GB, Used 34.91 %
+1721267767	0	5	, MEM Free 5.17 GB, Used 34.92 %
+1726289230	0	5	, MEM Free 5.17 GB, Used 34.92 %
+1731310980	0	5	, MEM Free 5.17 GB, Used 34.86 %
+1736339993	0	5	, MEM Free 5.16 GB, Used 34.96 %
+1741363862	0	5	, MEM Free 5.17 GB, Used 34.94 %
+1746384820	0	5	, MEM Free 5.16 GB, Used 34.98 %
+1751407183	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1756429009	0	5	, MEM Free 5.16 GB, Used 35.05 %
+1761457524	0	5	, MEM Free 5.15 GB, Used 35.11 %
+1766479184	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1771500536	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1776520794	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1781546615	0	5	, MEM Free 5.16 GB, Used 35.05 %
+1786571122	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1791592929	0	5	, MEM Free 5.16 GB, Used 35.02 %
+1796615736	0	5	, MEM Free 5.16 GB, Used 35.04 %
+1801641071	0	5	, MEM Free 5.15 GB, Used 35.09 %
+1806666454	0	5	, MEM Free 5.16 GB, Used 35.06 %
+1811686519	0	5	, MEM Free 5.16 GB, Used 35.05 %
+1816710629	0	5	, MEM Free 5.16 GB, Used 35.06 %
+1821734938	0	5	, MEM Free 5.14 GB, Used 35.25 %
+1826757090	0	5	, MEM Free 5.14 GB, Used 35.23 %
+1831777779	0	5	, MEM Free 5.15 GB, Used 35.15 %
+1836799929	0	5	, MEM Free 5.14 GB, Used 35.25 %
+1841823778	0	5	, MEM Free 5.15 GB, Used 35.20 %
+1846850042	0	5	, MEM Free 5.15 GB, Used 35.16 %
+1851871485	0	5	, MEM Free 5.15 GB, Used 35.10 %
+1856894682	0	5	, MEM Free 5.15 GB, Used 35.14 %
+1861914812	0	5	, MEM Free 5.15 GB, Used 35.15 %
+1866940337	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1871961920	0	5	, MEM Free 5.15 GB, Used 35.08 %
+1876983735	0	5	, MEM Free 5.15 GB, Used 35.09 %
+1882007456	0	5	, MEM Free 5.16 GB, Used 35.01 %
+1887032096	0	5	, MEM Free 5.16 GB, Used 35.03 %
+1892059009	0	5	, MEM Free 5.15 GB, Used 35.11 %
+1897080318	0	5	, MEM Free 5.15 GB, Used 35.12 %
+1902100792	0	5	, MEM Free 5.15 GB, Used 35.14 %
+1907123833	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1912148600	0	5	, MEM Free 5.15 GB, Used 35.11 %
+1917170271	0	5	, MEM Free 5.15 GB, Used 35.15 %
+1922191495	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1927212881	0	5	, MEM Free 5.14 GB, Used 35.22 %
+1932236517	0	5	, MEM Free 5.14 GB, Used 35.24 %
+1937257940	0	5	, MEM Free 5.14 GB, Used 35.24 %
+1942279640	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1947300492	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1952322940	0	5	, MEM Free 5.15 GB, Used 35.19 %
+1957353055	0	5	, MEM Free 5.15 GB, Used 35.16 %
+1962373782	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1967394267	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1972416805	0	5	, MEM Free 5.15 GB, Used 35.13 %
+1977445373	0	5	, MEM Free 5.15 GB, Used 35.17 %
+1982465917	0	5	, MEM Free 5.15 GB, Used 35.14 %
+1987487871	0	5	, MEM Free 5.15 GB, Used 35.15 %
+1992512431	0	5	, MEM Free 5.15 GB, Used 35.14 %
+1997535926	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2002556736	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2007579093	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2012600181	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2017624500	0	5	, MEM Free 5.15 GB, Used 35.15 %
+2022647170	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2027669192	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2032690508	0	5	, MEM Free 5.16 GB, Used 35.07 %
+2037713648	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2042736628	0	5	, MEM Free 5.15 GB, Used 35.08 %
+2047757426	0	5	, MEM Free 5.15 GB, Used 35.08 %
+2052780376	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2057802490	0	5	, MEM Free 5.16 GB, Used 35.05 %
+2062827343	0	5	, MEM Free 5.16 GB, Used 35.02 %
+2067848461	0	5	, MEM Free 5.16 GB, Used 35.01 %
+2072873137	0	5	, MEM Free 5.15 GB, Used 35.10 %
+2077898752	0	5	, MEM Free 5.16 GB, Used 35.08 %
+2082924227	0	5	, MEM Free 5.15 GB, Used 35.10 %
+2087944552	0	5	, MEM Free 5.15 GB, Used 35.09 %
+2092966377	0	5	, MEM Free 5.16 GB, Used 34.97 %
+2097987168	0	5	, MEM Free 5.16 GB, Used 35.05 %
+2103009668	0	5	, MEM Free 5.16 GB, Used 35.02 %
+2108034229	0	5	, MEM Free 5.16 GB, Used 35.06 %
+2113055560	0	5	, MEM Free 5.16 GB, Used 35.08 %
+2118076766	0	5	, MEM Free 5.15 GB, Used 35.10 %
+2123099802	0	5	, MEM Free 5.15 GB, Used 35.10 %
+2128123651	0	5	, MEM Free 5.15 GB, Used 35.08 %
+2133144600	0	5	, MEM Free 5.16 GB, Used 35.06 %
+2138166907	0	5	, MEM Free 5.16 GB, Used 35.05 %
+2143188008	0	5	, MEM Free 5.15 GB, Used 35.08 %
+2148212996	0	5	, MEM Free 5.15 GB, Used 35.10 %
+2153236345	0	5	, MEM Free 5.16 GB, Used 35.04 %
+2158263048	0	5	, MEM Free 5.15 GB, Used 35.09 %
+2163282809	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2168305697	0	5	, MEM Free 5.15 GB, Used 35.11 %
+2173328273	0	5	, MEM Free 5.16 GB, Used 35.03 %
+2178349267	0	5	, MEM Free 5.16 GB, Used 35.03 %
+2183371107	0	5	, MEM Free 5.16 GB, Used 35.03 %
+2188393623	0	5	, MEM Free 5.16 GB, Used 35.04 %
+2193419127	0	5	, MEM Free 5.16 GB, Used 35.06 %
+2198442827	0	5	, MEM Free 5.16 GB, Used 35.07 %
+2203464391	0	5	, MEM Free 5.16 GB, Used 35.03 %
+2208485719	0	5	, MEM Free 5.16 GB, Used 35.04 %
+2213510367	0	5	, MEM Free 5.16 GB, Used 35.01 %
+2218531261	0	5	, MEM Free 5.16 GB, Used 35.04 %
+2223554125	0	5	, MEM Free 5.16 GB, Used 35.05 %
+2228575048	0	5	, MEM Free 5.16 GB, Used 35.03 %
+2233598360	0	5	, MEM Free 5.16 GB, Used 35.03 %
+2238623810	0	5	, MEM Free 5.16 GB, Used 34.97 %
+2243647420	0	5	, MEM Free 5.16 GB, Used 34.98 %
+2248668533	0	5	, MEM Free 5.16 GB, Used 34.99 %
+2253691064	0	5	, MEM Free 5.16 GB, Used 35.00 %
+2258715535	0	5	, MEM Free 5.16 GB, Used 34.99 %
+2263736929	0	5	, MEM Free 5.16 GB, Used 34.99 %
+2268758866	0	5	, MEM Free 5.16 GB, Used 35.00 %
+2273781056	0	5	, MEM Free 5.16 GB, Used 34.97 %
+2278807334	0	5	, MEM Free 5.16 GB, Used 35.01 %
+2283830201	0	5	, MEM Free 5.16 GB, Used 35.06 %
+2288854155	0	5	, MEM Free 5.16 GB, Used 35.07 %
+2293875191	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2298900007	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2303921865	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2308943811	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2313964968	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2318991465	0	5	, MEM Free 5.15 GB, Used 35.17 %
+2324015428	0	5	, MEM Free 5.14 GB, Used 35.25 %
+2329036234	0	5	, MEM Free 5.14 GB, Used 35.25 %
+2334057036	0	5	, MEM Free 5.15 GB, Used 35.17 %
+2339080584	0	5	, MEM Free 5.14 GB, Used 35.30 %
+2344110403	0	5	, MEM Free 5.14 GB, Used 35.26 %
+2349132879	0	5	, MEM Free 5.14 GB, Used 35.24 %
+2354153735	0	5	, MEM Free 5.14 GB, Used 35.21 %
+2359176356	0	5	, MEM Free 5.14 GB, Used 35.23 %
+2364201867	0	5	, MEM Free 5.14 GB, Used 35.28 %
+2369223794	0	5	, MEM Free 5.14 GB, Used 35.26 %
+2374246244	0	5	, MEM Free 5.14 GB, Used 35.26 %
+2379267441	0	5	, MEM Free 5.14 GB, Used 35.26 %
+2384291400	0	5	, MEM Free 5.14 GB, Used 35.27 %
+2389313358	0	5	, MEM Free 5.14 GB, Used 35.27 %
+2394335336	0	5	, MEM Free 5.14 GB, Used 35.22 %
+2399356775	0	5	, MEM Free 5.14 GB, Used 35.24 %
+2404379906	0	5	, MEM Free 5.14 GB, Used 35.27 %
+2409405277	0	5	, MEM Free 5.14 GB, Used 35.25 %
+2414425456	0	5	, MEM Free 5.14 GB, Used 35.23 %
+2419446074	0	5	, MEM Free 5.15 GB, Used 35.18 %
+2424471912	0	5	, MEM Free 5.15 GB, Used 35.18 %
+2429495758	0	5	, MEM Free 5.15 GB, Used 35.17 %
+2434517336	0	5	, MEM Free 5.15 GB, Used 35.17 %
+2439540393	0	5	, MEM Free 5.15 GB, Used 35.16 %
+2444563160	0	5	, MEM Free 5.15 GB, Used 35.10 %
+2449586825	0	5	, MEM Free 5.15 GB, Used 35.11 %
+2454606821	0	5	, MEM Free 5.16 GB, Used 35.06 %
+2459628177	0	5	, MEM Free 5.15 GB, Used 35.09 %
+2464650230	0	5	, MEM Free 5.15 GB, Used 35.15 %
+2469672245	0	5	, MEM Free 5.15 GB, Used 35.17 %
+2474697304	0	5	, MEM Free 5.15 GB, Used 35.16 %
+2479718096	0	5	, MEM Free 5.15 GB, Used 35.16 %
+2484738722	0	5	, MEM Free 5.15 GB, Used 35.16 %
+2489761138	0	5	, MEM Free 5.15 GB, Used 35.16 %
+2494785570	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2499806655	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2504828175	0	5	, MEM Free 5.15 GB, Used 35.15 %
+2509848925	0	5	, MEM Free 5.15 GB, Used 35.15 %
+2514874122	0	5	, MEM Free 5.15 GB, Used 35.11 %
+2519897666	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2524920792	0	5	, MEM Free 5.15 GB, Used 35.17 %
+2529942401	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2534965050	0	5	, MEM Free 5.15 GB, Used 35.16 %
+2539989058	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2545010225	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2550031035	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2555053626	0	5	, MEM Free 5.15 GB, Used 35.17 %
+2560079209	0	5	, MEM Free 5.15 GB, Used 35.15 %
+2565101637	0	5	, MEM Free 5.15 GB, Used 35.11 %
+2570123610	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2575144020	0	5	, MEM Free 5.15 GB, Used 35.08 %
+2580170061	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2585192171	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2590213170	0	5	, MEM Free 5.15 GB, Used 35.11 %
+2595234471	0	5	, MEM Free 5.16 GB, Used 35.06 %
+2600257059	0	5	, MEM Free 5.16 GB, Used 35.01 %
+2605280778	0	5	, MEM Free 5.16 GB, Used 35.05 %
+2610301601	0	5	, MEM Free 5.16 GB, Used 35.05 %
+2615326727	0	5	, MEM Free 5.16 GB, Used 35.08 %
+2620350499	0	5	, MEM Free 5.16 GB, Used 34.99 %
+2625373260	0	5	, MEM Free 5.16 GB, Used 34.98 %
+2630394902	0	5	, MEM Free 5.16 GB, Used 34.98 %
+2635417882	0	5	, MEM Free 5.17 GB, Used 34.94 %
+2640438970	0	5	, MEM Free 5.16 GB, Used 34.99 %
+2645468547	0	5	, MEM Free 5.15 GB, Used 35.08 %
+2650491276	0	5	, MEM Free 5.16 GB, Used 35.07 %
+2655513745	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2660534268	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2665559516	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2670582153	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2675604248	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2680626268	0	5	, MEM Free 5.15 GB, Used 35.10 %
+2685649539	0	5	, MEM Free 5.15 GB, Used 35.15 %
+2690675717	0	5	, MEM Free 5.15 GB, Used 35.18 %
+2695696699	0	5	, MEM Free 5.15 GB, Used 35.09 %
+2700717484	0	5	, MEM Free 5.15 GB, Used 35.11 %
+2705739415	0	5	, MEM Free 5.15 GB, Used 35.16 %
+2710762930	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2715788563	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2720813322	0	5	, MEM Free 5.16 GB, Used 35.07 %
+2725835848	0	5	, MEM Free 5.15 GB, Used 35.09 %
+2730861045	0	5	, MEM Free 5.16 GB, Used 35.08 %
+2735887563	0	5	, MEM Free 5.15 GB, Used 35.18 %
+2740909976	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2745933480	0	5	, MEM Free 5.16 GB, Used 35.07 %
+2750957317	0	5	, MEM Free 5.16 GB, Used 35.04 %
+2755978572	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2760999322	0	5	, MEM Free 5.16 GB, Used 35.07 %
+2766020439	0	5	, MEM Free 5.16 GB, Used 35.03 %
+2771042420	0	5	, MEM Free 5.16 GB, Used 35.02 %
+2776066447	0	5	, MEM Free 5.16 GB, Used 35.03 %
+2781087009	0	5	, MEM Free 5.16 GB, Used 35.01 %
+2786110887	0	5	, MEM Free 5.16 GB, Used 34.96 %
+2791136450	0	5	, MEM Free 5.15 GB, Used 35.09 %
+2796164225	0	5	, MEM Free 5.16 GB, Used 35.07 %
+2801188575	0	5	, MEM Free 5.16 GB, Used 35.07 %
+2806213953	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2811235565	0	5	, MEM Free 5.16 GB, Used 35.01 %
+2816257715	0	5	, MEM Free 5.16 GB, Used 35.06 %
+2821279981	0	5	, MEM Free 5.16 GB, Used 35.05 %
+2826301425	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2831324073	0	5	, MEM Free 5.15 GB, Used 35.11 %
+2836345689	0	5	, MEM Free 5.15 GB, Used 35.15 %
+2841368085	0	5	, MEM Free 5.15 GB, Used 35.12 %
+2846389355	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2851410047	0	5	, MEM Free 5.14 GB, Used 35.24 %
+2856433601	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2861457664	0	5	, MEM Free 5.15 GB, Used 35.13 %
+2866478309	0	5	, MEM Free 5.15 GB, Used 35.14 %
+2869506610	0	1	CmdExecuted : RecordSlideShow
+2870018441	0	1	ExternalVideoController.Stop
+2870048013	0	1	Keyboard: @keyboard.inf,%*pnp0303.devicedesc%;Standard PS/2 Keyboard
+2872066917	0	5	, MEM Free 5.14 GB, Used 35.28 %
+2875461218	0	1	Record the Experiment speed-acc-novel-child-gaze-order1
+2875461257	0	1	MainForm does not intersect with StimulusWindow
+2875461402	0	1	ApplicationController.PrepareStimulusWindow
+2875461823	0	1	AddStimulusControl ImageStimulusControl
+2875461885	0	1	AddStimulusControl PdfStimulusControl
+2875462253	0	1	AddStimulusControl QuestionStimulusControl
+2875462420	0	1	MoviePlayerStimulusControl.Clear()
+2875462428	0	1	AddStimulusControl MoviePlayerStimulusControl
+2875462488	0	1	AddStimulusControl CalibrationStimulusControl
+2875463371	0	1	AddStimulusControl ExternalVideoStimulusControl
+2875473584	0	1	BuildRandomList
+2875506417	0	1	ScreenSaverController.StoreData
+2875544464	0	1	NameController::create participant folder::C:\Users\iView X\Desktop\Results\speed-acc-novel-child-gaze-order1\bing_pilot_1-[417ec75b-a107-49bc-a494-fd96d16cc541]
+2875544969	0	1	Execution of Experiment speed-acc-novel-child-gaze-order1
+2875546911	0	1	Eye Tracker Source End
+2875546944	0	1	Stop Recording failed: ERR_EMPTY_DATA_BUFFER
+2875546951	0	1	Eye Tracker Source Begin
+2875564974	0	1	Screen DPI is 1
+2875565040	0	1	m_isCalibrationQualityUsed = True
+2875565054	0	1	ExecuteCurrentObject Calibration
+2875568128	0	11	DoTheWork Start Calibration
+2875568150	0	11	AddProtocolLine 
+2875568154	0	11	Calibration : StartStimulus
+2875586119	0	1	Show StimulusWindow
+2875586953	0	11	PutDataIntoStimulusControl - CalibrationObject
+2875592473	0	1	ShowSlideShowWindow_Loaded Left=1920, Top=0, ActualWidth=3072, ActualHeight=1728
+2875955255	0	35	Calibration : NextPoint = 1  X=1525  Y=734
+2875995141	0	11	Recording disabled for this stimulus
+2878015793	0	5	, MEM Free 5.15 GB, Used 35.08 %
+2879811909	0	35	Calibration : NextPoint = 2  X=714  Y=174
+2881769309	0	35	Calibration : NextPoint = 3  X=2838  Y=451
+2883726665	0	35	Calibration : NextPoint = 4  X=2445  Y=1552
+2883739049	0	5	, MEM Free 5.15 GB, Used 35.10 %
+2885684108	0	35	Calibration : NextPoint = 5  X=222  Y=1131
+2887650505	0	9	Calibration : CaliFinnished
+2887887661	0	33	Calibration : ShowNextValidationPoint
+2888905857	0	5	, MEM Free 5.15 GB, Used 35.10 %
+2889848053	0	33	Calibration : ShowNextValidationPoint
+2891810397	0	33	Calibration : ShowNextValidationPoint
+2893773805	0	33	Calibration : ShowNextValidationPoint
+2894793308	0	5	, MEM Free 5.15 GB, Used 35.09 %
+2895749225	0	33	iv_GetAccuracy: RET_SUCCESS
+2900536170	0	1	StopExecution Calibration
+2900536189	0	11	Calibration : StopStimulus
+2900550236	0	5	, MEM Free 5.15 GB, Used 35.19 %
+2901736319	0	11	OnStimulusCompleted
+2901736341	0	11	ExecuteCurrentObject Movie
+2901736404	0	11	stopExecutionEvent set after 24540.9961641254 ms
+2901736407	0	11	DoTheWork End Calibration
+2901736407	0	26	DoTheWork Start Movie
+2901736426	0	26	AddProtocolLine mika_intro2.avi
+2901736428	0	26	Movie : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\mika_intro2.avi
+2901736430	0	26	PauseDataRecording while movie is loading
+2901736812	0	1	Show StimulusWindow
+2901736866	0	26	PutDataIntoStimulusControl - MovieObject
+2902207700	0	27	MediaOpened - RemarkMessage 9a1eafb691bc4dcde05f00e87cd82e99.avi
+2902212798	0	27	ContinueMessage 9a1eafb691bc4dcde05f00e87cd82e99.avi
+2906238354	0	5	, MEM Free 5.10 GB, Used 35.72 %
+2911261187	0	5	, MEM Free 5.11 GB, Used 35.65 %
+2915721835	0	1	StimulusList OnMediaEnded
+2915721840	0	1	StopExecution Movie
+2915721872	0	26	StopStimulus Movie
+2915722192	0	26	OnStimulusCompleted
+2915722212	0	26	ExecuteCurrentObject Composite
+2915722267	0	26	stopExecutionEvent set after 13509.0378428235 ms
+2915722269	0	26	DoTheWork End Movie
+2915722305	0	26	DoTheWork Start Composite
+2915722322	0	26	AddProtocolLine gr_sa_cookie_nonoise_look_0
+2915722325	0	26	Composite : StartStimulus 66679fe1-e159-4a21-b9a0-8c44f6382836
+2915722654	0	26	PutDataIntoStimulusControl - Composite - Video
+2916198537	0	27	MediaOpened - RemarkMessage ef177c1276275662048244274d3df8cf_3072x1728.avi
+2916199019	0	27	ContinueMessage ef177c1276275662048244274d3df8cf_3072x1728.avi
+2917228002	0	5	, MEM Free 5.07 GB, Used 36.15 %
+2922252161	0	5	, MEM Free 5.07 GB, Used 36.17 %
+2924737123	0	1	StimulusList OnMediaEnded
+2924737131	0	1	StopExecution Composite
+2924737166	0	26	StopStimulus Composite
+2924737173	4	26	ShowImage expected : Manual
+2924737471	0	26	OnStimulusCompleted
+2924737485	0	26	ExecuteCurrentObject Image
+2924737543	0	26	stopExecutionEvent set after 8538.11515286684 ms
+2924737547	0	26	DoTheWork End Composite
+2924737583	0	26	DoTheWork Start Image
+2924737598	0	26	AddProtocolLine black_background2.png
+2924737600	0	26	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+2924737872	0	1	Show StimulusWindow
+2924739491	0	26	PutDataIntoStimulusControl - ImageObject
+2924842651	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+2924843161	0	26	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+2925242944	4	26	ShowImage expected : 400
+2925242973	0	26	OnStimulusCompleted
+2925242990	0	26	ExecuteCurrentObject Composite
+2925243047	0	26	stopExecutionEvent set after 400.279240159988 ms
+2925243049	0	26	DoTheWork End Image
+2925243063	0	22	DoTheWork Start Composite
+2925243079	0	22	AddProtocolLine gr_sa_bosa_nonoise_hey_1
+2925243082	0	22	Composite : StartStimulus c433ed3a-ea42-41bf-89cf-e8112816f2fc
+2925243919	0	1	Show StimulusWindow
+2925246148	0	22	PutDataIntoStimulusControl - Composite - Video
+2925725278	0	21	MediaOpened - RemarkMessage 24188a4a8010b56ab8ec7d89ca523c41_3072x1728.avi
+2925725346	0	21	ContinueMessage 24188a4a8010b56ab8ec7d89ca523c41_3072x1728.avi
+2927746710	0	5	, MEM Free 5.06 GB, Used 36.30 %
+2932769764	0	5	, MEM Free 5.06 GB, Used 36.24 %
+2933787455	0	1	StimulusList OnMediaEnded
+2933787464	0	1	StopExecution Composite
+2933787496	0	22	StopStimulus Composite
+2933787503	4	22	ShowImage expected : Manual
+2933787791	0	22	OnStimulusCompleted
+2933787806	0	22	ExecuteCurrentObject Image
+2933787860	0	22	stopExecutionEvent set after 8062.12015879917 ms
+2933787865	0	22	DoTheWork End Composite
+2933787898	0	22	DoTheWork Start Image
+2933787912	0	22	AddProtocolLine black_background2.png
+2933787914	0	22	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+2933788204	0	1	Show StimulusWindow
+2933789735	0	22	PutDataIntoStimulusControl - ImageObject
+2933870040	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+2933870483	0	22	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+2934270333	4	22	ShowImage expected : 400
+2934270368	0	22	OnStimulusCompleted
+2934270386	0	22	ExecuteCurrentObject Composite
+2934270439	0	22	stopExecutionEvent set after 400.275818937778 ms
+2934270441	0	22	DoTheWork End Image
+2934270482	0	24	DoTheWork Start Composite
+2934270497	0	24	AddProtocolLine gr_sa_bosa_nonoise_hey_2
+2934270499	0	24	Composite : StartStimulus aebae3ad-e890-463d-a497-5921ae0a6893
+2934271584	0	1	Show StimulusWindow
+2934273683	0	24	PutDataIntoStimulusControl - Composite - Video
+2934752654	0	25	MediaOpened - RemarkMessage c0590f8304863a2c62a3a1606860018f_3072x1728.avi
+2934752708	0	25	ContinueMessage c0590f8304863a2c62a3a1606860018f_3072x1728.avi
+2937773983	0	5	, MEM Free 5.10 GB, Used 35.72 %
+2942806974	0	5	, MEM Free 5.15 GB, Used 35.20 %
+2942815078	0	1	StimulusList OnMediaEnded
+2942815087	0	1	StopExecution Composite
+2942815115	0	24	StopStimulus Composite
+2942815123	4	24	ShowImage expected : Manual
+2942815221	0	24	OnStimulusCompleted
+2942815236	0	24	ExecuteCurrentObject Image
+2942815286	0	24	stopExecutionEvent set after 8062.36477619028 ms
+2942815290	0	24	DoTheWork End Composite
+2942815323	0	24	DoTheWork Start Image
+2942815339	0	24	AddProtocolLine black_background2.png
+2942815341	0	24	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+2942815491	0	1	Show StimulusWindow
+2942817262	0	24	PutDataIntoStimulusControl - ImageObject
+2942897420	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+2942897927	0	24	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+2943297715	4	24	ShowImage expected : 400
+2943297755	0	24	OnStimulusCompleted
+2943297773	0	24	ExecuteCurrentObject Composite
+2943297834	0	24	stopExecutionEvent set after 400.277187427044 ms
+2943297836	0	24	DoTheWork End Image
+2943297876	0	31	DoTheWork Start Composite
+2943297891	0	31	AddProtocolLine gr_sa_bosa_nonoise_look_3
+2943297894	0	31	Composite : StartStimulus 96b22915-158d-4fb3-aa47-9f80f445c34d
+2943298568	0	1	Show StimulusWindow
+2943301023	0	31	PutDataIntoStimulusControl - Composite - Video
+2943730008	0	27	MediaOpened - RemarkMessage 42118acd7dd4f5ab7d18ace7fd7f4ccf_3072x1728.avi
+2943730080	0	27	ContinueMessage 42118acd7dd4f5ab7d18ace7fd7f4ccf_3072x1728.avi
+2948757473	0	5	, MEM Free 5.10 GB, Used 35.71 %
+2951651427	0	1	StimulusList OnMediaEnded
+2951651435	0	1	StopExecution Composite
+2951651468	0	31	StopStimulus Composite
+2951651475	4	31	ShowImage expected : Manual
+2951651786	0	31	OnStimulusCompleted
+2951651802	0	31	ExecuteCurrentObject Image
+2951651899	0	21	DoTheWork Start Image
+2951651916	0	21	AddProtocolLine black_background2.png
+2951651918	0	21	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+2951652330	0	31	stopExecutionEvent set after 7921.35499560022 ms
+2951652336	0	31	DoTheWork End Composite
+2951652495	0	1	Show StimulusWindow
+2951654226	0	21	PutDataIntoStimulusControl - ImageObject
+2951741687	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+2951742214	0	21	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+2952141987	4	21	ShowImage expected : 400
+2952142036	0	21	OnStimulusCompleted
+2952142054	0	21	ExecuteCurrentObject Composite
+2952142131	0	4	DoTheWork Start Composite
+2952142150	0	4	AddProtocolLine gr_sa_bosa_nonoise_look_4
+2952142152	0	4	Composite : StartStimulus 35aca129-739e-4138-8042-e9d1dd444365
+2952142168	0	21	stopExecutionEvent set after 400.276161060333 ms
+2952142170	0	21	DoTheWork End Image
+2952142600	0	1	Show StimulusWindow
+2952144428	0	4	PutDataIntoStimulusControl - Composite - Video
+2952624295	0	27	MediaOpened - RemarkMessage 4830de28c71d6173462bb53ebf757049_3072x1728.avi
+2952624371	0	27	ContinueMessage 4830de28c71d6173462bb53ebf757049_3072x1728.avi
+2954648212	0	5	, MEM Free 5.11 GB, Used 35.70 %
+2959670782	0	5	, MEM Free 5.11 GB, Used 35.59 %
+2960501386	0	1	StimulusList OnMediaEnded
+2960501399	0	1	StopExecution Composite
+2960501447	0	4	StopStimulus Composite
+2960501459	4	4	ShowImage expected : Manual
+2960501999	0	4	OnStimulusCompleted
+2960502014	0	4	ExecuteCurrentObject Image
+2960502264	0	31	DoTheWork Start Image
+2960502286	0	31	AddProtocolLine black_background2.png
+2960502288	0	31	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+2960502838	0	4	stopExecutionEvent set after 7877.03648254538 ms
+2960502854	0	4	DoTheWork End Composite
+2960504796	0	1	Show StimulusWindow
+2960507611	0	31	PutDataIntoStimulusControl - ImageObject
+2960585927	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+2960586363	0	31	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+2960986217	4	31	ShowImage expected : 400
+2960986247	0	31	OnStimulusCompleted
+2960986264	0	31	ExecuteCurrentObject Composite
+2960986323	0	31	stopExecutionEvent set after 400.27445044899 ms
+2960986325	0	31	DoTheWork End Image
+2960986361	0	31	DoTheWork Start Composite
+2960986376	0	31	AddProtocolLine gr_sa_bosa_nonoise_hey_5
+2960986378	0	31	Composite : StartStimulus 7f205a39-5e27-48a4-a3e9-5edd602dabd8
+2960986837	0	1	Show StimulusWindow
+2960989328	0	31	PutDataIntoStimulusControl - Composite - Video
+2961418522	0	24	MediaOpened - RemarkMessage 7fee44bd1be51d262545ba13c97ad322_3072x1728.avi
+2961418613	0	24	ContinueMessage 7fee44bd1be51d262545ba13c97ad322_3072x1728.avi
+2965441197	0	5	, MEM Free 5.11 GB, Used 35.59 %
+2969507140	0	1	StimulusList OnMediaEnded
+2969507150	0	1	StopExecution Composite
+2969507184	0	31	StopStimulus Composite
+2969507192	4	31	ShowImage expected : Manual
+2969507598	0	31	OnStimulusCompleted
+2969507614	0	31	ExecuteCurrentObject Image
+2969507670	0	31	stopExecutionEvent set after 8088.50667754173 ms
+2969507675	0	31	DoTheWork End Composite
+2969507711	0	31	DoTheWork Start Image
+2969507727	0	31	AddProtocolLine black_background2.png
+2969507728	0	31	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+2969507999	0	1	Show StimulusWindow
+2969509649	0	31	PutDataIntoStimulusControl - ImageObject
+2969564271	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+2969564714	0	31	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+2969964562	4	31	ShowImage expected : 400
+2969964594	0	31	OnStimulusCompleted
+2969964611	0	31	ExecuteCurrentObject Composite
+2969964682	0	22	DoTheWork Start Composite
+2969964699	0	22	AddProtocolLine gr_sa_bosa_nonoise_look_6
+2969964701	0	22	Composite : StartStimulus 213ed684-ffe4-4d65-b13f-e16557573934
+2969964707	0	31	stopExecutionEvent set after 400.276161060333 ms
+2969964710	0	31	DoTheWork End Image
+2969965051	0	1	Show StimulusWindow
+2969967069	0	22	PutDataIntoStimulusControl - Composite - Video
+2970412878	0	4	MediaOpened - RemarkMessage 4de9452045516e9d50846ef0621f5a29_3072x1728.avi
+2970412940	0	4	ContinueMessage 4de9452045516e9d50846ef0621f5a29_3072x1728.avi
+2971434378	0	5	, MEM Free 5.11 GB, Used 35.59 %
+2976458250	0	5	, MEM Free 5.11 GB, Used 35.63 %
+2978301934	0	1	StimulusList OnMediaEnded
+2978301944	0	1	StopExecution Composite
+2978301984	0	22	StopStimulus Composite
+2978301993	4	22	ShowImage expected : Manual
+2978302110	0	22	OnStimulusCompleted
+2978302127	0	22	ExecuteCurrentObject Image
+2978302182	0	22	stopExecutionEvent set after 7889.00049676132 ms
+2978302186	0	22	DoTheWork End Composite
+2978302223	0	22	DoTheWork Start Image
+2978302241	0	22	AddProtocolLine black_background2.png
+2978302242	0	22	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+2978302806	0	1	Show StimulusWindow
+2978304357	0	22	PutDataIntoStimulusControl - ImageObject
+2978358485	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+2978358947	0	22	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+2978758778	4	22	ShowImage expected : 400
+2978758813	0	22	OnStimulusCompleted
+2978758833	0	22	ExecuteCurrentObject Composite
+2978758891	0	22	stopExecutionEvent set after 400.278555915356 ms
+2978758893	0	22	DoTheWork End Image
+2978758907	0	24	DoTheWork Start Composite
+2978758923	0	24	AddProtocolLine gr_sa_bosa_nonoise_hey_7
+2978758925	0	24	Composite : StartStimulus a4e6ce76-65e8-40b8-847d-87f8cd84ca24
+2978759347	0	1	Show StimulusWindow
+2978761521	0	24	PutDataIntoStimulusControl - Composite - Video
+2979207087	0	29	MediaOpened - RemarkMessage 8b3326790f22defa8b5a0896927dac55_3072x1728.avi
+2979207164	0	29	ContinueMessage 8b3326790f22defa8b5a0896927dac55_3072x1728.avi
+2982231398	0	5	, MEM Free 5.11 GB, Used 35.64 %
+2987249790	0	1	StimulusList OnMediaEnded
+2987249800	0	1	StopExecution Composite
+2987249832	0	24	StopStimulus Composite
+2987249839	4	24	ShowImage expected : Manual
+2987250330	0	24	OnStimulusCompleted
+2987250347	0	24	ExecuteCurrentObject Image
+2987250405	0	24	stopExecutionEvent set after 8042.632534729 ms
+2987250410	0	24	DoTheWork End Composite
+2987250446	0	24	DoTheWork Start Image
+2987250462	0	24	AddProtocolLine black_background2.png
+2987250463	0	24	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+2987250738	0	1	Show StimulusWindow
+2987252679	0	24	PutDataIntoStimulusControl - ImageObject
+2987260862	0	5	, MEM Free 5.15 GB, Used 35.08 %
+2987318820	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+2987319308	0	24	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+2987719132	4	24	ShowImage expected : 400
+2987719173	0	24	OnStimulusCompleted
+2987719190	0	24	ExecuteCurrentObject Composite
+2987719248	0	24	stopExecutionEvent set after 400.290530193806 ms
+2987719250	0	24	DoTheWork End Image
+2987719289	0	24	DoTheWork Start Composite
+2987719304	0	24	AddProtocolLine gr_sa_bosa_nonoise_look_8
+2987719306	0	24	Composite : StartStimulus cd88cdbd-09ed-4592-8007-5bf5084cf8f0
+2987719754	0	1	Show StimulusWindow
+2987721844	0	24	PutDataIntoStimulusControl - Composite - Video
+2988184438	0	26	MediaOpened - RemarkMessage a9cf3e31ae4f99e93dbadc2771385730_3072x1728.avi
+2988184788	0	26	ContinueMessage a9cf3e31ae4f99e93dbadc2771385730_3072x1728.avi
+2993214211	0	5	, MEM Free 5.12 GB, Used 35.57 %
+2996062116	0	1	StimulusList OnMediaEnded
+2996062127	0	1	StopExecution Composite
+2996062169	0	24	StopStimulus Composite
+2996062177	4	24	ShowImage expected : Manual
+2996062741	0	24	OnStimulusCompleted
+2996062756	0	24	ExecuteCurrentObject Image
+2996062806	0	24	stopExecutionEvent set after 7877.34199769259 ms
+2996062811	0	24	DoTheWork End Composite
+2996062843	0	24	DoTheWork Start Image
+2996062858	0	24	AddProtocolLine black_background2.png
+2996062860	0	24	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+2996063081	0	1	Show StimulusWindow
+2996064582	0	24	PutDataIntoStimulusControl - ImageObject
+2996146065	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+2996146516	0	24	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+2996546365	4	24	ShowImage expected : 400
+2996546400	0	24	OnStimulusCompleted
+2996546418	0	24	ExecuteCurrentObject Composite
+2996546488	0	29	DoTheWork Start Composite
+2996546505	0	29	AddProtocolLine gr_sa_pifo_nonoise_hey_9
+2996546507	0	29	Composite : StartStimulus e77208cc-2e84-45d4-8eb7-d005379f3049
+2996546520	0	24	stopExecutionEvent set after 400.28129289341 ms
+2996546522	0	24	DoTheWork End Image
+2996546943	0	1	Show StimulusWindow
+2996548598	0	29	PutDataIntoStimulusControl - Composite - Video
+2996978652	0	25	MediaOpened - RemarkMessage 43a216e315e872249692915f6c8855bf_3072x1728.avi
+2996979097	0	25	ContinueMessage 43a216e315e872249692915f6c8855bf_3072x1728.avi
+2999007025	0	5	, MEM Free 5.11 GB, Used 35.60 %
+3004034223	0	5	, MEM Free 5.11 GB, Used 35.70 %
+3004808518	0	1	StimulusList OnMediaEnded
+3004808527	0	1	StopExecution Composite
+3004808561	0	29	StopStimulus Composite
+3004808569	4	29	ShowImage expected : Manual
+3004808932	0	29	OnStimulusCompleted
+3004808948	0	29	ExecuteCurrentObject Image
+3004809001	0	29	stopExecutionEvent set after 7829.43325400639 ms
+3004809006	0	29	DoTheWork End Composite
+3004809040	0	29	DoTheWork Start Image
+3004809055	0	29	AddProtocolLine black_background2.png
+3004809057	0	29	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3004809205	0	1	Show StimulusWindow
+3004810858	0	29	PutDataIntoStimulusControl - ImageObject
+3004907271	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3004907813	0	29	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3005307559	4	29	ShowImage expected : 400
+3005307596	0	29	OnStimulusCompleted
+3005307620	0	29	ExecuteCurrentObject Composite
+3005307707	0	32	DoTheWork Start Composite
+3005307724	0	32	AddProtocolLine gr_sa_pifo_nonoise_hey_10
+3005307727	0	32	Composite : StartStimulus bc3b1f94-ba05-4e1c-8282-189e867a843b
+3005307742	0	29	stopExecutionEvent set after 400.279240159988 ms
+3005307745	0	29	DoTheWork End Image
+3005308205	0	1	Show StimulusWindow
+3005311187	0	32	PutDataIntoStimulusControl - Composite - Video
+3005739850	0	22	MediaOpened - RemarkMessage 52af4b4cb37baaabf15a649b10d988f3_3072x1728.avi
+3005740154	0	22	ContinueMessage 52af4b4cb37baaabf15a649b10d988f3_3072x1728.avi
+3009768738	0	5	, MEM Free 5.11 GB, Used 35.67 %
+3013594888	0	1	StimulusList OnMediaEnded
+3013594897	0	1	StopExecution Composite
+3013594929	0	32	StopStimulus Composite
+3013594937	4	32	ShowImage expected : Manual
+3013595020	0	32	OnStimulusCompleted
+3013595037	0	32	ExecuteCurrentObject Image
+3013595086	0	32	stopExecutionEvent set after 7854.66032052755 ms
+3013595090	0	32	DoTheWork End Composite
+3013595099	0	31	DoTheWork Start Image
+3013595117	0	31	AddProtocolLine black_background2.png
+3013595119	0	31	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3013595440	0	1	Show StimulusWindow
+3013596753	0	31	PutDataIntoStimulusControl - ImageObject
+3013651438	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3013651882	0	31	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3014051735	4	31	ShowImage expected : 400
+3014051768	0	31	OnStimulusCompleted
+3014051787	0	31	ExecuteCurrentObject Composite
+3014051836	0	31	stopExecutionEvent set after 400.278213793755 ms
+3014051838	0	31	DoTheWork End Image
+3014051874	0	31	DoTheWork Start Composite
+3014051889	0	31	AddProtocolLine gr_sa_pifo_nonoise_look_11
+3014051891	0	31	Composite : StartStimulus 649cf933-c8ee-4dfc-b331-d9e37b178dc2
+3014052349	0	1	Show StimulusWindow
+3014053916	0	31	PutDataIntoStimulusControl - Composite - Video
+3014501042	0	24	MediaOpened - RemarkMessage 385d4a41004a4ec351f3db3fb984828f_3072x1728.avi
+3014501115	0	24	ContinueMessage 385d4a41004a4ec351f3db3fb984828f_3072x1728.avi
+3015526141	0	5	, MEM Free 5.11 GB, Used 35.66 %
+3020551192	0	5	, MEM Free 5.10 GB, Used 35.72 %
+3022307368	0	1	StimulusList OnMediaEnded
+3022307378	0	1	StopExecution Composite
+3022307412	0	31	StopStimulus Composite
+3022307420	4	31	ShowImage expected : Manual
+3022307755	0	31	OnStimulusCompleted
+3022307771	0	31	ExecuteCurrentObject Image
+3022307827	0	31	stopExecutionEvent set after 7806.2661054039 ms
+3022307832	0	31	DoTheWork End Composite
+3022307865	0	31	DoTheWork Start Image
+3022307880	0	31	AddProtocolLine black_background2.png
+3022307881	0	31	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3022308192	0	1	Show StimulusWindow
+3022309832	0	31	PutDataIntoStimulusControl - ImageObject
+3022362605	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3022363126	0	31	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3022762890	4	31	ShowImage expected : 400
+3022762921	0	31	OnStimulusCompleted
+3022762939	0	31	ExecuteCurrentObject Composite
+3022762996	0	31	stopExecutionEvent set after 400.271371349335 ms
+3022762998	0	31	DoTheWork End Image
+3022763008	0	11	DoTheWork Start Composite
+3022763026	0	11	AddProtocolLine gr_sa_pifo_nonoise_look_12
+3022763029	0	11	Composite : StartStimulus 90542e7a-61f1-4765-bae5-24d1f5baef15
+3022763457	0	1	Show StimulusWindow
+3022765660	0	11	PutDataIntoStimulusControl - Composite - Video
+3023245217	0	26	MediaOpened - RemarkMessage 3eb94893b2790277f195722daa33953f_3072x1728.avi
+3023245267	0	26	ContinueMessage 3eb94893b2790277f195722daa33953f_3072x1728.avi
+3026266346	0	5	, MEM Free 5.11 GB, Used 35.65 %
+3031050646	0	1	StimulusList OnMediaEnded
+3031050654	0	1	StopExecution Composite
+3031050687	0	11	StopStimulus Composite
+3031050694	4	11	ShowImage expected : Manual
+3031050784	0	11	OnStimulusCompleted
+3031050801	0	11	ExecuteCurrentObject Image
+3031050850	0	11	stopExecutionEvent set after 7805.38856189585 ms
+3031050854	0	11	DoTheWork End Composite
+3031050862	0	31	DoTheWork Start Image
+3031050879	0	31	AddProtocolLine black_background2.png
+3031050880	0	31	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3031051275	0	1	Show StimulusWindow
+3031052884	0	31	PutDataIntoStimulusControl - ImageObject
+3031107786	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3031108242	0	31	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3031508074	4	31	ShowImage expected : 400
+3031508111	0	31	OnStimulusCompleted
+3031508132	0	31	ExecuteCurrentObject Composite
+3031508191	0	31	stopExecutionEvent set after 400.272055593491 ms
+3031508193	0	31	DoTheWork End Image
+3031508202	0	22	DoTheWork Start Composite
+3031508220	0	22	AddProtocolLine gr_sa_pifo_nonoise_hey_13
+3031508222	0	22	Composite : StartStimulus 09434fc7-36b2-4a96-a63b-e733fb6f5fe0
+3031508624	0	1	Show StimulusWindow
+3031511361	0	22	PutDataIntoStimulusControl - Composite - Video
+3031526315	0	5	, MEM Free 5.17 GB, Used 34.87 %
+3031939423	0	4	MediaOpened - RemarkMessage 3af68d7a536f2c1b2975c4c3b0191060_3072x1728.avi
+3031940016	0	4	ContinueMessage 3af68d7a536f2c1b2975c4c3b0191060_3072x1728.avi
+3036968233	0	5	, MEM Free 5.11 GB, Used 35.65 %
+3039756213	0	1	StimulusList OnMediaEnded
+3039756222	0	1	StopExecution Composite
+3039756255	0	22	StopStimulus Composite
+3039756262	4	22	ShowImage expected : Manual
+3039756551	0	22	OnStimulusCompleted
+3039756567	0	22	ExecuteCurrentObject Image
+3039756623	0	22	stopExecutionEvent set after 7816.20544029093 ms
+3039756627	0	22	DoTheWork End Composite
+3039756660	0	22	DoTheWork Start Image
+3039756674	0	22	AddProtocolLine black_background2.png
+3039756676	0	22	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3039756966	0	1	Show StimulusWindow
+3039759404	0	22	PutDataIntoStimulusControl - ImageObject
+3039817942	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3039818402	0	22	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3040218234	4	22	ShowImage expected : 400
+3040218266	0	22	OnStimulusCompleted
+3040218286	0	22	ExecuteCurrentObject Composite
+3040218347	0	22	stopExecutionEvent set after 400.276161060333 ms
+3040218350	0	22	DoTheWork End Image
+3040218359	0	27	DoTheWork Start Composite
+3040218377	0	27	AddProtocolLine gr_sa_pifo_nonoise_look_14
+3040218380	0	27	Composite : StartStimulus e36fc3b7-173c-4805-9dbf-d73bb2feeb66
+3040218783	0	1	Show StimulusWindow
+3040221079	0	27	PutDataIntoStimulusControl - Composite - Video
+3040650530	0	11	MediaOpened - RemarkMessage e665af1efd3cd14c2e30efe032b41af8_3072x1728.avi
+3040651046	0	11	ContinueMessage e665af1efd3cd14c2e30efe032b41af8_3072x1728.avi
+3042678202	0	5	, MEM Free 5.11 GB, Used 35.66 %
+3047703533	0	5	, MEM Free 5.11 GB, Used 35.69 %
+3048474576	0	1	StimulusList OnMediaEnded
+3048474585	0	1	StopExecution Composite
+3048474616	0	27	StopStimulus Composite
+3048474622	4	27	ShowImage expected : Manual
+3048474919	0	27	OnStimulusCompleted
+3048474936	0	27	ExecuteCurrentObject Image
+3048475033	0	26	DoTheWork Start Image
+3048475052	0	26	AddProtocolLine black_background2.png
+3048475054	0	26	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3048475518	0	27	stopExecutionEvent set after 7823.53883018827 ms
+3048475524	0	27	DoTheWork End Composite
+3048475681	0	1	Show StimulusWindow
+3048477178	0	26	PutDataIntoStimulusControl - ImageObject
+3048529099	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3048529566	0	26	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3048929403	4	26	ShowImage expected : 400
+3048929449	0	26	OnStimulusCompleted
+3048929470	0	26	ExecuteCurrentObject Composite
+3048929548	0	25	DoTheWork Start Composite
+3048929565	0	25	AddProtocolLine gr_sa_pifo_nonoise_hey_15
+3048929568	0	25	Composite : StartStimulus 3ad578e8-a13d-42ca-a53d-aecf756cee66
+3048929583	0	26	stopExecutionEvent set after 400.2778716712 ms
+3048929586	0	26	DoTheWork End Image
+3048930101	0	1	Show StimulusWindow
+3048933040	0	25	PutDataIntoStimulusControl - Composite - Video
+3049361697	0	24	MediaOpened - RemarkMessage d9311119d64539207f4f6424b8c2f912_3072x1728.avi
+3049361782	0	24	ContinueMessage d9311119d64539207f4f6424b8c2f912_3072x1728.avi
+3053384877	0	5	, MEM Free 5.11 GB, Used 35.63 %
+3057156123	0	1	StimulusList OnMediaEnded
+3057156131	0	1	StopExecution Composite
+3057156165	0	25	StopStimulus Composite
+3057156172	4	25	ShowImage expected : Manual
+3057156271	0	25	OnStimulusCompleted
+3057156289	0	25	ExecuteCurrentObject Image
+3057156338	0	25	stopExecutionEvent set after 7794.34314585495 ms
+3057156342	0	25	DoTheWork End Composite
+3057156375	0	25	DoTheWork Start Image
+3057156395	0	25	AddProtocolLine black_background2.png
+3057156399	0	25	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3057156682	0	1	Show StimulusWindow
+3057158006	0	25	PutDataIntoStimulusControl - ImageObject
+3057223250	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3057223696	0	25	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3057623539	4	25	ShowImage expected : 400
+3057623570	0	25	OnStimulusCompleted
+3057623589	0	25	ExecuteCurrentObject Composite
+3057623647	0	25	stopExecutionEvent set after 400.275134693623 ms
+3057623649	0	25	DoTheWork End Image
+3057623659	0	26	DoTheWork Start Composite
+3057623676	0	26	AddProtocolLine gr_sa_pifo_nonoise_look_16
+3057623678	0	26	Composite : StartStimulus 56f3e33c-adaa-4cde-96f9-38645da43625
+3057624076	0	1	Show StimulusWindow
+3057626505	0	26	PutDataIntoStimulusControl - Composite - Video
+3058055829	0	22	MediaOpened - RemarkMessage fd7bc4e0dd93754c41d52cec8ccde185_3072x1728.avi
+3058055878	0	22	ContinueMessage fd7bc4e0dd93754c41d52cec8ccde185_3072x1728.avi
+3059081737	0	5	, MEM Free 5.11 GB, Used 35.67 %
+3064105929	0	5	, MEM Free 5.11 GB, Used 35.67 %
+3065853525	0	1	StimulusList OnMediaEnded
+3065853539	0	1	StopExecution Composite
+3065853578	0	26	StopStimulus Composite
+3065853588	4	26	ShowImage expected : Manual
+3065854120	0	26	OnStimulusCompleted
+3065854142	0	26	ExecuteCurrentObject Image
+3065854203	0	26	stopExecutionEvent set after 7797.65728385067 ms
+3065854208	0	26	DoTheWork End Composite
+3065854240	0	25	DoTheWork Start Image
+3065854257	0	25	AddProtocolLine black_background2.png
+3065854259	0	25	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3065854568	0	1	Show StimulusWindow
+3065856027	0	25	PutDataIntoStimulusControl - ImageObject
+3065934419	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3065934974	0	25	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3066334707	4	25	ShowImage expected : 400
+3066334742	0	25	OnStimulusCompleted
+3066334760	0	25	ExecuteCurrentObject Composite
+3066334815	0	25	stopExecutionEvent set after 400.273766204357 ms
+3066334817	0	25	DoTheWork End Image
+3066334853	0	25	DoTheWork Start Composite
+3066334868	0	25	AddProtocolLine great_job_gr
+3066334871	0	25	Composite : StartStimulus a1c8edc6-15e9-4fa6-8fa4-4649230a4915
+3066335451	0	1	Show StimulusWindow
+3066336710	0	25	PutDataIntoStimulusControl - Composite - Video
+3066801021	0	29	MediaOpened - RemarkMessage 60c3b54031bc9996064b4e3407d26313_3072x1728.avi
+3066801083	0	29	ContinueMessage 60c3b54031bc9996064b4e3407d26313_3072x1728.avi
+3069827525	0	5	, MEM Free 5.11 GB, Used 35.68 %
+3071672858	0	1	StimulusList OnMediaEnded
+3071672867	0	1	StopExecution Composite
+3071672904	0	25	StopStimulus Composite
+3071672912	4	25	ShowImage expected : Manual
+3071673359	0	25	OnStimulusCompleted
+3071673377	0	25	ExecuteCurrentObject Image
+3071673433	0	25	stopExecutionEvent set after 4871.78524851084 ms
+3071673438	0	25	DoTheWork End Composite
+3071673474	0	25	DoTheWork Start Image
+3071673489	0	25	AddProtocolLine black_background2.png
+3071673491	0	25	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3071673775	0	1	Show StimulusWindow
+3071675033	0	25	PutDataIntoStimulusControl - ImageObject
+3071730516	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3071731070	0	25	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3072130806	4	25	ShowImage expected : 400
+3072130855	0	25	OnStimulusCompleted
+3072130877	0	25	ExecuteCurrentObject Composite
+3072130941	0	25	stopExecutionEvent set after 400.272739838123 ms
+3072130943	0	25	DoTheWork End Image
+3072130985	0	22	DoTheWork Start Composite
+3072131001	0	22	AddProtocolLine ol_sa_bottle_nonoise_look_16.5
+3072131003	0	22	Composite : StartStimulus 8cb65dfe-65eb-4d1a-92dd-c8aa7dedd60a
+3072131678	0	1	Show StimulusWindow
+3072133019	0	22	PutDataIntoStimulusControl - Composite - Video
+3072597113	0	32	MediaOpened - RemarkMessage 67a32392adbd5dcf905315e855d3c988_3072x1728.avi
+3072597175	0	32	ContinueMessage 67a32392adbd5dcf905315e855d3c988_3072x1728.avi
+3075618975	0	5	, MEM Free 5.11 GB, Used 35.69 %
+3080350008	0	1	StimulusList OnMediaEnded
+3080350018	0	1	StopExecution Composite
+3080350054	0	22	StopStimulus Composite
+3080350063	4	22	ShowImage expected : Manual
+3080350177	0	22	OnStimulusCompleted
+3080350196	0	22	ExecuteCurrentObject Image
+3080350248	0	22	stopExecutionEvent set after 7752.84645691395 ms
+3080350253	0	22	DoTheWork End Composite
+3080350263	0	26	DoTheWork Start Image
+3080350280	0	26	AddProtocolLine black_background2.png
+3080350282	0	26	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3080350652	0	1	Show StimulusWindow
+3080352476	0	26	PutDataIntoStimulusControl - ImageObject
+3080424652	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3080425096	0	26	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3080824941	4	26	ShowImage expected : 400
+3080824974	0	26	OnStimulusCompleted
+3080824994	0	26	ExecuteCurrentObject Composite
+3080825050	0	26	stopExecutionEvent set after 400.273766204357 ms
+3080825052	0	26	DoTheWork End Image
+3080825066	0	29	DoTheWork Start Composite
+3080825083	0	29	AddProtocolLine ol_dr_modi_nonoise_hey_17
+3080825086	0	29	Composite : StartStimulus 221d0922-78bd-4be5-975d-e4f12b7c0c37
+3080825422	0	1	Show StimulusWindow
+3080827918	0	29	PutDataIntoStimulusControl - Composite - Video
+3080845212	0	5	, MEM Free 5.17 GB, Used 34.89 %
+3081258231	0	11	MediaOpened - RemarkMessage d3582837879af47ac0bb7329be17a83a_3072x1728.avi
+3081258276	0	11	ContinueMessage d3582837879af47ac0bb7329be17a83a_3072x1728.avi
+3086281468	0	5	, MEM Free 5.11 GB, Used 35.68 %
+3091309739	0	5	, MEM Free 5.11 GB, Used 35.70 %
+3093091098	0	1	StimulusList OnMediaEnded
+3093091107	0	1	StopExecution Composite
+3093091139	0	29	StopStimulus Composite
+3093091147	4	29	ShowImage expected : Manual
+3093091230	0	29	OnStimulusCompleted
+3093091248	0	29	ExecuteCurrentObject Image
+3093091300	0	29	stopExecutionEvent set after 11832.8233431363 ms
+3093091304	0	29	DoTheWork End Composite
+3093091314	0	26	DoTheWork Start Image
+3093091332	0	26	AddProtocolLine black_background2.png
+3093091334	0	26	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3093091648	0	1	Show StimulusWindow
+3093093016	0	26	PutDataIntoStimulusControl - ImageObject
+3093166668	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3093167327	0	26	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3093566952	4	26	ShowImage expected : 400
+3093566983	0	26	OnStimulusCompleted
+3093567005	0	26	ExecuteCurrentObject Composite
+3093567066	0	26	stopExecutionEvent set after 400.274108326912 ms
+3093567068	0	26	DoTheWork End Image
+3093567081	0	21	DoTheWork Start Composite
+3093567098	0	21	AddProtocolLine ol_sa_modi_nonoise_hey_18
+3093567101	0	21	Composite : StartStimulus 46becb61-daea-49fe-b4df-8151fbbcca35
+3093567510	0	1	Show StimulusWindow
+3093569446	0	21	PutDataIntoStimulusControl - Composite - Video
+3094032279	0	31	MediaOpened - RemarkMessage a8de0cac8adb844afb2687d781a82423_3072x1728.avi
+3094032359	0	31	ContinueMessage a8de0cac8adb844afb2687d781a82423_3072x1728.avi
+3097055581	0	5	, MEM Free 5.10 GB, Used 35.71 %
+3101834884	0	1	StimulusList OnMediaEnded
+3101834892	0	1	StopExecution Composite
+3101834921	0	21	StopStimulus Composite
+3101834928	4	21	ShowImage expected : Manual
+3101835369	0	21	OnStimulusCompleted
+3101835388	0	21	ExecuteCurrentObject Image
+3101835501	0	26	DoTheWork Start Image
+3101835516	0	26	AddProtocolLine black_background2.png
+3101835518	0	26	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3101836109	0	21	stopExecutionEvent set after 7802.53526253796 ms
+3101836116	0	21	DoTheWork End Composite
+3101836703	0	1	Show StimulusWindow
+3101837901	0	26	PutDataIntoStimulusControl - ImageObject
+3101894842	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3101895397	0	26	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3102295134	4	26	ShowImage expected : 400
+3102295185	0	26	OnStimulusCompleted
+3102295207	0	26	ExecuteCurrentObject Composite
+3102295267	0	26	stopExecutionEvent set after 400.270687104702 ms
+3102295269	0	26	DoTheWork End Image
+3102295308	0	11	DoTheWork Start Composite
+3102295323	0	11	AddProtocolLine ol_dr_modi_nonoise_look_19
+3102295326	0	11	Composite : StartStimulus 8d8f4080-83f4-4805-98d1-ba560cb0a3ad
+3102295740	0	1	Show StimulusWindow
+3102298924	0	11	PutDataIntoStimulusControl - Composite - Video
+3102316665	0	5	, MEM Free 5.17 GB, Used 34.91 %
+3102760444	0	29	MediaOpened - RemarkMessage bfcfc4133c93812e7767481729747375_3072x1728.avi
+3102760510	0	29	ContinueMessage bfcfc4133c93812e7767481729747375_3072x1728.avi
+3107782762	0	5	, MEM Free 5.10 GB, Used 35.72 %
+3112810538	0	5	, MEM Free 5.11 GB, Used 35.66 %
+3113661681	0	1	StimulusList OnMediaEnded
+3113661691	0	1	StopExecution Composite
+3113661723	0	11	StopStimulus Composite
+3113661730	4	11	ShowImage expected : Manual
+3113662032	0	11	OnStimulusCompleted
+3113662050	0	11	ExecuteCurrentObject Image
+3113662149	0	32	DoTheWork Start Image
+3113662167	0	32	AddProtocolLine black_background2.png
+3113662170	0	32	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3113662676	0	11	stopExecutionEvent set after 10901.1827849574 ms
+3113662682	0	11	DoTheWork End Composite
+3113663265	0	1	Show StimulusWindow
+3113664662	0	32	PutDataIntoStimulusControl - ImageObject
+3113720191	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3113720671	0	32	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3114120479	4	32	ShowImage expected : 400
+3114120509	0	32	OnStimulusCompleted
+3114120530	0	32	ExecuteCurrentObject Composite
+3114120588	0	32	stopExecutionEvent set after 400.274108326912 ms
+3114120591	0	32	DoTheWork End Image
+3114120605	0	26	DoTheWork Start Composite
+3114120622	0	26	AddProtocolLine ol_sa_modi_nonoise_look _20
+3114120624	0	26	Composite : StartStimulus 0a9349ef-1417-4ed6-b8db-cfd631632aed
+3114121015	0	1	Show StimulusWindow
+3114123400	0	26	PutDataIntoStimulusControl - Composite - Video
+3114569791	0	31	MediaOpened - RemarkMessage fcf4e6d237d5cdac5c191f4d07d89d65_3072x1728.avi
+3114569958	0	31	ContinueMessage fcf4e6d237d5cdac5c191f4d07d89d65_3072x1728.avi
+3118601145	0	5	, MEM Free 5.11 GB, Used 35.60 %
+3122294537	0	1	StimulusList OnMediaEnded
+3122294547	0	1	StopExecution Composite
+3122294575	0	26	StopStimulus Composite
+3122294581	4	26	ShowImage expected : Manual
+3122294667	0	26	OnStimulusCompleted
+3122294685	0	26	ExecuteCurrentObject Image
+3122294737	0	26	stopExecutionEvent set after 7724.58989808845 ms
+3122294741	0	26	DoTheWork End Composite
+3122294773	0	26	DoTheWork Start Image
+3122294788	0	26	AddProtocolLine black_background2.png
+3122294789	0	26	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3122295088	0	1	Show StimulusWindow
+3122296471	0	26	PutDataIntoStimulusControl - ImageObject
+3122364307	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3122364772	0	26	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3122764601	4	26	ShowImage expected : 400
+3122764635	0	26	OnStimulusCompleted
+3122764658	0	26	ExecuteCurrentObject Composite
+3122764720	0	26	stopExecutionEvent set after 400.275476815701 ms
+3122764722	0	26	DoTheWork End Image
+3122764732	0	22	DoTheWork Start Composite
+3122764750	0	22	AddProtocolLine ol_dl_modi_nonoise_hey_21
+3122764753	0	22	Composite : StartStimulus 0ba4c36c-3ca4-42bb-be18-21fd8a07e44b
+3122765177	0	1	Show StimulusWindow
+3122767162	0	22	PutDataIntoStimulusControl - Composite - Video
+3123229916	0	11	MediaOpened - RemarkMessage 7bd7d708f94bce6d23ad5edf56a48326_3072x1728.avi
+3123230016	0	11	ContinueMessage 7bd7d708f94bce6d23ad5edf56a48326_3072x1728.avi
+3124253961	0	5	, MEM Free 5.12 GB, Used 35.58 %
+3129280032	0	5	, MEM Free 5.11 GB, Used 35.60 %
+3134302273	0	5	, MEM Free 5.12 GB, Used 35.56 %
+3135019021	0	1	StimulusList OnMediaEnded
+3135019030	0	1	StopExecution Composite
+3135019064	0	22	StopStimulus Composite
+3135019071	4	22	ShowImage expected : Manual
+3135019373	0	22	OnStimulusCompleted
+3135019391	0	22	ExecuteCurrentObject Image
+3135019448	0	22	stopExecutionEvent set after 11789.0163028083 ms
+3135019452	0	22	DoTheWork End Composite
+3135019484	0	22	DoTheWork Start Image
+3135019498	0	22	AddProtocolLine black_background2.png
+3135019500	0	22	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3135019775	0	1	Show StimulusWindow
+3135021306	0	22	PutDataIntoStimulusControl - ImageObject
+3135089303	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3135089852	0	22	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3135489601	4	22	ShowImage expected : 400
+3135489641	0	22	OnStimulusCompleted
+3135489662	0	22	ExecuteCurrentObject Composite
+3135489723	0	22	stopExecutionEvent set after 400.280608649254 ms
+3135489725	0	22	DoTheWork End Image
+3135489771	0	29	DoTheWork Start Composite
+3135489789	0	29	AddProtocolLine ol_sa_modi_nonoise_look _22
+3135489791	0	29	Composite : StartStimulus cdea9522-f1bb-494b-b701-35bc584be5af
+3135490508	0	1	Show StimulusWindow
+3135492796	0	29	PutDataIntoStimulusControl - Composite - Video
+3135905930	0	25	MediaOpened - RemarkMessage 9a46d64cda6ebaf23ffeab9af7a152b3_3072x1728.avi
+3135905983	0	25	ContinueMessage 9a46d64cda6ebaf23ffeab9af7a152b3_3072x1728.avi
+3139929688	0	5	, MEM Free 5.12 GB, Used 35.52 %
+3143660882	0	1	StimulusList OnMediaEnded
+3143660890	0	1	StopExecution Composite
+3143660919	0	29	StopStimulus Composite
+3143660926	4	29	ShowImage expected : Manual
+3143661223	0	29	OnStimulusCompleted
+3143661241	0	29	ExecuteCurrentObject Image
+3143661297	0	29	stopExecutionEvent set after 7754.90500634289 ms
+3143661301	0	29	DoTheWork End Composite
+3143661335	0	29	DoTheWork Start Image
+3143661353	0	29	AddProtocolLine black_background2.png
+3143661355	0	29	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3143661613	0	1	Show StimulusWindow
+3143663195	0	29	PutDataIntoStimulusControl - ImageObject
+3143717394	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3143717824	0	29	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3144117689	4	29	ShowImage expected : 400
+3144117721	0	29	OnStimulusCompleted
+3144117744	0	29	ExecuteCurrentObject Composite
+3144117804	0	29	stopExecutionEvent set after 400.2778716712 ms
+3144117807	0	29	DoTheWork End Image
+3144117816	0	32	DoTheWork Start Composite
+3144117834	0	32	AddProtocolLine ol_dr_modi_nonoise_hey _23
+3144117837	0	32	Composite : StartStimulus 2b463611-ed75-4ba0-bd81-b81a86479386
+3144118249	0	1	Show StimulusWindow
+3144121051	0	32	PutDataIntoStimulusControl - Composite - Video
+3144565997	0	26	MediaOpened - RemarkMessage ff2dcf103dc584ee430d7f69e50ae9e0_3072x1728.avi
+3144566050	0	26	ContinueMessage ff2dcf103dc584ee430d7f69e50ae9e0_3072x1728.avi
+3145586570	0	5	, MEM Free 5.12 GB, Used 35.51 %
+3150611869	0	5	, MEM Free 5.12 GB, Used 35.57 %
+3155636013	0	5	, MEM Free 5.12 GB, Used 35.55 %
+3156360453	0	1	StimulusList OnMediaEnded
+3156360463	0	1	StopExecution Composite
+3156360495	0	32	StopStimulus Composite
+3156360503	4	32	ShowImage expected : Manual
+3156360601	0	32	OnStimulusCompleted
+3156360619	0	32	ExecuteCurrentObject Image
+3156360667	0	32	stopExecutionEvent set after 11794.4139651551 ms
+3156360671	0	32	DoTheWork End Composite
+3156360679	0	29	DoTheWork Start Image
+3156360695	0	29	AddProtocolLine black_background2.png
+3156360697	0	29	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3156361082	0	1	Show StimulusWindow
+3156362577	0	29	PutDataIntoStimulusControl - ImageObject
+3156426394	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3156426894	0	29	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3156826682	4	29	ShowImage expected : 400
+3156826719	0	29	OnStimulusCompleted
+3156826740	0	29	ExecuteCurrentObject Composite
+3156826800	0	29	stopExecutionEvent set after 400.275134693623 ms
+3156826803	0	29	DoTheWork End Image
+3156826837	0	24	DoTheWork Start Composite
+3156826854	0	24	AddProtocolLine ol_sa_modi_nonoise_look_24
+3156826856	0	24	Composite : StartStimulus 6448d477-696f-453e-ab9a-3379a2fc25a1
+3156827411	0	1	Show StimulusWindow
+3156830051	0	24	PutDataIntoStimulusControl - Composite - Video
+3157257981	0	27	MediaOpened - RemarkMessage 9b25d5ca647c9903830be8c4e27317d0_3072x1728.avi
+3157258053	0	27	ContinueMessage 9b25d5ca647c9903830be8c4e27317d0_3072x1728.avi
+3161280443	0	5	, MEM Free 5.11 GB, Used 35.59 %
+3164959112	0	1	StimulusList OnMediaEnded
+3164959120	0	1	StopExecution Composite
+3164959145	0	24	StopStimulus Composite
+3164959153	4	24	ShowImage expected : Manual
+3164959542	0	24	OnStimulusCompleted
+3164959560	0	24	ExecuteCurrentObject Image
+3164959703	0	25	DoTheWork Start Image
+3164959719	0	25	AddProtocolLine black_background2.png
+3164959720	0	25	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3164959755	0	24	stopExecutionEvent set after 7701.06831086063 ms
+3164959762	0	24	DoTheWork End Composite
+3164959919	0	1	Show StimulusWindow
+3164961669	0	25	PutDataIntoStimulusControl - ImageObject
+3165020473	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3165021004	0	25	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3165420766	4	25	ShowImage expected : 400
+3165420818	0	25	OnStimulusCompleted
+3165420843	0	25	ExecuteCurrentObject Composite
+3165420915	0	25	stopExecutionEvent set after 400.272055593491 ms
+3165420918	0	25	DoTheWork End Image
+3165420923	0	21	DoTheWork Start Composite
+3165420941	0	21	AddProtocolLine ol_dr_toma_nonoise_hey_25
+3165420944	0	21	Composite : StartStimulus a5dc1b30-febf-44ae-bffb-395f92fbfe71
+3165421398	0	1	Show StimulusWindow
+3165423528	0	21	PutDataIntoStimulusControl - Composite - Video
+3165869056	0	4	MediaOpened - RemarkMessage 54ca567a1676de717314bbd4c96cccbb_3072x1728.avi
+3165869114	0	4	ContinueMessage 54ca567a1676de717314bbd4c96cccbb_3072x1728.avi
+3166892894	0	5	, MEM Free 5.11 GB, Used 35.59 %
+3171916306	0	5	, MEM Free 5.12 GB, Used 35.46 %
+3176940280	0	5	, MEM Free 5.12 GB, Used 35.49 %
+3177496848	0	1	StimulusList OnMediaEnded
+3177496856	0	1	StopExecution Composite
+3177496888	0	21	StopStimulus Composite
+3177496895	4	21	ShowImage expected : Manual
+3177496986	0	21	OnStimulusCompleted
+3177497005	0	21	ExecuteCurrentObject Image
+3177497055	0	21	stopExecutionEvent set after 11627.6642768292 ms
+3177497059	0	21	DoTheWork End Composite
+3177497071	0	26	DoTheWork Start Image
+3177497087	0	26	AddProtocolLine black_background2.png
+3177497089	0	26	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3177497471	0	1	Show StimulusWindow
+3177498813	0	26	PutDataIntoStimulusControl - ImageObject
+3177562329	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3177562774	0	26	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3177962622	4	26	ShowImage expected : 400
+3177962662	0	26	OnStimulusCompleted
+3177962686	0	26	ExecuteCurrentObject Composite
+3177962751	0	26	stopExecutionEvent set after 400.272739837647 ms
+3177962754	0	26	DoTheWork End Image
+3177962760	0	22	DoTheWork Start Composite
+3177962778	0	22	AddProtocolLine ol_sa_toma_nonoise_hey_26
+3177962781	0	22	Composite : StartStimulus adaaf710-cbb8-4852-a6a4-5003b1121207
+3177963221	0	1	Show StimulusWindow
+3177965868	0	22	PutDataIntoStimulusControl - Composite - Video
+3178410920	0	31	MediaOpened - RemarkMessage 577f39604f96d95087e5d3979c422e05_3072x1728.avi
+3178410962	0	31	ContinueMessage 577f39604f96d95087e5d3979c422e05_3072x1728.avi
+3182432913	0	5	, MEM Free 5.12 GB, Used 35.54 %
+3187455769	0	5	, MEM Free 5.11 GB, Used 35.60 %
+3188000880	0	1	StimulusList OnMediaEnded
+3188000888	0	1	StopExecution Composite
+3188000922	0	22	StopStimulus Composite
+3188000929	4	22	ShowImage expected : Manual
+3188001221	0	22	OnStimulusCompleted
+3188001240	0	22	ExecuteCurrentObject Image
+3188001334	0	24	DoTheWork Start Image
+3188001350	0	24	AddProtocolLine black_background2.png
+3188001352	0	24	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3188001748	0	22	stopExecutionEvent set after 9589.92853750992 ms
+3188001754	0	22	DoTheWork End Composite
+3188002201	0	1	Show StimulusWindow
+3188003723	0	24	PutDataIntoStimulusControl - ImageObject
+3188071764	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3188072256	0	24	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3188472055	4	24	ShowImage expected : 400
+3188472099	0	24	OnStimulusCompleted
+3188472125	0	24	ExecuteCurrentObject Composite
+3188472185	0	24	stopExecutionEvent set after 400.272397715569 ms
+3188472188	0	24	DoTheWork End Image
+3188472215	0	21	DoTheWork Start Composite
+3188472232	0	21	AddProtocolLine ol_dr_toma_nonoise_look_27
+3188472235	0	21	Composite : StartStimulus 20294bd3-63bd-4ab2-a361-3c65b8c5f57b
+3188472836	0	1	Show StimulusWindow
+3188474414	0	21	PutDataIntoStimulusControl - Composite - Video
+3188954380	0	4	MediaOpened - RemarkMessage 19f002bf7fa9aab067656a64451a8644_3072x1728.avi
+3188954449	0	4	ContinueMessage 19f002bf7fa9aab067656a64451a8644_3072x1728.avi
+3192976476	0	5	, MEM Free 5.11 GB, Used 35.60 %
+3198002915	0	5	, MEM Free 5.11 GB, Used 35.62 %
+3200171921	0	1	StimulusList OnMediaEnded
+3200171930	0	1	StopExecution Composite
+3200171964	0	21	StopStimulus Composite
+3200171971	4	21	ShowImage expected : Manual
+3200172269	0	21	OnStimulusCompleted
+3200172288	0	21	ExecuteCurrentObject Image
+3200172424	0	31	DoTheWork Start Image
+3200172440	0	31	AddProtocolLine black_background2.png
+3200172442	0	31	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3200172886	0	21	stopExecutionEvent set after 11217.4836773486 ms
+3200172892	0	21	DoTheWork End Composite
+3200173034	0	1	Show StimulusWindow
+3200174124	0	31	PutDataIntoStimulusControl - ImageObject
+3200246368	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3200246860	0	31	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3200646666	4	31	ShowImage expected : 400
+3200646705	0	31	OnStimulusCompleted
+3200646726	0	31	ExecuteCurrentObject Composite
+3200646795	0	25	DoTheWork Start Composite
+3200646812	0	25	AddProtocolLine ol_sa_toma_nonoise_look_28
+3200646814	0	25	Composite : StartStimulus dd46f7fd-df98-4049-ab70-45c078cd87af
+3200646833	0	31	stopExecutionEvent set after 400.280266526699 ms
+3200646835	0	31	DoTheWork End Image
+3200647239	0	1	Show StimulusWindow
+3200649662	0	25	PutDataIntoStimulusControl - Composite - Video
+3201163011	0	11	MediaOpened - RemarkMessage 6a6bfbd9442e0698198f8e6cd3263b60_3072x1728.avi
+3201163068	0	11	ContinueMessage 6a6bfbd9442e0698198f8e6cd3263b60_3072x1728.avi
+3203192344	0	5	, MEM Free 5.10 GB, Used 35.77 %
+3208216074	0	5	, MEM Free 5.11 GB, Used 35.68 %
+3210146119	0	1	StimulusList OnMediaEnded
+3210146128	0	1	StopExecution Composite
+3210146160	0	25	StopStimulus Composite
+3210146167	4	25	ShowImage expected : Manual
+3210146257	0	25	OnStimulusCompleted
+3210146277	0	25	ExecuteCurrentObject Image
+3210146326	0	25	stopExecutionEvent set after 8983.05297557402 ms
+3210146330	0	25	DoTheWork End Composite
+3210146337	0	31	DoTheWork Start Image
+3210146356	0	31	AddProtocolLine black_background2.png
+3210146358	0	31	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3210146765	0	1	Show StimulusWindow
+3210148422	0	31	PutDataIntoStimulusControl - ImageObject
+3210207407	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3210207852	0	31	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3210607698	4	31	ShowImage expected : 400
+3210607727	0	31	OnStimulusCompleted
+3210607747	0	31	ExecuteCurrentObject Composite
+3210607805	0	31	stopExecutionEvent set after 400.276161060333 ms
+3210607807	0	31	DoTheWork End Image
+3210607816	0	29	DoTheWork Start Composite
+3210607834	0	29	AddProtocolLine ol_dl_toma_nonoise_hey_29
+3210607836	0	29	Composite : StartStimulus 9053ab84-3943-4557-8cce-f89e76726884
+3210608243	0	1	Show StimulusWindow
+3210610531	0	29	PutDataIntoStimulusControl - Composite - Video
+3211039998	0	24	MediaOpened - RemarkMessage 37353a7d1c2a3361117b7aa1996b9f53_3072x1728.avi
+3211040051	0	24	ContinueMessage 37353a7d1c2a3361117b7aa1996b9f53_3072x1728.avi
+3214068482	0	5	, MEM Free 5.10 GB, Used 35.72 %
+3219095465	0	5	, MEM Free 5.11 GB, Used 35.69 %
+3222621062	0	1	StimulusList OnMediaEnded
+3222621070	0	1	StopExecution Composite
+3222621106	0	29	StopStimulus Composite
+3222621114	4	29	ShowImage expected : Manual
+3222621505	0	29	OnStimulusCompleted
+3222621524	0	29	ExecuteCurrentObject Image
+3222621579	0	29	stopExecutionEvent set after 11581.0142008095 ms
+3222621584	0	29	DoTheWork End Composite
+3222621615	0	29	DoTheWork Start Image
+3222621629	0	29	AddProtocolLine black_background2.png
+3222621631	0	29	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3222621908	0	1	Show StimulusWindow
+3222623588	0	29	PutDataIntoStimulusControl - ImageObject
+3222699243	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3222699655	0	29	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3223099530	4	29	ShowImage expected : 400
+3223099560	0	29	OnStimulusCompleted
+3223099583	0	29	ExecuteCurrentObject Composite
+3223099642	0	29	stopExecutionEvent set after 400.272055593491 ms
+3223099644	0	29	DoTheWork End Image
+3223099657	0	4	DoTheWork Start Composite
+3223099676	0	4	AddProtocolLine ol_sa_toma_nonoise_look_30
+3223099679	0	4	Composite : StartStimulus c1c50730-233b-467b-9945-d6ee675a9ed2
+3223100280	0	1	Show StimulusWindow
+3223102935	0	4	PutDataIntoStimulusControl - Composite - Video
+3223597876	0	25	MediaOpened - RemarkMessage c146e7084107d3b8705c63d3bd4a2edd_3072x1728.avi
+3223597959	0	25	ContinueMessage c146e7084107d3b8705c63d3bd4a2edd_3072x1728.avi
+3224621729	0	5	, MEM Free 5.10 GB, Used 35.72 %
+3229643602	0	5	, MEM Free 5.11 GB, Used 35.68 %
+3232587407	0	1	StimulusList OnMediaEnded
+3232587415	0	1	StopExecution Composite
+3232587447	0	4	StopStimulus Composite
+3232587453	4	4	ShowImage expected : Manual
+3232587538	0	4	OnStimulusCompleted
+3232587558	0	4	ExecuteCurrentObject Image
+3232587607	0	4	stopExecutionEvent set after 8989.45374028587 ms
+3232587611	0	4	DoTheWork End Composite
+3232587619	0	21	DoTheWork Start Image
+3232587636	0	21	AddProtocolLine black_background2.png
+3232587638	0	21	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3232587946	0	1	Show StimulusWindow
+3232589562	0	21	PutDataIntoStimulusControl - ImageObject
+3232642271	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3232642714	0	21	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3233042567	4	21	ShowImage expected : 400
+3233042602	0	21	OnStimulusCompleted
+3233042625	0	21	ExecuteCurrentObject Composite
+3233042685	0	21	stopExecutionEvent set after 400.276845304489 ms
+3233042687	0	21	DoTheWork End Image
+3233042696	0	24	DoTheWork Start Composite
+3233042714	0	24	AddProtocolLine ol_dr_toma_nonoise_hey_31
+3233042717	0	24	Composite : StartStimulus 6b5c1d0a-ddce-4680-8705-0e912b164e86
+3233043153	0	1	Show StimulusWindow
+3233045179	0	24	PutDataIntoStimulusControl - Composite - Video
+3233508873	0	29	MediaOpened - RemarkMessage a4fe7cc9246f9e48fc00349f9da6dd69_3072x1728.avi
+3233508922	0	29	ContinueMessage a4fe7cc9246f9e48fc00349f9da6dd69_3072x1728.avi
+3235531228	0	5	, MEM Free 5.11 GB, Used 35.66 %
+3240558270	0	5	, MEM Free 5.11 GB, Used 35.63 %
+3245077900	0	1	StimulusList OnMediaEnded
+3245077910	0	1	StopExecution Composite
+3245078092	0	24	StopStimulus Composite
+3245078101	4	24	ShowImage expected : Manual
+3245078529	0	24	OnStimulusCompleted
+3245078548	0	24	ExecuteCurrentObject Image
+3245078606	0	24	stopExecutionEvent set after 11569.1145055714 ms
+3245078611	0	24	DoTheWork End Composite
+3245078648	0	24	DoTheWork Start Image
+3245078664	0	24	AddProtocolLine black_background2.png
+3245078665	0	24	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3245079016	0	1	Show StimulusWindow
+3245080961	0	24	PutDataIntoStimulusControl - ImageObject
+3245151112	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3245151572	0	24	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3245551417	4	24	ShowImage expected : 400
+3245551453	0	24	OnStimulusCompleted
+3245551476	0	24	ExecuteCurrentObject Composite
+3245551537	0	24	stopExecutionEvent set after 400.284029871464 ms
+3245551540	0	24	DoTheWork End Image
+3245551549	0	21	DoTheWork Start Composite
+3245551568	0	21	AddProtocolLine ol_sa_toma_nonoise_look_32
+3245551571	0	21	Composite : StartStimulus 9b9fa573-41e5-46af-865a-140921bbefcf
+3245551911	0	1	Show StimulusWindow
+3245554433	0	21	PutDataIntoStimulusControl - Composite - Video
+3245571445	0	5	, MEM Free 5.17 GB, Used 34.84 %
+3246050745	0	4	MediaOpened - RemarkMessage 790645ac50ee49758c47b7406f10e178_3072x1728.avi
+3246050784	0	4	ContinueMessage 790645ac50ee49758c47b7406f10e178_3072x1728.avi
+3251072497	0	5	, MEM Free 5.11 GB, Used 35.68 %
+3254995526	0	1	StimulusList OnMediaEnded
+3254995533	0	1	StopExecution Composite
+3254995566	0	21	StopStimulus Composite
+3254995573	4	21	ShowImage expected : Manual
+3254995659	0	21	OnStimulusCompleted
+3254995680	0	21	ExecuteCurrentObject Image
+3254995727	0	21	stopExecutionEvent set after 8944.74418152714 ms
+3254995731	0	21	DoTheWork End Composite
+3254995739	0	27	DoTheWork Start Image
+3254995755	0	27	AddProtocolLine black_background2.png
+3254995757	0	27	Image : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-stimuli\fillers\black_background2.png
+3254996154	0	1	Show StimulusWindow
+3254997413	0	27	PutDataIntoStimulusControl - ImageObject
+3255061129	0	18	ShowDataOfObject C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\black_background2.png
+3255061615	0	27	ContinueMessage 82c3827a23dc8011c3fbcc4d31772ea2_3072x1728.jpg
+3255461406	4	27	ShowImage expected : 400
+3255461437	0	27	OnStimulusCompleted
+3255461459	0	27	ExecuteCurrentObject Composite
+3255461515	0	27	stopExecutionEvent set after 400.270687104702 ms
+3255461517	0	27	DoTheWork End Image
+3255461532	0	22	DoTheWork Start Composite
+3255461548	0	22	AddProtocolLine all_done_ol
+3255461550	0	22	Composite : StartStimulus 8b4b835b-cab7-4de0-bbc5-956139c3442d
+3255461912	0	1	Show StimulusWindow
+3255464408	0	22	PutDataIntoStimulusControl - Composite - Video
+3255877983	0	11	MediaOpened - RemarkMessage 02cd2d10c439c205f28cd62e8906bb37_3072x1728.avi
+3255878121	0	11	ContinueMessage 02cd2d10c439c205f28cd62e8906bb37_3072x1728.avi
+3256903599	0	5	, MEM Free 5.11 GB, Used 35.70 %
+3258980266	0	1	StimulusList OnMediaEnded
+3258980274	0	1	StopExecution Composite
+3258980307	0	22	StopStimulus Composite
+3258980314	4	22	ShowImage expected : Manual
+3258980400	0	22	OnStimulusCompleted
+3258980421	0	22	ExecuteCurrentObject Movie
+3258980471	0	22	stopExecutionEvent set after 3102.15119612789 ms
+3258980486	0	22	DoTheWork End Composite
+3258980522	0	21	DoTheWork Start Movie
+3258980539	0	21	AddProtocolLine elmo_quiet_curtains.avi
+3258980541	0	21	Movie : StartStimulus C:\Users\iView X\Desktop\Experiments\speed-acc-novel-child-gaze-order1\elmo_quiet_curtains.avi
+3258980548	0	21	PauseDataRecording while movie is loading
+3258980834	0	21	PutDataIntoStimulusControl - MovieObject
+3259325164	0	27	MediaOpened - RemarkMessage c7280d7cf8d2071e0a099f77fef07087.avi
+3259325207	0	27	ContinueMessage c7280d7cf8d2071e0a099f77fef07087.avi
+3262345749	0	5	, MEM Free 5.17 GB, Used 34.93 %
+3267369733	0	5	, MEM Free 5.17 GB, Used 34.93 %
+3272392309	0	5	, MEM Free 5.17 GB, Used 34.92 %
+3277416336	0	5	, MEM Free 5.17 GB, Used 34.92 %
+3282437620	0	5	, MEM Free 5.17 GB, Used 34.92 %
+3285844353	0	1	StimulusList OnMediaEnded
+3285844358	0	1	StopExecution Movie
+3285844383	0	21	StopStimulus Movie
+3285844479	0	21	OnStimulusCompleted
+3285846718	0	1	Hide StimulusWindow
+3285846770	0	21	Experiment Execution Completed
+3285853512	0	21	Eye Tracker Source End
+3285869736	0	1	SceneRecordingController.Stop
+3286047573	0	1	SaveRecordedData C:\Users\iView X\Desktop\Results\speed-acc-novel-child-gaze-order1\bing_pilot_1-[417ec75b-a107-49bc-a494-fd96d16cc541]\bing_pilot_1-eye_data.idf
+3286051965	0	1	Saving C:\Users\iView X\Desktop\Results\speed-acc-novel-child-gaze-order1\bing_pilot_1-[417ec75b-a107-49bc-a494-fd96d16cc541]\bing_pilot_1-eye_data.idf
+3286314491	2	1	Return

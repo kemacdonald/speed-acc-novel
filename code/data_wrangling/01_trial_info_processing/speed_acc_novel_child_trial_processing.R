@@ -6,50 +6,18 @@
 library(here)
 source(here::here("code/helper_functions/libraries_and_functions.R"))
 
-### Define global variables
-read_path <- "data/0b_stimuli_information" 
+### Define path to stimulus log files
+read_path <- "data/0b_stimuli_information/stimuli_rois_xml/" 
 
-## Read in stimulus log .xml to get stimulus id tag and source name
-make_stim_key_value_pairs <- function(xml_obj) {
-  tibble(
-    key = xml_obj[['GUID']],
-    name = xml_obj[['Name']]
-  )
-}
+## Read in stimulus log .xml files
+stim_log_files <- dir(here::here(read_path), pattern = "*.xml")
 
-stim_log_files <- dir(here::here(read_path, "kids/kid_stim_logs/"), 
-                 pattern = "*.xml")
-
-stim_log_df <- xmlParse(here::here(read_path, "kids/kid_stim_logs/", stim_log_files[1])) %>% 
+stim_log_df <- xmlParse(here::here(read_path, stim_log_files[1])) %>% 
   xmlToList() %>% 
   flatten() %>% 
   purrr::map_dfr(make_stim_key_value_pairs)
 
 ## Iterate over trial-level .xml files and extract relevant information using ROIs
-process_one_stim_xml <- function(xml_obj) {
-  tibble(
-    stimulus_name = xml_obj$Tag,
-    aoi_x_min = xml_obj[['Points']][[1]]$X,
-    aoi_y_min = xml_obj[['Points']][[1]]$Y,
-    aoi_x_max = xml_obj[['Points']][[2]]$X,
-    aoi_y_max = xml_obj[['Points']][[2]]$Y
-  ) %>% 
-    mutate(aoi_type = ifelse(str_detect(stimulus_name, ".jpg|.png"), "image", "movie"),
-           aoi_location = case_when (
-             aoi_x_min == 0 ~ 'left',
-             aoi_y_min == 0 ~ 'center_face',
-             aoi_x_max == 3072 ~ 'right'
-           ))
-} 
-
-make_roi_key_value_pairs <- function(file) {
-  print(file)
-  xml_list <- xmlParse(here::here(read_path, "kids/kid_xml_rois/", file)) %>% 
-    xmlToList()
-  
-  xml_list %>% purrr::map_dfr(process_one_stim_xml)
-}
-
 files <- dir(here::here(read_path, "kids/kid_xml_rois/"), 
              pattern="*.xml")
 

@@ -17,19 +17,50 @@ library(tidyverse);
 
 # set ggplot theme
 #theme_set(
-  #ggthemes::theme_few() #+
-  #theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+#ggthemes::theme_few() #+
+#theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 #)
 
+# convert xml object to stimuli key-value pairs
+make_stim_key_value_pairs <- function(xml_obj) {
+  tibble(
+    key = xml_obj[['GUID']],
+    name = xml_obj[['Name']]
+  )
+}
 
-# make function to convert logit back to probability 
+process_one_stim_xml <- function(xml_obj) {
+  tibble(
+    stimulus_name = xml_obj$Tag,
+    aoi_x_min = xml_obj[['Points']][[1]]$X,
+    aoi_y_min = xml_obj[['Points']][[1]]$Y,
+    aoi_x_max = xml_obj[['Points']][[2]]$X,
+    aoi_y_max = xml_obj[['Points']][[2]]$Y
+  ) %>% 
+    mutate(aoi_type = ifelse(str_detect(stimulus_name, ".jpg|.png"), "image", "movie"),
+           aoi_location = case_when (
+             aoi_x_min == 0 ~ 'left',
+             aoi_y_min == 0 ~ 'center_face',
+             aoi_x_max == 3072 ~ 'right'
+           ))
+} 
+
+make_roi_key_value_pairs <- function(file) {
+  print(file)
+  xml_list <- xmlParse(here::here(read_path, "kids/kid_xml_rois/", file)) %>% 
+    xmlToList()
+  
+  xml_list %>% purrr::map_dfr(process_one_stim_xml)
+}
+
+
+# convert logit back to probability 
 logit_to_prob <- function(logit) {
   odds <- exp(logit)
   odds / (1 + odds)
 }
 
 ## Read HDDM file
-
 read_hddm_file <- function(file_name, path, condition_list, param_list) {
   raw_file <- read_csv(paste0(path, file_name), col_names = F)
   
@@ -43,7 +74,6 @@ read_hddm_file <- function(file_name, path, condition_list, param_list) {
     mutate(condition = condition_name,
            param_name = param_name)
   
-  # return the data frame
   final_df
 }
 
@@ -87,7 +117,7 @@ score_trial_type_lwl <- function(trial, start, end) {
       
       if(is.na(curr_val)) { # break if we hit an NA
         break
-        } 
+      } 
       
       if(first_look_signer) {
         
@@ -114,7 +144,8 @@ score_trial_type_lwl <- function(trial, start, end) {
   } else {
     trial_type <- "off_center"
   }
-  return(c(trial_type, rt))
+  
+  c(trial_type, rt)
 }
 
 ## Add trial numbers 
@@ -133,7 +164,7 @@ add.tr.nums.fun <- function (df) {
     unique() %>% 
     mutate(tr.num = 1:n_trials)
   
-  return(df)
+  df
 }
 
 ## Score trial for SMI eye tracking data
@@ -191,9 +222,7 @@ score_trial_et <- function(trial_df, crit_onset_type = "noun") {
   }
   
   # add the rt and score to the trial data frame
-  trial_df <- cbind(trial_df, trial_score)
-  
-  return(trial_df)
+  cbind(trial_df, trial_score)
 }
 
 
@@ -231,7 +260,7 @@ fit_ddm <- function(df, condition_col, subid_col, bysub = T, niter = 500) {
              fit.vals = round(fit.vals, 3))
   }
   
-  return(pars)
+  pars
 }
 
 ## Remove outlier values
@@ -256,7 +285,7 @@ remove_extreme_vals <- function(data_frame, sd_cut_val = 2, value_column) {
     filter_(filter_criteria_upper, 
             filter_criteria_lower)
   
-  return(data_frame)
+  data_frame
 }
 
 
@@ -380,7 +409,7 @@ preprocess.data <- function(d,
                         ifelse(is.na(ry), ly, 
                                ifelse(is.na(ly), ry, 
                                       NA)))
-             )
+      )
     
     # remove the l/r eye variable names
     d <- d[, !(names(d) %in% c("lx","rx","ly","ry"))]
@@ -466,5 +495,3 @@ roi.image <- function (rois,y.max=1050,x.max=1680) {
          names(rois)[i])
   }
 }
-
-
