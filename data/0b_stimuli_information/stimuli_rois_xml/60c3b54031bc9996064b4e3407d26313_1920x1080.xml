@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ArrayOfCAOI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CAOI>
+    <Points>
+      <Point>
+        <X>384</X>
+        <Y>0</Y>
+      </Point>
+      <Point>
+        <X>1536</X>
+        <Y>648</Y>
+      </Point>
+    </Points>
+    <Enabled>true</Enabled>
+    <BorderWidth>2</BorderWidth>
+    <Type>Rectangle</Type>
+    <Style>Transparent</Style>
+    <HatchStyle>DarkDownwardDiagonal</HatchStyle>
+    <Color>NamedColor:Red</Color>
+    <Name>great_job_gr</Name>
+    <Scope>Global</Scope>
+    <Group>Composite</Group>
+    <Tag>great_job_gr.mov</Tag>
+  </CAOI>
+</ArrayOfCAOI>
