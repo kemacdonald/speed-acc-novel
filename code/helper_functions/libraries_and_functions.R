@@ -15,11 +15,9 @@ library(rstanarm);
 # load tidyverse last, so no functions get masked
 library(tidyverse); 
 
-# set ggplot theme
-#theme_set(
-#ggthemes::theme_few() #+
-#theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-#)
+to.n <- function (x) {
+  as.numeric(as.character(x))
+}
 
 # convert xml object to stimuli key-value pairs
 make_stim_key_value_pairs <- function(xml_obj) {
@@ -29,7 +27,7 @@ make_stim_key_value_pairs <- function(xml_obj) {
   )
 }
 
-process_one_stim_xml <- function(xml_obj) {
+process_one_stim_xml <- function(xml_obj, x_max = 1920) {
   tibble(
     stimulus_name = xml_obj$Tag,
     aoi_x_min = xml_obj[['Points']][[1]]$X,
@@ -41,15 +39,14 @@ process_one_stim_xml <- function(xml_obj) {
            aoi_location = case_when (
              aoi_x_min == 0 ~ 'left',
              aoi_y_min == 0 ~ 'center_face',
-             aoi_x_max == 3072 ~ 'right'
+             aoi_x_max == x_max ~ 'right'
            ))
 } 
 
 make_roi_key_value_pairs <- function(file) {
   print(file)
-  xml_list <- xmlParse(here::here(read_path, "kids/kid_xml_rois/", file)) %>% 
+  xml_list <- xmlParse(here::here(read_path, file)) %>% 
     xmlToList()
-  
   xml_list %>% purrr::map_dfr(process_one_stim_xml)
 }
 
@@ -298,14 +295,13 @@ remove_extreme_vals <- function(data_frame, sd_cut_val = 2, value_column) {
 ## adapted from aen and dy
 ################################################################################
 
-to.n <- function (x) {
-  as.numeric(as.character(x))
+process_et_file <- function(file_name, file_path, x_max = 1920, y_max = 1080, avg_eyes=TRUE, sample_rate = 30) {
+  d <- read.smi.idf(paste(file_path, file_name, sep="")) 
+  preprocess.data(d, x.max = x_max, y.max = y_max, samp.rate = sample_rate, avg.eyes = avg_eyes) 
 }
 
-
 read.smi.idf <- function (file.name, suffix.len = 4) {
-  
-  file.name <- paste(raw.data.path,files[10],sep="")
+  print(file.name)
   
   ## read the header from the file to paste back into the new file
   tmp.header <- scan(file.name, what = character(), sep="\n", 
@@ -381,8 +377,7 @@ read.smi.idf <- function (file.name, suffix.len = 4) {
 ## eyes, do whatever preprocessing needs to be done. 
 ################################################################################
 
-preprocess.data <- function(d, 
-                            x.max = 1680, y.max=1050,
+preprocess.data <- function(d, x.max = 1680, y.max=1050,
                             samp.rate = 120,
                             avg.eyes=TRUE) {
   
