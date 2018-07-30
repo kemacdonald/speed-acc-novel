@@ -1,0 +1,33 @@
+stimulus_name,trial_num_exp,learning_block,gaze_block,trial_num_gaze_block,trial_num_learn_block,left_image,right_image,target_word,target_side,distractor_image,target_image,carrier_phrase,gaze_direction,gaze_target,trial_type,gaze_condition,speaker,order_name,order_number
+ol_dl_pifo_nonoise_look,1,1,1,1,1,Novel24.jpg,Novel14.jpg,pifo,left,Novel14.jpg,Novel24.jpg,look,left,pifo,exposure,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_sa_pifo_nonoise_hey,2,1,1,2,1,Novel23.jpg,Novel24.jpg,pifo,right,Novel23.jpg,Novel24.jpg,hey,straight_ahead,NA,test,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_dr_pifo_nonoise_hey,3,1,1,3,2,Novel27.jpg,Novel24.jpg,pifo,right,Novel27.jpg,Novel24.jpg,hey,right,pifo,exposure,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_sa_pifo_nonoise_look,4,1,1,4,2,Novel24.jpg,Novel5.jpg,pifo,left,Novel5.jpg,Novel24.jpg,look,straight_ahead,NA,test,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_dr_pifo_nonoise_hey,5,1,1,5,3,Novel15.jpg,Novel24.jpg,pifo,right,Novel15.jpg,Novel24.jpg,hey,right,pifo,exposure,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_sa_pifo_nonoise_look,6,1,1,6,3,Novel7.jpg,Novel24.jpg,pifo,right,Novel7.jpg,Novel24.jpg,look,straight_ahead,NA,test,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_dl_pifo_nonoise_look,7,1,1,7,4,Novel24.jpg,Novel22.jpg,pifo,left,Novel22.jpg,Novel24.jpg,look,left,pifo,exposure,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_sa_pifo_nonoise_hey,8,1,1,8,4,Novel24.jpg,Novel3.jpg,pifo,left,Novel3.jpg,Novel24.jpg,hey,straight_ahead,NA,test,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_dl_toma_nonoise_look,9,2,1,9,1,Novel19.jpg,Novel10.jpg,toma,left,Novel10.jpg,Novel19.jpg,look,left,toma,exposure,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_sa_toma_nonoise_hey,10,2,1,10,1,Novel6.jpg,Novel19.jpg,toma,right,Novel6.jpg,Novel19.jpg,hey,straight_ahead,NA,test,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_dr_toma_nonoise_hey,11,2,1,11,2,Novel9.jpg,Novel19.jpg,toma,right,Novel9.jpg,Novel19.jpg,hey,right,toma,exposure,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_sa_toma_nonoise_look,12,2,1,12,2,Novel19.jpg,Novel17.jpg,toma,left,Novel17.jpg,Novel19.jpg,look,straight_ahead,NA,test,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_dr_toma_nonoise_hey,13,2,1,13,3,Novel11.jpg,Novel19.jpg,toma,right,Novel11.jpg,Novel19.jpg,hey,right,toma,exposure,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_sa_toma_nonoise_look,14,2,1,14,3,Novel28.jpg,Novel19.jpg,toma,right,Novel28.jpg,Novel19.jpg,look,straight_ahead,NA,test,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_dl_toma_nonoise_look,15,2,1,15,4,Novel19.jpg,Novel16.jpg,toma,left,Novel16.jpg,Novel19.jpg,look,left,toma,exposure,gaze ,olivia,gaze_nogaze_ol_gr,4
+ol_sa_toma_nonoise_hey,16,2,1,16,4,Novel19.jpg,Novel13.jpg,toma,left,Novel13.jpg,Novel19.jpg,hey,straight_ahead,NA,test,gaze ,olivia,gaze_nogaze_ol_gr,4
+gr_sa_bosa_nonoise_look,17,3,2,1,1,Novel12.jpg,Novel6.jpg,bosa,left,Novel6.jpg,Novel12.jpg,look,straight_ahead,NA,exposure,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_bosa_nonoise_hey,18,3,2,2,1,Novel7.jpg,Novel12.jpg,bosa,right,Novel7.jpg,Novel12.jpg,hey,straight_ahead,NA,test,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_bosa_nonoise_hey,19,3,2,3,2,Novel5.jpg,Novel12.jpg,bosa,right,Novel5.jpg,Novel12.jpg,hey,straight_ahead,NA,exposure,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_bosa_nonoise_look,20,3,2,4,2,Novel12.jpg,Novel1.jpg,bosa,left,Novel1.jpg,Novel12.jpg,look,straight_ahead,NA,test,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_bosa_nonoise_hey,21,3,2,5,3,Novel27.jpg,Novel12.jpg,bosa,right,Novel27.jpg,Novel12.jpg,hey,straight_ahead,NA,exposure,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_bosa_nonoise_look,22,3,2,6,3,Novel14.jpg,Novel12.jpg,bosa,right,Novel14.jpg,Novel12.jpg,look,straight_ahead,NA,test,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_bosa_nonoise_look,23,3,2,7,4,Novel12.jpg,Novel15.jpg,bosa,left,Novel15.jpg,Novel12.jpg,look,straight_ahead,NA,exposure,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_bosa_nonoise_hey,24,3,2,8,4,Novel12.jpg,Novel4.jpg,bosa,left,Novel4.jpg,Novel12.jpg,hey,straight_ahead,NA,test,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_modi_nonoise_look,25,4,2,9,1,Novel18.jpg,Novel22.jpg,modi,left,Novel22.jpg,Novel18.jpg,look,straight_ahead,NA,exposure,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_modi_nonoise_hey,26,4,2,10,1,Novel23.jpg,Novel18.jpg,modi,right,Novel23.jpg,Novel18.jpg,hey,straight_ahead,NA,test,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_modi_nonoise_hey,27,4,2,11,2,Novel10.jpg,Novel18.jpg,modi,right,Novel10.jpg,Novel18.jpg,hey,straight_ahead,NA,exposure,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_modi_nonoise_look,28,4,2,12,2,Novel18.jpg,Novel17.jpg,modi,left,Novel17.jpg,Novel18.jpg,look,straight_ahead,NA,test,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_modi_nonoise_hey,29,4,2,13,3,Novel26.jpg,Novel18.jpg,modi,right,Novel26.jpg,Novel18.jpg,hey,straight_ahead,NA,exposure,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_modi_nonoise_look,30,4,2,14,3,Novel11.jpg,Novel18.jpg,modi,right,Novel11.jpg,Novel18.jpg,look,straight_ahead,NA,test,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_modi_nonoise_look,31,4,2,15,4,Novel18.jpg,Novel9.jpg,modi,left,Novel9.jpg,Novel18.jpg,look,straight_ahead,NA,exposure,straight_ahead,grace,gaze_nogaze_ol_gr,4
+gr_sa_modi_nonoise_hey,32,4,2,16,4,Novel18.jpg,Novel2.jpg,modi,left,Novel2.jpg,Novel18.jpg,hey,straight_ahead,NA,test,straight_ahead,grace,gaze_nogaze_ol_gr,4

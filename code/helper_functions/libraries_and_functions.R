@@ -15,6 +15,42 @@ library(rstanarm);
 # load tidyverse last, so no functions get masked
 library(tidyverse); 
 
+process_log_files <- function(dir_path) {
+  files <- list.files(dir_path)
+  files %>% purrr::map_dfr(process_log_file, file_path = dir_path)
+}
+
+process_log_file <- function(file, file_path) {
+  xml_list <- xmlParse(here::here(file_path, file)) %>% xmlToList(simplify = TRUE)
+  xml_list %>% purrr::map_dfr(make_stimulus_key)
+}
+
+make_stimulus_key <- function(xml_obj) {
+  is_stimulus_file <- (str_detect(names(xml_obj), pattern = "StimulusFile") %>% sum()) > 0
+  
+  if(is_stimulus_file) {
+    d <- tibble(
+      stimulus_name = xml_obj[["Name"]],
+      stimulus = xml_obj[["StimulusFile"]],
+      stimulus_type = xml_obj[["Type"]]
+    )
+    
+  } else {
+    d <- tibble(
+      stimulus_name = xml_obj[["Name"]],
+      stimulus = NA,
+      stimulus_type = xml_obj[["Type"]]
+    )
+  }
+  
+  d %>% mutate(stimulus_name = str_remove(stimulus_name, ".mov|.jpg|.png|.avi"),
+               trial_num_exp = str_extract(stimulus_name, pattern = "[:digit:]+"),
+               stimulus_name = str_remove_all(stimulus_name, pattern = '_*[:digit:]+'),
+               stimulus_name = str_remove(stimulus_name, pattern = '[.]'),
+               stimulus_name = str_trim(stimulus_name),
+               stimulus = str_remove(stimulus, ".mov|.jpg|.png|.avi")) 
+}
+
 to.n <- function (x) {
   as.numeric(as.character(x))
 }
@@ -27,31 +63,31 @@ make_stim_key_value_pairs <- function(xml_obj) {
   )
 }
 
-process_one_stim_xml <- function(xml_obj, x_max = 1920) {
+# note that we flip the y coordinate 
+process_one_stim_xml <- function(xml_obj, x_max = 1920, y_max = 1080, file_name) {
+  print(file_name)
   tibble(
+    stimulus = str_remove(file_name, pattern = ".xml"),
     stimulus_name = xml_obj$Tag,
     aoi_x_min = xml_obj[['Points']][[1]]$X,
-    aoi_y_min = xml_obj[['Points']][[1]]$Y,
+    aoi_y_min = y_max - as.numeric(xml_obj[['Points']][[2]]$Y),
     aoi_x_max = xml_obj[['Points']][[2]]$X,
-    aoi_y_max = xml_obj[['Points']][[2]]$Y
+    aoi_y_max = y_max - as.numeric(xml_obj[['Points']][[1]]$Y)
   ) %>% 
     mutate(aoi_type = ifelse(str_detect(stimulus_name, ".jpg|.png"), "image", "movie"),
            aoi_location = case_when (
              aoi_x_min == 0 ~ 'left',
-             aoi_y_min == 0 ~ 'center_face',
+             aoi_y_max == 1080 ~ 'center_face',
              aoi_x_max == x_max ~ 'right'
            ))
 } 
 
-make_roi_key_value_pairs <- function(file) {
-  print(file)
-  xml_list <- xmlParse(here::here(read_path, file)) %>% 
-    xmlToList()
-  xml_list %>% purrr::map_dfr(process_one_stim_xml)
+make_roi_key_value_pairs <- function(file, x_max = 1920, y_max = 1080) {
+  xml_list <- xmlParse(here::here(read_path, file)) %>% xmlToList()
+  xml_list %>% purrr::map_dfr(process_one_stim_xml, x_max = x_max, y_max = y_max, file_name = file)
 }
 
-
-# convert logit back to probability 
+# convert logit to probability 
 logit_to_prob <- function(logit) {
   odds <- exp(logit)
   odds / (1 + odds)

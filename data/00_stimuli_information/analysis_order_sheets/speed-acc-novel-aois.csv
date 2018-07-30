@@ -1,0 +1,4 @@
+aoi_x_min,aoi_y_min,aoi_x_max,aoi_y_max,aoi_type,aoi_location
+0,0,480,270,image,left
+1440,0,1920,270,image,right
+346,432,1498,1080,movie,center_face
