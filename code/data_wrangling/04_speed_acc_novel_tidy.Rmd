@@ -135,6 +135,14 @@ d %<>%
 ## Save first shifts data file to disk
 
 ```{r}
+# just keep first shift data
+d_fs <- d %>% ungroup() %>% 
+  select(subid, stimulus_name:trial_num_learn_block, noun, trial_type, 
+         gaze_condition, speaker, order_name, order_number, gaze, testing_date:comments, 
+         rt:shift_accuracy_clean)  %>% 
+  distinct()
+
+# write to processed data folder
 write_path <- "data/03_processed_data/"
-write_csv(d, path = here::here(write_path, "speed_acc_novel_shifts.csv"))
+write_csv(d_fs, path = here::here(write_path, "speed_acc_novel_shifts.csv"))
 ```
