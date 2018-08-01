@@ -14,7 +14,8 @@ write_path <- "data/00_stimuli_information/analysis_order_sheets/"
 
 ## Make stimuli key
 df_stimulus_key <- process_log_files(stimuli_logs_path) %>% 
-  filter(stimulus_type == "Composite") 
+  filter(stimulus_type == "Composite", 
+         !(is.na(trial_num_exp))) 
 
 write_csv(df_stimulus_key, path = here::here(write_path, "speed-acc-stimulus-key.csv"))
 
@@ -49,10 +50,10 @@ order_sheets_gs %>% gs_download(ws = "nogaze_gaze_1_gr",
 order_sheets_gs %>% gs_download(ws = "nogaze_gaze_2_ol", 
                                 to = file.path(exp_order_sheet_path, "speed_acc_novel_kid_order2.csv"),
                                 overwrite = T) 
-order_sheets_gs %>% gs_download(ws = "gaze_nogaze_1_gr", 
+order_sheets_gs %>% gs_download(ws = "gaze_nogaze_3_gr", 
                                 to = file.path(exp_order_sheet_path, "speed_acc_novel_kid_order3.csv"),
                                 overwrite = T) 
-order_sheets_gs %>% gs_download(ws = "gaze_nogaze_2_ol", 
+order_sheets_gs %>% gs_download(ws = "gaze_nogaze_4_ol", 
                                 to = file.path(exp_order_sheet_path, "speed_acc_novel_kid_order4.csv"),
                                 overwrite = T)
 
@@ -70,10 +71,13 @@ trial_timing_gs %>% gs_download(ws = "novel_nonoise",
 trial_timing_df <- read_csv(here::here(exp_order_sheet_path, "speed_acc_novel_trial_timing.csv")) %>% 
   select(-speaker) 
 
-## PULL EVERTHING TOGETHER
+#### PULL EVERTHING TOGETHER
+
 # timing information and stimulus key
 stimuli_info_df <- left_join(df_orders, trial_timing_df, by = "stimulus_name")
-df_final <- dplyr::left_join(stimuli_info_df, df_stimulus_key, by = c("stimulus_name", "trial_num_exp")) %>% 
+df_final <- dplyr::left_join(stimuli_info_df, df_stimulus_key, by = c("stimulus_name", 
+                                                                      "trial_num_exp",
+                                                                      "order_name")) %>% 
   select(stimulus, everything()) 
 
 ## Write final stimuli information metadata to .csv

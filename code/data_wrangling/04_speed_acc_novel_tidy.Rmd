@@ -1,0 +1,140 @@
+---
+title: "Speed-Acc-Novel Data Tidying"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=T, warning=F, cache=F, message=F, sanitize = T)
+```
+
+```{r}
+library(here)
+source(here::here("code/helper_functions/libraries_and_functions.R"))
+processed_data_path <- "data/03_processed_data/"
+d <- read_csv(here::here(processed_data_path, "speed_acc_novel_timecourse.csv.gz"))
+```
+
+### Score each trial: RT and Accuracy of first shift
+
+Filter out "away" looks and create some useful variables: condition, target side of the screen, and whether the participant was looking at the target vs. distracter at each time point.
+
+And for our RT analyses, we need to mark the critical onset for each trial. Here we mark three time points of interest. Time relative to the:
+
+1. center fixation appearing on the screen
+2. sentence onset
+3. target noun onset
+
+First, we need to convert the trial measurement information from frames to milliseconds and seconds and remove the original timing variables, so we don't get confused in the future.
+
+```{r}
+d %<>% 
+  mutate(noun_onset_ms = (noun_onset_sec * 1000) + (noun_onset_frames * 33),
+         noun_onset_seconds = noun_onset_ms / 1000,
+         sentence_onset_ms = (sentence_onset_sec * 1000) + (sentence_onset_frames * 33),
+         sentence_onset_seconds = sentence_onset_ms / 1000,
+         gaze_onset_ms = (as.numeric(gaze_onset_sec) * 1000) + (as.numeric(gaze_onset_frames) * 33),
+         gaze_onset_seconds = gaze_onset_ms / 1000) %>% 
+  select(-noun_onset_sec, -noun_onset_frames, -sentence_onset_sec, -sentence_onset_frames,
+         -gaze_onset_sec, -gaze_onset_frames)
+```
+
+```{r}
+center_fix_onset <- 2.5 # experiment was programmed such that center fixation appeared 2_5 sec after trial onset
+
+d %<>% 
+  filter(aoi_looking_type != "away", is.na(aoi_looking_type) == F) %>% 
+  mutate(t_stim = ifelse(t_stim == 0, 0, round(t_stim, digits = 3)),
+         target_side = ifelse(target_image == left_image, "left", "right"),
+         target_looking = ifelse(aoi_looking_type == "face", "center",
+                                 ifelse(aoi_looking_type == target_side, "target", "distracter")),
+         t_rel_noun = t_stim - noun_onset_seconds,
+         t_rel_center_fixation = t_stim - center_fix_onset,
+         t_rel_sentence = t_stim - sentence_onset_seconds)
+```
+
+### Flag where participant was looking at each of the critical points in the trial 
+
+In the next set of chunks, we will condense the timecourse information into fewer bits. Specifically, we want to get the information about each participants' first shift on every trial using noun onset (the start of the target noun in the sentence).
+
+```{r flag gaze target at noun onsets for each trial}
+d_orig <- d
+
+d <- d_orig %>% 
+  filter(t_rel_noun > 0) %>%
+  group_by(trial_num_exp, subid) %>% 
+  do(filter(., t_rel_noun == min(t_rel_noun))) %>% 
+  mutate(response = target_looking,
+         response_onset_type = "noun") %>% 
+  select(subid, trial_num_exp, response, response_onset_type) %>% 
+  left_join(d_orig, ., by = c("subid", "trial_num_exp"))
+```
+
+Next, we need to compute RT for each trial, using my own score trial function. 
+
+The function takes in a data frame for each trial and computes an RT and whether the shift was correct or incorrect. You can tell the function the kind of onset value from which you want to compute RT. The different onset values are:
+
+* noun 
+* center_fixation
+* sentence
+
+Now we apply the score trial function to each trial for each participant in the tidy data frame using the do() functionality in dplyr. Note that we are using the .$ index to use a variable from the piped data frame as an argument to the score trial function.
+
+```{r}
+d %<>% 
+  group_by(subid, trial_num_exp, response_onset_type) %>% 
+  filter(is.na(response_onset_type) == F) %>% 
+  do(score_trial_et(., crit_onset_type = .$response_onset_type))
+```
+
+Check the distribution of shift types over the different response types.
+
+```{r check freq of each shift}
+d %>% 
+  select(subid, trial_num_exp, response_onset_type, shift_type) %>% 
+  unique() %>% 
+  group_by(response_onset_type, shift_type) %>% 
+  count() %>% 
+  kable()
+```
+
+Check one trial to make sure the scoring function is working. 
+
+```{r}
+check <- d %>% 
+  filter(subid == "SAN-071218-04", trial_num_exp == 10) %>% 
+  ungroup() %>% 
+  select(t_stim, t_rel_noun, stimulus_name,
+         rt, gaze_target, 
+         response, shift_type, aoi_looking_type,
+         shift_accuracy)
+```
+
+Now we have an RT, a shift type, and a correct/incorrect value for each trial based on three different critical onset points in the trial (i.e., center fixation, sentence, and noun onset).
+
+Compute child's age at test.
+
+```{r}
+d %<>% 
+  mutate(age_years = age,
+         age = as.double(testing_date - birth_date),
+         age_group = as.integer(age / 365))
+```
+
+Add variable that stores information about center-initial shifts. Change condition labels to make it clearer. And add variable to track block.
+
+```{r}
+d %<>% 
+  mutate(shift_start_location = ifelse(shift_type %in% c("C_T", "C_D"), 
+                                       "center", 
+                                       "not_center"),
+         shift_accuracy_clean = ifelse(str_detect(shift_type, "_T"), 
+                                       "correct", 
+                                       "incorrect"))
+```
+
+## Save first shifts data file to disk
+
+```{r}
+write_path <- "data/03_processed_data/"
+write_csv(d, path = here::here(write_path, "speed_acc_novel_shifts.csv"))
+```

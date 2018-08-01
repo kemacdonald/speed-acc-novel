@@ -21,11 +21,13 @@ process_log_files <- function(dir_path) {
 }
 
 process_log_file <- function(file, file_path) {
+  # get order name from log file name
+  order_name <- str_split(file, "-", simplify = T)[3] %>% str_replace(".xml", "")
   xml_list <- xmlParse(here::here(file_path, file)) %>% xmlToList(simplify = TRUE)
-  xml_list %>% purrr::map_dfr(make_stimulus_key)
+  xml_list %>% purrr::map_dfr(make_stimulus_key, order_name)
 }
 
-make_stimulus_key <- function(xml_obj) {
+make_stimulus_key <- function(xml_obj, order_name) {
   is_stimulus_file <- (str_detect(names(xml_obj), pattern = "StimulusFile") %>% sum()) > 0
   
   if(is_stimulus_file) {
@@ -34,7 +36,6 @@ make_stimulus_key <- function(xml_obj) {
       stimulus = xml_obj[["StimulusFile"]],
       stimulus_type = xml_obj[["Type"]]
     )
-    
   } else {
     d <- tibble(
       stimulus_name = xml_obj[["Name"]],
@@ -44,6 +45,7 @@ make_stimulus_key <- function(xml_obj) {
   }
   
   d %>% mutate(stimulus_name = str_remove(stimulus_name, ".mov|.jpg|.png|.avi"),
+               order_name = str_remove(order_name, "_[:digit:]+"),
                trial_num_exp = str_extract(stimulus_name, pattern = "[:digit:]+"),
                stimulus_name = str_remove_all(stimulus_name, pattern = '_*[:digit:]+'),
                stimulus_name = str_remove(stimulus_name, pattern = '[.]'),
@@ -110,10 +112,7 @@ read_hddm_file <- function(file_name, path, condition_list, param_list) {
   final_df
 }
 
-
-
 ## Plot HDDM parameter values
-
 plot_hddm <- function(d, x_lims = c(0, 3)) {
   ggplot(aes(x = param_value, color = condition), data = d) +
     geom_line(stat="density", size = 1.5) + 
@@ -208,48 +207,48 @@ score_trial_et <- function(trial_df, crit_onset_type = "noun") {
   # filter trial to keep just that onset type
   trial_df %<>% filter(response_onset_type == crit_onset_type)
   # print the subid and trial number to make debugging easier
-  print(paste(trial_df$tr.num[1], trial_df$subid[1]))
+  print(paste(trial_df$trial_num_exp[1], trial_df$subid[1]))
   
   # build variables to index each trial
-  response.type.index <- paste0(crit_onset_type, ".onset") 
-  t.filter.type <- paste0("t.rel.", crit_onset_type, " > 0")
-  t.select.type <- paste0("t.rel.", crit_onset_type)
+  response_type_index <- paste0(crit_onset_type, "_onset") 
+  t_filter_type <- paste0("t_rel_", crit_onset_type, " > 0")
+  t_select_type <- paste0("t_rel_", crit_onset_type)
   
   # check if there is a shift in the trial after the critical onset
   # and record where the shift started and ended
-  crit.window.responses <- trial_df %>% 
-    filter_(t.filter.type) %>% 
-    select_("target_looking", t.select.type) %>% 
+  crit_window_responses <- trial_df %>% 
+    filter_(t_filter_type) %>% 
+    select_("target_looking", t_select_type) %>% 
     group_by(target_looking) %>% 
-    summarise_(min_t = interp(~ min(x), x = as.name(t.select.type))) %>% 
+    summarise_(min_t = interp(~ min(x), x = as.name(t_select_type))) %>% 
     arrange(min_t)
   
   # store info about the shift
-  shift.start <- crit.window.responses$target_looking[1]
-  shift.info <-paste(crit.window.responses$target_looking[1], crit.window.responses$target_looking[2],
+  shift_start <- crit_window_responses$target_looking[1]
+  shift_info <-paste(crit_window_responses$target_looking[1], crit_window_responses$target_looking[2],
                      sep = "-")
   
   # check if there is only one "response" in the target_looking vector
-  # if 1, then there was no shift (i.e., no change from response at crit.onset)
-  if (nrow(crit.window.responses) == 1) {
+  # if 1, then there was no shift (i_e_, no change from response at crit_onset)
+  if (nrow(crit_window_responses) == 1) {
     trial_score <- trial_df %>% 
       mutate(rt = NA, shift_type = "no_shift") %>% 
       select(rt, shift_type) 
   } else {
     # get the earliest time point when target looking switches from the critical onset value 
     trial_score <- trial_df %>% 
-      filter_(t.filter.type) %>% 
-      filter(target_looking != shift.start) %>% 
-      select_(t.select.type, "target_looking") %>% 
+      filter_(t_filter_type) %>% 
+      filter(target_looking != shift_start) %>% 
+      select_(t_select_type, "target_looking") %>% 
       group_by(target_looking) %>% 
-      summarise_(rt = interp(~ min(x), x = as.name(t.select.type))) %>% 
+      summarise_(rt = interp(~ min(x), x = as.name(t_select_type))) %>% 
       filter(rt == min(rt)) %>% 
-      mutate(shift_type = ifelse(shift.info == "center-target", "C_T", 
-                                 ifelse(shift.info == "center-distracter", "C_D",
-                                        ifelse(shift.info == "target-distracter", "T_D",
-                                               ifelse(shift.info== "target-center", "T_C",
-                                                      ifelse(shift.info == "distracter-target", "D_T",
-                                                             ifelse(shift.info == "distracter-center", "D_C")))))),
+      mutate(shift_type = ifelse(shift_info == "center-target", "C_T", 
+                                 ifelse(shift_info == "center-distracter", "C_D",
+                                        ifelse(shift_info == "target-distracter", "T_D",
+                                               ifelse(shift_info== "target-center", "T_C",
+                                                      ifelse(shift_info == "distracter-target", "D_T",
+                                                             ifelse(shift_info == "distracter-center", "D_C", NA)))))),
              shift_accuracy = ifelse(shift_type == "C_T", "correct", "incorrect")) %>%
       select(rt, shift_type, shift_accuracy) 
   }
