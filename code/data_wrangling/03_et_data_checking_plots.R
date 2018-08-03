@@ -1,14 +1,11 @@
 ## Plots to sanity check output of eye tracking data processing pipeline
-
-library(here)
 source(here::here("code/helper_functions/libraries_and_functions.R"))
 processed_data_path <- "data/03_processed_data/"
-
-df <- read_csv(here::here(processed_data_path, "speed_acc_novel_et.csv.gz"))
+df <- read_feather(here::here(processed_data_path, "speed_acc_novel_timecourse.feather"))
 
 # plot to check that fixation locations look reasonable
 df %>% 
-  sample_frac(size = 0.20) %>% 
+  sample_frac(size = 0.10) %>% 
   ggplot(aes(x = x, y = y, color = aoi_looking_type), data = .) +
   geom_point(alpha = 0.3, size = 3) +
   xlim(0, 1980) +

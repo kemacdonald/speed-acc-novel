@@ -8,10 +8,9 @@ knitr::opts_chunk$set(echo=T, warning=F, cache=F, message=F, sanitize = T)
 ```
 
 ```{r}
-library(here)
 source(here::here("code/helper_functions/libraries_and_functions.R"))
 processed_data_path <- "data/03_processed_data/"
-d <- read_csv(here::here(processed_data_path, "speed_acc_novel_timecourse.csv.gz"))
+d <- read_feather(here::here(processed_data_path, "speed_acc_novel_timecourse.feather"))
 ```
 
 ### Score each trial: RT and Accuracy of first shift
