@@ -23,11 +23,12 @@ trials_to_plot <- sample(all_trials, size = 1)
 
 df %>%
   filter(stimulus %in% trials_to_plot, 
-         t.stim >= 0, t.stim <= 5) %>% 
-  ggplot(aes(x = t.stim, y = x, color = aoi_looking_type)) +
+         t_rel_noun >= 0, t_rel_noun <= 4) %>% 
+  ggplot(aes(x = t_rel_noun, y = x, color = target_looking)) +
   geom_point() +
   geom_line(aes(group = 1)) +
   labs(x = "time (ms)", y = "x coordinate") +
   facet_grid(stimulus~subid) +
   ggthemes::scale_color_ptol() +
-  ggthemes::theme_base()
+  ggthemes::theme_base() +
+  theme(legend.position = "top")
