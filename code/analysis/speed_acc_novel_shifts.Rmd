@@ -11,7 +11,7 @@ knitr::opts_chunk$set(warning=F, message=F, sanitize = T,
                       fig.height=4, fig.width=8, echo=T, cache = F)
 ```
 
-```{r}
+```{r libraries-data-paths}
 library(here)
 library(tidyverse)
 # source(here::here("code/helper_functions/libraries_and_functions.R"))
@@ -19,10 +19,9 @@ data_path <- "data/03_processed_data/"
 theme_set(ggthemes::theme_base())
 ```
 
-## Load data
-
-```{r}
-d <- read_csv(here::here(data_path, "speed_acc_novel_shifts.csv")) 
+Read in data
+```{r load-data}
+d <- read_csv(here::here(data_path, "speed_acc_novel_shifts.csv"))
 View(d)
 ```
 
@@ -38,67 +37,79 @@ Some questions we'd like to know about our data:
 
 We can answer these questions using tidyverse to generate tables. For example, the following code uses the `count()` function to tell us how many rows (i.e., trials) each particpant has in the dataset. `kable()` is a function for making the tables prettier if we were to knit this document to an html file for viewing on a browser.
 
-## Participant number and number trials
-```{r}
+Participant number and number trials
+```{r number-participants-trials}
 d %>% 
   count(subid) %>% 
   kable()
 ```
 
-## Participant number
-```{r}
+Number of unique participants
+```{r number-participants}
 d$subid %>%
   unique %>%
   length
 ```
 
-## Group by demographics
+Group by demographics
+```{r pull-out-demographic-info-by-subject}
 d_by_subject <- d %>%
   group_by(subid, gender, ethnicity_race, order_key, keep_drop, age_years, age_group) %>%
   summarise
 View(d_by_subject)
+```
 
-## Gender breakdown
+Gender breakdown
 ```{r}
-gender_by_subject <- d %>%
-  group_by(subid, gender) %>%
-  summarise
-gender_by_subject # I think this can be taken out due to d_by_subject
-
 d_by_subject %>%
   group_by(gender) %>%
-  summarise(gender_number = n())
+  count(gender)
 ```
 
-## Age group breakdown
+Age group breakdown
 ```{r}
-agegroup_by_subject <- d %>%
-  group_by(subid, age_group) %>%
-  summarise
-agegroup_by_subject # I think this can be taken out due to d_by_subject
-
 d_by_subject %>%
   group_by(age_group) %>%
-  summarise(agegroup_number = n())
+  count(age_group)
 ```
 
-## Keep, drop, pilot
-```{r}
+Count the number of participants who are kept and dropped
+```{r count-exclusions}
 # This code will NOT work until updated subject logs are read in
 d_by_subject %>%
   group_by(keep_drop) %>%
-  summarise(keepdrop_number = n())
+  count(keep_drop)
 
 d_by_subject %>%
   group_by(reason_excluded) %>%
-  summarise(excluded_number = n())
+  count(reason_excluded)
 ```
 
+Count the number of trials per participant
+```{r count-trials-per-participant}
+d %>%
+  group_by(subid) %>%
+  count(subid)
+```
 
-## Trials
+Count the number of trials per word
+```{r count-trials-per-word}
+d %>%
+  group_by(noun) %>%
+  count(noun)
+```
+
+Count the number of trials per word per participant
+```{r count-trials-per-word-per-participant}
+d %>%
+  group_by(subid, noun) %>%
+  count(subid)
+```
+
+Trials per gaze condition per participant:
 Here is some code that uses `group_by()` to tells us how many trials are in each condition. Note the use of `arrange()` to keep the table sorted by participant id.
 
-```{r}
+```{r count-trials-per-gaze-condition-per-participant}
 d %>% 
   group_by(gaze_condition) %>% 
   count(subid) %>% 
@@ -107,40 +118,325 @@ d %>%
 
 ```
 
+Count trials per gaze condition
+```{r count-trials-per-gaze-condition}
+d %>%
+  group_by(gaze_condition) %>%
+  count(gaze_condition)
+```
+
+
 ## Filter data
 
 Remove shifts that do not start at center. Remove participants based on keep_drop, and extreme RTs
 
-## Remove shifts that don't start at center
-```{r}
-d_center_shifts <- d %>%
-  filter(shift_start_location == "center")
-View(d_center_shifts)
+*Note that if you want to analyze the full data set you should comment out the first filter step. only run this if you want to JUST use pilot data!
+
+```{r filter-data}
+d_keep <- d %>%
+  filter(keep_drop == "keep", 
+         shift_start_location == "center") %>%
+  group_by(subid) %>%
+  filter(n() >= 16)
 ```
 
 
+If I wanted to look at ONLY pilot data:
+```{r pull-out-pilot-data, eval = FALSE}
+d_keep <- d %>%
+  filter(reason_excluded == "pilot",
+         shift_start_location == "center")
+View(d_keep)
+```
+
+
+
+TODO: remove RTs that are +/- 3 standard deviations from the mean.
+
+```{r filter-extreme-rts, eval=FALSE}
+# get mean RT and sd of RT
+mean_rt <- ms$m %>%
+  mean()
+sd_rt <- ms$m %>%
+  sd()
+
+# define RT cut-offs
+rt_lower_limit <- mean_rt - 3*sd_rt
+rt_upper_limit <- mean_rt + 3*sd_rt
+
+# filter out RTs outside cut-offs
+ms_ss_FILTERED <- ms_ss %>%
+  filter(m_ss > rt_lower_limit, m_ss < rt_upper_limit)
+View(d_keep)
+
+ms_FILTERED <- ms_ss_FILTERED %>%
+  group_by(gaze_condition, 
+           trial_type, 
+           trial_num_learn_block) %>%
+  summarise(m = mean(m_ss))
+```
+
+Count number of trials after filtering
+```{r count-trials-filtered}
+d_keep %>%
+  count(gaze_condition, trial_type, trial_num_learn_block)
+```
+
+Summarise RT
+```{r summarise-rt}
+ms_ss <- d_keep %>%
+  filter(!is.na(rt)) %>%
+  group_by(subid, 
+           gaze_condition, 
+           trial_type, 
+           trial_num_learn_block) %>%
+  summarise(m_ss = mean(rt)) 
+
+ms <- ms_ss %>%
+  group_by(gaze_condition, 
+           trial_type, 
+           trial_num_learn_block) %>%
+  summarise(m = mean(m_ss))
+```
 
 ## Explore data using visualization
 
 What does the distribution of age in the sample look like? 
 
-```{r}
-
+Histogram of subjects' ages:
+```{r plot-age-distribution}
+ggplot(data = d_by_subject) +
+   geom_histogram(mapping = aes(x= age_years),
+                  fill = "light blue",
+                  color = "black",
+                  binwidth = .2) +
+  theme_minimal()
 ```
 
 ### Reaction Time 
 
 What does the distribution of Reaction Times (RT) look like overall? How about across different gaze conditions?
 
-```{r}
-
+Plot overall RT distribution:
+```{r plot-overall-rt-distribution}
+ggplot(data = d_keep) +
+  geom_density(mapping = aes(x = rt),
+                 binwidth = .1,
+                 fill = "light blue",
+                 color = "black") +
+  theme_minimal()
 ```
+
+Plot RT density distributions by gaze condition in separate graphs:
+```{r plot-rt-by-gaze-condition-separate-graphs}
+ggplot(data = d_keep) +
+  geom_density(mapping = aes(x = rt),
+                 binwidth = .1,
+                 fill = "light blue",
+                 color = "black") +
+  theme_minimal() +
+  facet_wrap(facets = ~gaze_condition)
+```
+
+
+Plot RT density distributions by gaze condition in one graph:
+```{r plot-rt-by-gaze-condition-one-graph}
+ggplot(data = d_keep) +
+  geom_density(mapping = aes(x = rt,
+                             fill = gaze_condition),
+               alpha = .5)+
+  theme_minimal()
+```
+
+
+Plot RT distribution by gaze condition in exposure vs. test trials:
+```{r plot-rt-by-gaze-condition-exposure-vs-test}
+ggplot(data = d_keep) +
+  geom_density(mapping = aes(x = rt,
+                             fill = gaze_condition),
+               alpha = .5) +
+  theme_minimal() + 
+  facet_wrap(facets = ~trial_type)
+```
+
+
+Plot RT as a function of trial number in different gaze conditions in exposure and test trials
+```{r plot-rt-by-condition-over-trials}
+ggplot(data = ms) +
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = m,
+                          color = gaze_condition)) +
+  theme_minimal() +
+  facet_wrap(facets = ~trial_type) +
+  labs(x = "trial number", y = "mean RT")
+```
+
+
 
 ### Accuracy
 
 What does first shift accuracy look like for different gaze conditions?
 
-```{r}
+Accuracy by condition and trial number
+```{r table-accuracy-by-condition-trial-number}
+# table for accuracy by condition
+condition_accuracy <- d_keep %>%
+  group_by(gaze_condition, 
+           shift_accuracy, 
+           trial_num_learn_block,
+           trial_type) %>%
+  count(gaze_condition)
+
+# spread out table
+condition_accuracy_spread <- spread(condition_accuracy, key = shift_accuracy, value = n)
+
+#compute proportion correct first shifts and add to df
+condition_accuracy_spread <- condition_accuracy_spread %>%
+  mutate(total = correct + incorrect,
+         prop_correct = correct / total)
+```
+
+Plot accuracy as a function of trial number for all trials
+```{r plot-accuracy-by-condition-over-all-trials-test-exposure}
+ggplot(data = condition_accuracy_spread) +
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = prop_correct,
+                          color = gaze_condition)) +
+  scale_y_continuous(limits = c(0, 1)) +
+  theme_minimal() +
+  facet_wrap(facets = ~trial_type) +
+  labs(x = "trial number", y = "proportion correct")
+```
+
+Bar graph to show proportion correct for each gaze condition
+```{r bar-graph-proportion-correct-by-condition}
+ggplot(data = condition_accuracy_spread) +
+  geom_bar(mapping = aes(x = gaze_condition,
+                         y = prop_correct),
+           stat = "identity",
+           fill = "light blue") +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Filter data by gaze condition (not sure if I'll need this but might as well keep):
+```{r pull-out-data-by-gaze-condition}
+d_keep_gaze <- d_keep %>%
+  filter(gaze_condition == "gaze")
+
+d_keep_sa <- d_keep %>%
+  filter(gaze_condition == "straight_ahead")
+```
+
+Accuracy by condition and trial number by participant (attempt)
+```{r, eval = FALSE}
+# table for accuracy by condition
+condition_accuracy <- d_keep %>%
+  group_by(subid,
+           gaze_condition, 
+           shift_accuracy, 
+           trial_num_learn_block,
+           trial_type) %>%
+  count(gaze_condition)
+
+condition_accuracy_spread <- spread(condition_accuracy, key = shift_accuracy, value = n)
+condition_accuracy_spread <- condition_accuracy_spread %>%
+  mutate(total = correct + incorrect,
+         prop_correct = correct / total)
+
+condition_accuracy_spread$correct[is.na(condition_accuracy_spread$correct)] <- 0
+condition_accuracy_spread$incorrect[is.na(condition_accuracy_spread$incorrect)] <- 0
+
+condition_accuracy_spread_total <- condition_accuracy_spread %>%
+  group_by(gaze_condition,
+           trial_num_learn_block,
+           prop_correct,
+           trial_type) %>%
+  count(gaze_condition)
+```
+
+
+
+
+
+Accuracy by condition and trial number for just test trials
+```{r table-accuracy-condition-trial-number-test-trials, eval = FALSE}
+# table for accuracy by condition on just test trials
+d_keep_test <- d_keep %>%
+  filter(trial_type == "test")
+
+condition_accuracy_test <- d_keep_test %>%
+  group_by(gaze_condition, 
+           shift_accuracy,
+           trial_num_learn_block) %>%
+  count(gaze_condition)
+
+condition_accuracy_spread_test <- spread(condition_accuracy_test, key = shift_accuracy, value = n)
+condition_accuracy_spread_test <- condition_accuracy_spread_test %>%
+  mutate(total = correct + incorrect,
+         prop_correct = correct / total)
+
+# bar graph of accuracy on test trials by condition
+ggplot(data = condition_accuracy_spread_test) +
+  geom_bar(mapping = aes(x = gaze_condition,
+                         y = prop_correct),
+           stat = "identity",
+           fill = "light blue") +
+  theme_minimal() +
+  labs(x = "trial number", y = "proportion correct")
+
+# plot accuracy as function of trial number on just test trials
+ggplot(data = condition_accuracy_spread_test) +
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = prop_correct,
+                          color = gaze_condition)) +
+  scale_y_continuous(limits = c(0, 1)) +
+  theme_minimal()
+```
+
+
+
+
+Earlier attempts to plot accuracy:
+```{r, eval = FALSE}
+# this is probably trash
+ggplot(data = d_keep) +
+  geom_bar(mapping = aes(x = gaze_condition,
+                         y = shift_accuracy,
+                         fill = shift_accuracy),
+           position = position_fill(),
+           stat = "identity") +
+  theme_minimal()
+
+ggplot(data = d_keep) +
+  geom_bar(mapping = aes(x = gaze_condition,
+                         fill = shift_accuracy),
+           stat = "count") +
+  theme_minimal()
+# end of trash
+
+# plot proportion of correct and incorrect shifts by condition
+ggplot(data = d_keep) +
+  geom_bar(mapping = aes(x = gaze_condition,
+                         fill = factor(shift_accuracy)),
+           position = position_fill(reverse = TRUE)) +
+  theme_minimal()
+
+ggplot(data = condition_accuracy) +
+  geom_bar(mapping = aes(x = gaze_condition,
+                         y = ))
 
 ```
 
