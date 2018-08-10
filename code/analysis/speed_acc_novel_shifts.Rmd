@@ -57,6 +57,7 @@ d_by_subject <- d %>%
   group_by(subid, gender, ethnicity_race, order_key, keep_drop, age_years, age_group) %>%
   summarise
 View(d_by_subject)
+# missing demographic info for SAN-071718-02/02b
 ```
 
 Gender breakdown
@@ -132,14 +133,25 @@ Remove shifts that do not start at center. Remove participants based on keep_dro
 
 *Note that if you want to analyze the full data set you should comment out the first filter step. only run this if you want to JUST use pilot data!
 
+Take out word blocks for reasons explained in subject log or if there is data for less than 50% of word block:
+```{r}
+d_complete <- d %>%
+  filter(is.na(block_excluded) | 
+           block_excluded != learning_block) %>%
+  group_by(subid, learning_block) %>%
+  filter(n() >= 4)
+# should probably combine this with next filtering step
+```
+
+
+Filter data based on keep_drop and center start locations:
 ```{r filter-data}
-d_keep <- d %>%
+d_keep <- d_complete %>%
   filter(keep_drop == "keep", 
          shift_start_location == "center") %>%
   group_by(subid) %>%
   filter(n() >= 16)
 ```
-
 
 If I wanted to look at ONLY pilot data:
 ```{r pull-out-pilot-data, eval = FALSE}
