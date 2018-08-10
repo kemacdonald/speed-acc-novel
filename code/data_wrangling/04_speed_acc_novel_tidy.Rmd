@@ -8,10 +8,9 @@ knitr::opts_chunk$set(echo=T, warning=F, cache=F, message=F, sanitize = T)
 ```
 
 ```{r}
-library(here)
 source(here::here("code/helper_functions/libraries_and_functions.R"))
 processed_data_path <- "data/03_processed_data/"
-d <- read_csv(here::here(processed_data_path, "speed_acc_novel_timecourse.csv.gz"))
+d <- read_feather(here::here(processed_data_path, "speed_acc_novel_timecourse.feather"))
 ```
 
 ### Score each trial: RT and Accuracy of first shift
@@ -23,34 +22,6 @@ And for our RT analyses, we need to mark the critical onset for each trial. Here
 1. center fixation appearing on the screen
 2. sentence onset
 3. target noun onset
-
-First, we need to convert the trial measurement information from frames to milliseconds and seconds and remove the original timing variables, so we don't get confused in the future.
-
-```{r}
-d %<>% 
-  mutate(noun_onset_ms = (noun_onset_sec * 1000) + (noun_onset_frames * 33),
-         noun_onset_seconds = noun_onset_ms / 1000,
-         sentence_onset_ms = (sentence_onset_sec * 1000) + (sentence_onset_frames * 33),
-         sentence_onset_seconds = sentence_onset_ms / 1000,
-         gaze_onset_ms = (as.numeric(gaze_onset_sec) * 1000) + (as.numeric(gaze_onset_frames) * 33),
-         gaze_onset_seconds = gaze_onset_ms / 1000) %>% 
-  select(-noun_onset_sec, -noun_onset_frames, -sentence_onset_sec, -sentence_onset_frames,
-         -gaze_onset_sec, -gaze_onset_frames)
-```
-
-```{r}
-center_fix_onset <- 2.5 # experiment was programmed such that center fixation appeared 2_5 sec after trial onset
-
-d %<>% 
-  filter(aoi_looking_type != "away", is.na(aoi_looking_type) == F) %>% 
-  mutate(t_stim = ifelse(t_stim == 0, 0, round(t_stim, digits = 3)),
-         target_side = ifelse(target_image == left_image, "left", "right"),
-         target_looking = ifelse(aoi_looking_type == "face", "center",
-                                 ifelse(aoi_looking_type == target_side, "target", "distracter")),
-         t_rel_noun = t_stim - noun_onset_seconds,
-         t_rel_center_fixation = t_stim - center_fix_onset,
-         t_rel_sentence = t_stim - sentence_onset_seconds)
-```
 
 ### Flag where participant was looking at each of the critical points in the trial 
 
@@ -90,10 +61,9 @@ Check the distribution of shift types over the different response types.
 
 ```{r check freq of each shift}
 d %>% 
-  select(subid, trial_num_exp, response_onset_type, shift_type) %>% 
-  unique() %>% 
-  group_by(response_onset_type, shift_type) %>% 
-  count() %>% 
+  ungroup() %>% 
+  distinct(subid, trial_num_exp, shift_type, trial_type, gaze_condition) %>% 
+  count(shift_type, trial_type, gaze_condition) %>% 
   kable()
 ```
 

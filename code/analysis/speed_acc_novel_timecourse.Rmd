@@ -1,0 +1,154 @@
+---
+title: "Speed-Acc Novel Timecourse"
+output: html_document
+---
+
+```{r chunk_options, echo = F}
+knitr::opts_chunk$set(warning=F, message=F, sanitize = T, 
+                      fig.height=4, fig.width=8, echo=T, cache = F)
+```
+
+```{r}
+source(here::here("code/helper_functions/libraries_and_functions.R"))
+data_path <- "data/03_processed_data/"
+theme_set(ggthemes::theme_base())
+```
+
+## Read data
+
+Note we filter to only keep participants flagged as "keep" in the participant log
+
+```{r}
+d <- read_feather(here::here(data_path, "speed_acc_novel_timecourse.feather")) 
+d_analysis <- d %>% filter(keep_drop == "keep")
+```
+
+Create exlcusions table
+
+```{r}
+d %>% 
+  distinct(subid, keep_drop, reason_excluded) %>% 
+  filter(keep_drop == "drop") %>% 
+  kable()
+```
+
+Check how many participants and trials in each trial type. 
+
+```{r}
+ss_exclude <- d_analysis %>% 
+  distinct(subid, trial_num_exp) %>% 
+  count(subid) %>% 
+  filter(n < 16) %>% 
+  pull(subid)
+```
+
+Make a table of proportion looking to each area of interest: Left, Right, Center, and Away
+
+```{r}
+d_analysis %>% 
+  filter(is.na(target_looking) == F, !(subid %in% ss_exclude)) %>% 
+  group_by(target_looking) %>% 
+  summarise(count_looks = n()) %>% 
+  mutate(total_looks = sum(count_looks),
+         prop_looks = round(count_looks / total_looks, 2)) %>% 
+  kable()
+```
+
+## Visualize timecourse looking
+
+Aggregate looking behavior over time.
+
+```{r}
+# get total number of trials looking at each time slice (denom in prop looking computation)
+ss_d <- d_analysis %>% 
+  filter(t_stim >= 0, t_stim <= 10) %>% 
+  group_by(subid, t_stim, gaze_condition, trial_type, trial_num_learn_block) %>% 
+  summarise(count = n()) %>% 
+  ungroup() %>% 
+  complete(nesting(subid, t_stim), gaze_condition, trial_type, trial_num_learn_block,
+           fill = list(count = 0)) %>% 
+  mutate(subid = as.character(subid),
+         trial_num_learn_block = as.character(trial_num_learn_block))
+
+# get proportion looking by dividing the freq looking at each target (numerator) by the total looking 
+# derived in step 1 of this chunk
+ss_d <- as.data.frame(xtabs(~ subid + t_stim + target_looking + gaze_condition + trial_type + trial_num_learn_block, 
+                            data = d_analysis),
+                      stringsAsFactors = F) %>% 
+  mutate(t_stim = as.numeric(t_stim)) %>% 
+  left_join(x = ss_d, y = ., by = c("subid", "t_stim", "gaze_condition", "trial_type", "trial_num_learn_block")) %>% 
+  mutate(proportion_looking = Freq / count)
+
+
+# Get means and CIs for proportion looking at each time slice across particpants
+ms <- ss_d %>% 
+  group_by(t_stim, gaze_condition, target_looking, trial_num_learn_block, trial_type) %>% 
+  summarise(mean = mean(proportion_looking, na.rm = T))
+```
+
+Make plot
+
+```{r}
+ms %>% 
+  filter(gaze_condition == "gaze") %>% 
+  ggplot(aes(x = as.numeric(t_stim), y = mean, 
+           color = target_looking, linetype = gaze_condition), data = .) + 
+  ylim(0,1) +
+  xlim(0, 10.5) +
+  geom_line(size=1) +  
+  guides(color = F) +
+  xlab("Time in sec from onset of trial") +
+  geom_vline(xintercept = mean(d$noun_onset_seconds), linetype = "dashed") +
+  geom_vline(xintercept = mean(d$sentence_onset_seconds), linetype = "dashed") +
+  ylab("Proportion looking") +
+  geom_dl(aes(label = target_looking), method = "last.bumpup") +
+  facet_wrap(trial_type~trial_num_learn_block, ncol = 4) +
+  ggthemes::theme_base() +
+  theme(text = element_text(size = 12), legend.position = "top")
+```
+
+## Collapse and look at aggregate looking behavior. 
+
+```{r}
+d_ms <- d_analysis %>% filter(t_rel_noun >= 0, t_rel_noun <= 2.5 target_looking != "center")
+
+# get total number of trials looking at each time slice (denom in prop looking computation)
+ss_cond <- d_ms %>% 
+  group_by(subid, gaze_condition, trial_type, trial_num_learn_block) %>% 
+  summarise(count = n()) %>% 
+  ungroup() %>% 
+  complete(subid, gaze_condition, trial_type, trial_num_learn_block, 
+           fill = list(count = 0)) %>% 
+  mutate(subid = as.character(subid),
+         trial_num_learn_block = as.character(trial_num_learn_block))
+
+# get proportion looking by dividing the freq looking at each target (numerator) by the total looking 
+# derived in step 1 of this chunk
+ss_cond <- as.data.frame(xtabs(~ subid + target_looking + gaze_condition + trial_type + trial_num_learn_block, 
+                            data = d_ms),
+                      stringsAsFactors = F) %>% 
+  left_join(x = ss_cond, y = ., by = c("subid", "gaze_condition", "trial_type", "trial_num_learn_block")) %>% 
+  mutate(proportion_looking = Freq / count)
+
+# Get means and CIs for proportion looking at each time slice across particpants
+ms_cond <- ss_cond %>% 
+  group_by(gaze_condition, target_looking, trial_num_learn_block, trial_type) %>% 
+  tidyboot::tidyboot_mean(column = proportion_looking, nboot = 1000, na.rm = TRUE)
+```
+
+Make key plot of target looking as a function of trial number and trial type.
+
+```{r}
+ms_cond %>% 
+  filter(target_looking == "target") %>% 
+  ggplot(aes(x = trial_num_learn_block, y = mean, 
+             color = gaze_condition, group = gaze_condition)) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
+                  position = position_jitter(width = 0.1) ) +
+  geom_line() +
+  facet_wrap(~trial_type) +
+  lims(y = c(0.3, 0.9)) +
+  geom_hline(yintercept = 0.5, lty = "dashed") +
+  ggthemes::scale_color_ptol() +
+  theme(legend.position = "top")
+```
