@@ -1,7 +1,11 @@
 ## Plots to sanity check output of eye tracking data processing pipeline
 source(here::here("code/helper_functions/libraries_and_functions.R"))
 processed_data_path <- "data/03_processed_data/"
-df <- read_feather(here::here(processed_data_path, "speed_acc_novel_timecourse.feather"))
+
+kid_et <- "speed_acc_novel_timecourse.feather"
+adult_et <- "speed_acc_novel_adult_timecourse.feather"
+
+df <- read_feather(here::here(processed_data_path, adult_et))
 
 # plot to check that fixation locations look reasonable
 df %>% 

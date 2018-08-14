@@ -21,13 +21,14 @@ process_log_files <- function(dir_path) {
 }
 
 process_log_file <- function(file, file_path) {
-  # get order name from log file name
-  order_name <- str_split(file, "-", simplify = T)[3] %>% str_replace(".xml", "")
+  # get order age and name from log file name
+  order_age <- str_split(file, "-", simplify = T)[3] %>% str_replace(".xml", "")
+  order_name <- str_split(file, "-", simplify = T)[4] %>% str_replace(".xml", "")
   xml_list <- xmlParse(here::here(file_path, file)) %>% xmlToList(simplify = TRUE)
-  xml_list %>% purrr::map_dfr(make_stimulus_key, order_name)
+  xml_list %>% purrr::map_dfr(make_stimulus_key, order_name, order_age)
 }
 
-make_stimulus_key <- function(xml_obj, order_name) {
+make_stimulus_key <- function(xml_obj, order_name, order_age) {
   is_stimulus_file <- (str_detect(names(xml_obj), pattern = "StimulusFile") %>% sum()) > 0
   
   if(is_stimulus_file) {
@@ -46,6 +47,7 @@ make_stimulus_key <- function(xml_obj, order_name) {
   
   d %>% mutate(stimulus_name = str_remove(stimulus_name, ".mov|.jpg|.png|.avi"),
                order_name = str_remove(order_name, "_[:digit:]+"),
+               order_age = order_age,
                trial_num_exp = str_extract(stimulus_name, pattern = "[:digit:]+"),
                stimulus_name = str_remove_all(stimulus_name, pattern = '_*[:digit:]+'),
                stimulus_name = str_remove(stimulus_name, pattern = '[.]'),
