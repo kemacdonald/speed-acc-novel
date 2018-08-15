@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DocumentRoot>
+  <StimuliInfo>
+    <StimulusInformation GUID="92a573ef-2bee-4cda-a0f7-d93d68c79b9b" Name="Calibration" Type="Calibration" />
+    <StimulusInformation GUID="cc0d1173-a266-4938-9792-8672cd594b43" Name="mika_intro.avi" Type="Movie" StimulusFile="cc3bd7c5c8d457694031c7630357751f.avi" FitToScreen="True" />
+    <StimulusInformation GUID="ce39a6df-ff39-4ef3-ada7-3be69bf12a9c" Name="ol_sa_cookie_nonoise_look_0" Type="Composite" StimulusFile="e74e6ab1cd3f4b97e184d621ea6296b9_1920x1080.avi" />
+    <StimulusInformation GUID="37ada1ea-369a-44a8-b1a1-8860e8e7ae2e" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="a4881d46-4c01-41eb-b9f0-302cbe391642" Name="ol_dl_pifo_nonoise_look_1" Type="Composite" StimulusFile="7dfb1d72597ea3a1e7945e55dd7e7b63_1920x1080.avi" />
+    <StimulusInformation GUID="9890bf44-1579-4774-94c4-59880589d5be" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="c449bfe1-68b5-43a7-b819-2cc353f544d2" Name="ol_sa_pifo_nonoise_hey_2" Type="Composite" StimulusFile="03f438f88a00afd49a48ba8191d6c3b0_1920x1080.avi" />
+    <StimulusInformation GUID="7a926abc-6363-4f39-bfeb-a896a2375448" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="f714396a-fad1-4baf-8424-4f75ee93e5a5" Name="ol_dr_pifo_nonoise_hey_3" Type="Composite" StimulusFile="bd4b282096c46006d7cec21927e5ba09_1920x1080.avi" />
+    <StimulusInformation GUID="8ca8c3f7-b905-4ff3-9fcc-f5161898a300" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="c9c3eb04-2b41-4e24-831f-1957042baee2" Name="ol_sa_pifo_nonoise_look_4" Type="Composite" StimulusFile="e8369a5f799f06dd10ee8c1f0a199666_1920x1080.avi" />
+    <StimulusInformation GUID="3287c736-2d89-4d12-a9e9-16e8d7354b65" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="db0e9e41-96f8-44fc-8310-c7cd2e404750" Name="ol_dr_pifo_nonoise_hey_5" Type="Composite" StimulusFile="3318a5ebacb086a2213063e8028d4d95_1920x1080.avi" />
+    <StimulusInformation GUID="1cc8027e-abab-4f6d-8d6d-3a3216364229" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="e6e4865c-0ace-47b0-910b-f8d72bbf945b" Name="ol_sa_pifo_nonoise_look_6" Type="Composite" StimulusFile="ed0d41586730728879a055597a2ec2b8_1920x1080.avi" />
+    <StimulusInformation GUID="b334d78c-3aa2-4ec3-bebc-aa63de6a08cf" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="a75efb1e-f872-49e2-9df6-8f9807e5702d" Name="ol_dl_pifo_nonoise_look_7" Type="Composite" StimulusFile="717ba1f627b0d9129668adbb9fabc291_1920x1080.avi" />
+    <StimulusInformation GUID="8352121c-f997-4703-91a1-083680cd2064" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="cdf8bb6b-f7f6-474f-b9d7-9bf98c9f7f02" Name="ol_sa_pifo_nonoise_hey_8" Type="Composite" StimulusFile="e4ff5bb1293f1b9b84e7def037193bec_1920x1080.avi" />
+    <StimulusInformation GUID="a6c371f2-8507-49f9-a2a9-54e845ccb982" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="bf829920-6f24-4ad9-850b-1933db63d10e" Name="ol_dl_toma_nonoise_look_9" Type="Composite" StimulusFile="2b81f6dbce406b7ff51d317f15ba07fb_1920x1080.avi" />
+    <StimulusInformation GUID="ba6871b3-eda4-476c-9206-d3e6ed84a9eb" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="86f23130-4a63-4f99-a425-cb9758dfffe9" Name="ol_sa_toma_nonoise_hey_10" Type="Composite" StimulusFile="fea73ddebacab162c1dd6ab2c037be32_1920x1080.avi" />
+    <StimulusInformation GUID="27575ac8-d6ee-4e05-8e04-932b987827e3" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="64d5f633-74f7-4dc5-a4b3-fca21f4beb6a" Name="ol_dr_toma_nonoise_hey_11" Type="Composite" StimulusFile="a490e7a40e288b9bc01054fe98164981_1920x1080.avi" />
+    <StimulusInformation GUID="04035a03-cb7e-438c-94aa-1bb1c186efe4" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="511a2703-f985-41d0-a33a-aa16af4d606f" Name="ol_sa_toma_nonoise_look_12" Type="Composite" StimulusFile="12e2c34cfbbecb10e50928d535f4a0ee_1920x1080.avi" />
+    <StimulusInformation GUID="f1caf5f2-1dd6-4139-9cd6-8707de983dd3" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="1bc16861-1a9a-4821-a17a-f6457e43d661" Name="ol_dr_toma_nonoise_hey _13" Type="Composite" StimulusFile="a893ab3d7a50c62ba6ce05afd8ae31ca_1920x1080.avi" />
+    <StimulusInformation GUID="202da79d-8707-467d-ac05-b8f438e7cffd" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="3c6119a7-1760-4afd-b2d7-24df5e381141" Name="ol_sa_toma_nonoise_look_14" Type="Composite" StimulusFile="300f26aad563c61fbd1211fb6d7fcdf0_1920x1080.avi" />
+    <StimulusInformation GUID="fdb9253e-d66b-4eca-842f-cea3ff292f54" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="e4813dea-a787-4cc3-bb01-943fb6ad469f" Name="ol_dl_toma_nonoise_look_15" Type="Composite" StimulusFile="57864ba956f64e97bb2045a1ceef7f98_1920x1080.avi" />
+    <StimulusInformation GUID="ae0a72f3-4abe-41dc-97f7-dad11b356015" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="a81fc69c-e614-4e7c-8bbe-b9b57172c75e" Name="ol_sa_toma_nonoise_hey_16" Type="Composite" StimulusFile="f021e5c9d0eb3569ce9fbacbc2ee47d8_1920x1080.avi" />
+    <StimulusInformation GUID="3b140471-e6d9-4947-b461-2e10aa5af30c" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="111ba6d9-3501-461a-a400-c71d0d2c8431" Name="great_job_ol" Type="Composite" StimulusFile="f8f24a6863eec5ddd2f50db053a34a6f_1920x1080.avi" />
+    <StimulusInformation GUID="6cfc859b-ac3b-49c6-9c78-5854cf2b6526" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="5c62aa79-5736-4e9c-9dcf-6623de426fb2" Name="gr_sa_bottle_nonoise_look_16.5" Type="Composite" StimulusFile="2501a6ecbb85880234d5fad1010d8b19_1920x1080.avi" />
+    <StimulusInformation GUID="84b3c61c-1729-45df-bb21-d0e1bfde2e0c" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="bf185131-13e3-4bc7-ae14-9dbad3c544ee" Name="gr_sa_bosa_nonoise_look_17" Type="Composite" StimulusFile="a6663180c30e9c578b9a72e8c446d8f3_1920x1080.avi" />
+    <StimulusInformation GUID="e7bb632f-d73b-4099-a21b-2e0fbe2dcc42" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="a528984f-37a6-4c26-aea0-64b22235b048" Name="gr_sa_bosa_nonoise_hey_18" Type="Composite" StimulusFile="cb36bb4065cef9a66c54c321d13c8105_1920x1080.avi" />
+    <StimulusInformation GUID="63d28b11-81aa-4f1d-8742-521482eec170" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="908e23fa-317b-42c4-8c83-b04f6831ee06" Name="gr_sa_bosa_nonoise_hey 19" Type="Composite" StimulusFile="5cf132574735912cd47a7ceb1e4f4699_1920x1080.avi" />
+    <StimulusInformation GUID="88d3b9cd-14bd-4047-8ce9-c6ffa9822db6" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="10ae122d-7c84-41b8-977c-c2ffb67c1ccd" Name="gr_sa_bosa_nonoise_look_20" Type="Composite" StimulusFile="e3790676867cc35c6215099b785be5ff_1920x1080.avi" />
+    <StimulusInformation GUID="35971e43-b1c5-4c08-8fc5-92e1f921391c" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="e0ce0188-08f6-4778-8ffe-ff184a106453" Name="gr_sa_bosa_nonoise_hey_21" Type="Composite" StimulusFile="ccfd578d698a0aef0bc8b8a3227907aa_1920x1080.avi" />
+    <StimulusInformation GUID="6dc7df5e-7922-42fa-b11e-3b1389529482" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="4b13c96a-8f0e-44e3-9920-f7837a5d7607" Name="gr_sa_bosa_nonoise_look_22" Type="Composite" StimulusFile="1df277cbb57189960b7c0d5847d7be42_1920x1080.avi" />
+    <StimulusInformation GUID="f0d3f66c-0d36-46b4-93f9-9b240c845fe9" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="93536ad8-fb8f-4c35-b6da-06c769c10c68" Name="gr_sa_bosa_nonoise_look_23" Type="Composite" StimulusFile="96d8451d047a826632d9537d4ec9ec80_1920x1080.avi" />
+    <StimulusInformation GUID="84236f41-5ad4-42d9-a407-760e0fcd59a0" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="2cc61abb-396b-4c83-b944-852f3d365b3f" Name="gr_sa_bosa_nonoise_hey_24" Type="Composite" StimulusFile="e6d6b6156de07c7fb0a9dcc4eae3f308_1920x1080.avi" />
+    <StimulusInformation GUID="c07cfa35-f25f-4c31-b8d3-9b8ce192012c" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="0a91d1a9-b9e8-4117-b141-66817cfcfc27" Name="gr_sa_modi_nonoise_look_25" Type="Composite" StimulusFile="a9d74b4d697ac943fdb9662bccc87bd1_1920x1080.avi" />
+    <StimulusInformation GUID="088407c8-a50f-413f-903e-8b4c0f620383" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="12274696-6d21-4428-a9d8-3bb471b8c897" Name="gr_sa_modi_nonoise_hey_26" Type="Composite" StimulusFile="67f22ef2f53cdd45406fb43a588de6b3_1920x1080.avi" />
+    <StimulusInformation GUID="137032f6-ed40-42d5-a165-4296d243364d" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="3a34b8ad-4dd5-4393-9564-f7d7f4d38712" Name="gr_sa_modi_nonoise_hey_27" Type="Composite" StimulusFile="46b21f34e4834b5f111868b2850c3478_1920x1080.avi" />
+    <StimulusInformation GUID="e83b1f00-c505-45b3-b962-d2be579181dd" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="c97e3835-3cb5-4aee-a707-9309d2461810" Name="gr_sa_modi_nonoise_look_28" Type="Composite" StimulusFile="0de6a4555e53ed8af943a53895ad40c4_1920x1080.avi" />
+    <StimulusInformation GUID="97879ffc-7e4a-4e85-bb97-56db4c26bcc6" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="e9db85dc-0013-4186-893d-eb6c076932bb" Name="gr_sa_modi_nonoise_hey_29" Type="Composite" StimulusFile="5dd4c6c7bd652decb44fcb5977b81521_1920x1080.avi" />
+    <StimulusInformation GUID="be36cc43-b113-4bc8-b9dc-65b384610ac6" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="e4e42b6e-0d26-42ca-a127-1c75e1c00fa5" Name="gr_sa_modi_nonoise_look_30" Type="Composite" StimulusFile="62c38068be2bb7f81fc1fb52f7e68452_1920x1080.avi" />
+    <StimulusInformation GUID="feee8e95-c5c4-43b7-8aaa-fd98b8d93ab6" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="76b6c17f-1eab-4769-bd4f-e08c547fac3c" Name="gr_sa_modi_nonoise_look_31" Type="Composite" StimulusFile="ccc672b02bb3a427c08c50976bb1521f_1920x1080.avi" />
+    <StimulusInformation GUID="4152c179-3ff7-42bc-bbe0-5391853a9e8e" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="44cbf1f7-728f-443f-ae21-4070c9da0b62" Name="gr_sa_modi_nonoise_hey_32" Type="Composite" StimulusFile="c835a2c67db27d7c5fe76b7cf3644b34_1920x1080.avi" />
+    <StimulusInformation GUID="13806021-917b-447f-8938-4ae511725b12" Name="black_background2.png" Type="Image" StimulusFile="82c3827a23dc8011c3fbcc4d31772ea2_1920x1080.jpg" />
+    <StimulusInformation GUID="1b66f042-1372-41cc-86ef-d4f6d86e860d" Name="all_done_gr" Type="Composite" StimulusFile="eb611debac9ddee16b4e580065f7b1b2_1920x1080.avi" />
+    <StimulusInformation GUID="2768acd1-53ef-4b43-9209-dccb3f94546f" Name="elmo_quiet_curtains.avi" Type="Movie" StimulusFile="c7280d7cf8d2071e0a099f77fef07087.avi" FitToScreen="True" />
+  </StimuliInfo>
+</DocumentRoot>
