@@ -15,6 +15,45 @@ library(rstanarm);
 # load tidyverse last, so no functions get masked
 library(tidyverse); 
 
+aggregate_ss_looking <- function(df, grouping_cols, aoi_column) {
+  # create group by to get the total number of looks in each time slice
+  total_looks_group_by <- rlang::syms(grouping_cols)
+  
+  # add aoi looking column to group by to get the total number of looks to an AOI in a timeslice
+  aoi_looks_group_by <- rlang::syms(c(grouping_cols, aoi_column))
+  
+  ss_total <- df %>% 
+    count(!!! total_looks_group_by) %>% 
+    complete(!!! total_looks_group_by, fill = list(n = 0)) %>% 
+    rename(n_total_looks = n)
+  
+  ss_aois <- df %>%
+    count(!!! aoi_looks_group_by) %>%
+    complete(!!! aoi_looks_group_by, fill = list(n = 0)) %>%
+    rename(n_aoi_looks = n)
+  
+  left_join(ss_aois, ss_total) %>%
+    mutate(prop_looking = n_aoi_looks / n_total_looks) %>% 
+    filter(!is.nan(prop_looking))
+  
+}
+
+create_time_bin_trial <- function(trial, t_ms_diff = 33) {
+  n_bins <- nrow(trial)
+  max_time <- trial$t_rel_noun %>% max() * 1000
+  time_ms <- seq.int(0, max_time, by = t_ms_diff %>% round()) %>% .[1:n_bins]
+  
+  trial %>% 
+    mutate(time_ms_normalized = time_ms ,
+           time_bin = seq.int(1, n_bins))
+}
+
+create_time_bins_ss <- function(ss_df, t_ms_diff = 33) {
+  ss_df %>% 
+    split(.$trial_num_exp) %>% 
+    purrr::map_dfr(create_time_bin_trial, t_ms_diff)
+}
+
 process_log_files <- function(dir_path) {
   files <- list.files(dir_path)
   files %>% purrr::map_dfr(process_log_file, file_path = dir_path)
@@ -414,8 +453,8 @@ read.smi.idf <- function (file.name, suffix.len = 4) {
 ## eyes, do whatever preprocessing needs to be done. 
 ################################################################################
 
-preprocess.data <- function(d, x.max = 1680, y.max=1050,
-                            samp.rate = 120,
+preprocess.data <- function(d, x.max = 1920, y.max=1080,
+                            samp.rate = 30,
                             avg.eyes=TRUE) {
   
   ## drop the .jpg from the stimulus

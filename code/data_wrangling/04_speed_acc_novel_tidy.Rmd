@@ -30,17 +30,18 @@ In the next set of chunks, we will condense the timecourse information into fewe
 ```{r flag gaze target at noun onsets for each trial}
 d_orig <- d
 
-d <- d_orig %>% 
+d_analysis <- d_orig %>% 
   filter(t_rel_noun > 0) %>%
   group_by(trial_num_exp, subid) %>% 
   do(filter(., t_rel_noun == min(t_rel_noun))) %>% 
   mutate(response = target_looking,
          response_onset_type = "noun") %>% 
-  select(subid, trial_num_exp, response, response_onset_type) %>% 
-  left_join(d_orig, ., by = c("subid", "trial_num_exp"))
+  select(subid, trial_num_exp, response) %>% 
+  left_join(d_orig, .) %>% 
+  distinct()
 ```
 
-Next, we need to compute RT for each trial, using my own score trial function. 
+Next, we need to compute RT for each trial, using our own score trial function. 
 
 The function takes in a data frame for each trial and computes an RT and whether the shift was correct or incorrect. You can tell the function the kind of onset value from which you want to compute RT. The different onset values are:
 
@@ -50,7 +51,7 @@ The function takes in a data frame for each trial and computes an RT and whether
 
 Now we apply the score trial function to each trial for each participant in the tidy data frame using the do() functionality in dplyr. Note that we are using the .$ index to use a variable from the piped data frame as an argument to the score trial function.
 
-```{r}
+```{r score trials}
 d %<>% 
   group_by(subid, trial_num_exp, response_onset_type) %>% 
   filter(is.na(response_onset_type) == F) %>% 
@@ -76,7 +77,8 @@ check <- d %>%
   select(t_stim, t_rel_noun, stimulus_name,
          rt, gaze_target, 
          response, shift_type, aoi_looking_type,
-         shift_accuracy)
+         shift_accuracy) %>% 
+  distinct()
 ```
 
 Now we have an RT, a shift type, and a correct/incorrect value for each trial based on three different critical onset points in the trial (i.e., center fixation, sentence, and noun onset).
@@ -106,10 +108,11 @@ d %<>%
 
 ```{r}
 # just keep first shift data
-d_fs <- d %>% ungroup() %>% 
-  select(subid, stimulus_name:trial_num_learn_block, noun, trial_type, 
+d_fs <- d %>% 
+  ungroup() %>% 
+  select(subid, age_category, stimulus_name:trial_num_learn_block, noun, trial_type, 
          gaze_condition, speaker, order_name, order_number, gaze, testing_date:comments, 
-         rt:shift_accuracy_clean)  %>% 
+         rt:shift_accuracy_clean) %>% 
   distinct()
 
 # write to processed data folder

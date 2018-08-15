@@ -4,9 +4,10 @@ output: html_document
 ---
 
 ```{r chunk_options, echo = F}
-knitr::opts_chunk$set(warning=F, message=F, sanitize = T, 
-                      fig.height=4, fig.width=8, echo=T, cache = F)
+knitr::opts_chunk$set(warning=F, message=F, sanitize = T, echo=T, cache = F)
 ```
+
+## Set up
 
 ```{r}
 source(here::here("code/helper_functions/libraries_and_functions.R"))
@@ -16,160 +17,246 @@ theme_set(ggthemes::theme_base())
 
 ## Read data
 
-Note we filter to only keep participants flagged as "keep" in the participant log
-
 ```{r}
-kid_et <- "speed_acc_novel_timecourse.feather"
-adult_et <- "speed_acc_novel_adult_timecourse.feather"
-
-d <- read_feather(here::here(data_path, adult_et)) 
-d_analysis <- d %>% filter(keep_drop == "keep")
+file_name <- "speed_acc_novel_timecourse.feather"
+d <- read_feather(here::here(data_path, file_name)) 
 ```
 
-Create exlcusions table
+Filter based on exlcusions in the subject log and remove bad blocks based on subject log.
+
+```{r}
+d_analysis <- d %>% 
+  filter(keep_drop == "keep",
+         t_rel_noun >= 0, 
+         t_rel_noun <= 4
+         )
+```
+
+Create time bins for each participant and each trial. Note that for the next chunk to work, you must filter the eye movement data to time after noun onset.
+
+```{r}
+d_analysis %<>% 
+  split(.$subid) %>% 
+  purrr::map_dfr(create_time_bins_ss, t_ms_diff = 33)
+```
+
+Create exclusions table.
 
 ```{r}
 d %>% 
-  distinct(subid, keep_drop, reason_excluded) %>% 
+  distinct(subid, keep_drop, reason_excluded, age_category) %>% 
   filter(keep_drop == "drop") %>% 
   kable()
 ```
 
-Check how many participants and trials for each trial type. 
+Create exclusions list based on number of trials completed.
 
 ```{r}
-d_analysis %>% 
-  #distinct(subid, trial_num_exp) %>% 
-  count(subid, trial_num_exp, target_looking)
-```
-
-Create exlcusions list based on number of trials completed.
-
-```{r}
-ss_exclude <- d_analysis %>% 
+ss_exclude <- d_analysis %>%
+  filter(target_looking != "away") %>% 
   distinct(subid, trial_num_exp) %>% 
   count(subid) %>% 
   filter(n < 16) %>% 
   pull(subid)
 ```
 
+Filter participants who did not complete more than half the trials. 
+
+```{r}
+d_analysis %<>% filter(!(subid %in% ss_exclude))
+```
+
+Check how many trials in each block.
+
+```{r}
+d_analysis %>% 
+  distinct(subid, trial_num_exp, learning_block, gaze_condition) %>% 
+  count(subid, learning_block, gaze_condition) %>% 
+  kable()
+```
+
 Make a table of proportion looking to each area of interest: Left, Right, Center, and Away
 
 ```{r}
 d_analysis %>% 
-  filter(is.na(target_looking) == F, !(subid %in% ss_exclude)) %>% 
-  group_by(target_looking) %>% 
+  filter(!is.na(target_looking)) %>% 
+  group_by(target_looking, age_category) %>% 
   summarise(count_looks = n()) %>% 
+  group_by(age_category) %>% 
   mutate(total_looks = sum(count_looks),
          prop_looks = round(count_looks / total_looks, 2)) %>% 
+  arrange(age_category) %>% 
   kable()
 ```
 
-## Visualize timecourse looking
-
-Aggregate looking behavior over time.
+Filter away looks. 
 
 ```{r}
-# get total number of trials looking at each time slice (denom in prop looking computation)
-ss_d <- d_analysis %>% 
-  filter(t_stim >= 0, t_stim <= 9) %>% 
-  group_by(subid, t_stim, gaze_condition, trial_type, trial_num_learn_block) %>% 
-  summarise(count = n()) %>% 
-  ungroup() %>% 
-  complete(nesting(subid, t_stim), gaze_condition, trial_type, trial_num_learn_block,
-           fill = list(count = 0)) %>% 
-  mutate(subid = as.character(subid),
-         trial_num_learn_block = as.character(trial_num_learn_block))
+d_analysis %<>% filter(target_looking != "away")
+```
 
-# get proportion looking by dividing the freq looking at each target (numerator) by the total looking 
-# derived in step 1 of this chunk
-ss_d <- as.data.frame(xtabs(~ subid + t_stim + target_looking + gaze_condition + trial_type + trial_num_learn_block, 
-                            data = d_analysis),
-                      stringsAsFactors = F) %>% 
-  mutate(t_stim = as.numeric(t_stim)) %>% 
-  left_join(x = ss_d, y = ., by = c("subid", "t_stim", "gaze_condition", "trial_type", "trial_num_learn_block")) %>% 
-  mutate(proportion_looking = Freq / count)
+## Visualize timecourse looking to all AOIs
+
+Get means and CIs for proportion looking at each time slice for each participant
+
+```{r}
+ss_time <- aggregate_ss_looking(d_analysis, 
+                           grouping_cols = list("subid", 
+                                                "time_ms_normalized", 
+                                                "gaze_condition", 
+                                                "trial_type", 
+                                                "age_category",
+                                                "trial_num_learn_block"),
+                           aoi_column = "target_looking") 
 
 
-# Get means and CIs for proportion looking at each time slice across particpants
-ms <- ss_d %>% 
-  group_by(t_stim, gaze_condition, target_looking, trial_type, trial_num_learn_block) %>% 
-  summarise(mean = mean(proportion_looking, na.rm = T),
+# Get means and CIs for proportion looking at each time slice collapsing across particpants
+ms_time <- ss_time %>% 
+  group_by(time_ms_normalized, 
+           gaze_condition, 
+           target_looking, 
+           trial_type, 
+           age_category,
+           trial_num_learn_block) %>% 
+  summarise(mean = mean(prop_looking), 
             n = n())
 ```
 
 Make timecourse plot
 
-```{r, eval = F}
-ms %>% 
-  #filter(gaze_condition == "gaze") %>% 
-  ggplot(aes(x = as.numeric(t_stim), y = mean, 
-           color = target_looking, linetype = gaze_condition), data = .) + 
-  ylim(0,1) +
-  xlim(0, 10.5) +
-  geom_line(size=1) +  
+```{r timecourse plot}
+ms_time %>% 
+  filter(age_category == "adults") %>% 
+  ggplot(aes(x = time_ms_normalized, y = mean, 
+           color = target_looking, linetype = gaze_condition)) + 
+  lims(x = c(0, 4000), y = c(-.1, 1)) +
+  geom_line(size = 1) +  
   guides(color = F) +
-  xlab("Time in sec from onset of trial") +
-  geom_vline(xintercept = mean(d$noun_onset_seconds), linetype = "dashed") +
-  geom_vline(xintercept = mean(d$sentence_onset_seconds), linetype = "dashed") +
-  ylab("Proportion looking") +
+  labs(x = "Time in msec from onset of noun",
+       y = "Proportion looking") +
   geom_dl(aes(label = target_looking), method = "last.bumpup") +
-  facet_wrap(~trial_type, ncol = 4) +
-  facet_wrap(trial_type~trial_num_learn_block, ncol = 4) +
+  facet_wrap(trial_num_learn_block~trial_type, ncol = 2) +
   ggthemes::theme_base() +
+  ggthemes::scale_color_ptol() +
   theme(text = element_text(size = 12), legend.position = "top")
 ```
 
-## Collapse and look at aggregate looking behavior. 
+## Collapse and plot aggregate looking to target and disctracter
 
 ```{r}
-d_ms <- d_analysis %>% filter(t_rel_noun >= 0, t_rel_noun <= 3, target_looking != "center")
-```
+ss_trial_number <- d_analysis %>% 
+  filter(target_looking %in% c("target", "distracter")) %>% 
+  aggregate_ss_looking(grouping_cols = list("subid", 
+                                            "gaze_condition", 
+                                            "trial_type", 
+                                            "age_category",
+                                            "trial_num_learn_block"),
+                       aoi_column = "target_looking") 
 
-```{r}
-d_ms %>% 
-  distinct(subid, trial_num_exp) %>% 
-  count(subid)
-```
-
-```{r}
-# get total number of trials looking at each time slice (denom in prop looking computation)
-ss_cond <- d_ms %>% 
-  group_by(subid, gaze_condition, trial_type, trial_num_learn_block) %>% 
-  summarise(count = n()) %>% 
-  ungroup() %>% 
-  complete(subid, gaze_condition, trial_type, trial_num_learn_block, 
-           fill = list(count = 0)) %>% 
-  mutate(subid = as.character(subid),
-         trial_num_learn_block = as.character(trial_num_learn_block))
-
-# get proportion looking by dividing the freq looking at each target (numerator) by the total looking 
-# derived in step 1 of this chunk
-ss_cond <- as.data.frame(xtabs(data = d_ms,
-                               ~ subid + target_looking + gaze_condition + trial_type + trial_num_learn_block),
-                      stringsAsFactors = F) %>% 
-  left_join(x = ss_cond, y = ., by = c("subid", "gaze_condition", "trial_type", "trial_num_learn_block")) %>% 
-  mutate(proportion_looking = Freq / count)
-
-# Get means and CIs for proportion looking at each time slice across particpants
-ms_cond <- ss_cond %>% 
-  group_by(gaze_condition, target_looking, trial_num_learn_block, trial_type) %>% 
-  filter(!is.na(proportion_looking)) %>% 
-  tidyboot::tidyboot_mean(column = proportion_looking, nboot = 1000, na.rm = T)
+ms_trial_number <- ss_trial_number %>% 
+  group_by(gaze_condition, 
+           target_looking, 
+           trial_type, 
+           trial_num_learn_block, 
+           age_category) %>% 
+  tidyboot::tidyboot_mean(column = prop_looking, nboot = 1000, na.rm = T)
 ```
 
 Make key plot of target looking as a function of trial number and trial type.
 
+```{r trial number plot}
+ms_trial_number %>% 
+  filter(target_looking == "target") %>% 
+  ggplot(aes(x = trial_num_learn_block, y = mean, 
+             lty = gaze_condition,
+             color = gaze_condition,
+             group = interaction(target_looking, gaze_condition))) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
+                  position = position_jitter(width = 0.09) ) +
+  geom_line() +
+  lims(y = c(0.3, 1.05)) +
+  facet_wrap(trial_type~age_category) +
+  geom_hline(yintercept = 0.5, lty = "dashed") +
+  guides(lty = F) +
+  ggthemes::scale_color_ptol() +
+  theme(legend.position = "top")
+```
+
+## Collapse and plot target/distracter looking across conditions
+
+```{r}
+ss_cond <- d_analysis %>% 
+  filter(target_looking %in% c("target", "distracter")) %>% 
+  aggregate_ss_looking(grouping_cols = list("subid", 
+                                            "gaze_condition", 
+                                            "trial_type", 
+                                            "age_category"),
+                       aoi_column = "target_looking") 
+
+ms_cond <- ss_cond %>% 
+  group_by(gaze_condition, 
+           target_looking, 
+           trial_type, 
+           age_category) %>% 
+  tidyboot::tidyboot_mean(column = prop_looking, nboot = 1000, na.rm = T)
+```
+
+Plot
+
 ```{r}
 ms_cond %>% 
   filter(target_looking == "target") %>% 
-  ggplot(aes(x = trial_num_learn_block, y = mean, 
-             color = gaze_condition, group = gaze_condition)) +
+  ggplot(aes(x = fct_rev(age_category), y = mean, 
+             color = gaze_condition)) +
   geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
-                  position = position_jitter(width = 0.1) ) +
-  geom_line() +
+                  position = position_jitter(width = 0.15) ) +
+  lims(y = c(0.3, 1.05)) +
   facet_wrap(~trial_type) +
   geom_hline(yintercept = 0.5, lty = "dashed") +
   ggthemes::scale_color_ptol() +
   theme(legend.position = "top")
 ```
+
+## How does center looking change?
+
+```{r}
+ss_tr_center <- d_analysis %>% 
+  aggregate_ss_looking(grouping_cols = list("subid", 
+                                            "gaze_condition", 
+                                            "trial_type", 
+                                            "age_category",
+                                            "trial_num_learn_block"),
+                       aoi_column = "target_looking") 
+
+ms_tr_center <- ss_tr_center %>% 
+  group_by(gaze_condition, 
+           target_looking, 
+           trial_type, 
+           trial_num_learn_block, 
+           age_category) %>% 
+  tidyboot::tidyboot_mean(column = prop_looking, nboot = 1000, na.rm = T)
+```
+
+```{r center trial number plot}
+ms_tr_center %>% 
+  filter(target_looking == "center") %>% 
+  ggplot(aes(x = trial_num_learn_block, y = mean, 
+             color = gaze_condition,
+             group = interaction(target_looking, gaze_condition))) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
+                  position = position_jitter(width = 0.09) ) +
+  geom_line() +
+  lims(y = c(0, 1.05)) +
+  facet_wrap(trial_type~age_category) +
+  geom_hline(yintercept = 0.33, lty = "dashed") +
+  guides(lty = F) +
+  ggthemes::scale_color_ptol() +
+  theme(legend.position = "top")
+```
+
+## Statistical models
+
+```{r}
+
+```
+

@@ -1,15 +1,12 @@
 ## Plots to sanity check output of eye tracking data processing pipeline
 source(here::here("code/helper_functions/libraries_and_functions.R"))
 processed_data_path <- "data/03_processed_data/"
-
-kid_et <- "speed_acc_novel_timecourse.feather"
-adult_et <- "speed_acc_novel_adult_timecourse.feather"
-
-df <- read_feather(here::here(processed_data_path, adult_et))
+file_name <- "speed_acc_novel_timecourse.feather"
+df <- read_feather(here::here(processed_data_path, file_name))
 
 # plot to check that fixation locations look reasonable
 df %>% 
-  sample_frac(size = 0.10) %>% 
+  sample_frac(size = 0.05) %>% 
   ggplot(aes(x = x, y = y, color = aoi_looking_type), data = .) +
   geom_point(alpha = 0.3, size = 3) +
   xlim(0, 1980) +
@@ -32,7 +29,7 @@ df %>%
   geom_point() +
   geom_line(aes(group = 1)) +
   labs(x = "time (ms)", y = "x coordinate") +
-  facet_grid(stimulus~subid) +
+  facet_wrap(stimulus~subid, ncol = 4) +
   ggthemes::scale_color_ptol() +
   ggthemes::theme_base() +
   theme(legend.position = "top")
