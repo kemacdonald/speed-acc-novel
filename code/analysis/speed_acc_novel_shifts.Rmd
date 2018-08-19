@@ -11,16 +11,18 @@ knitr::opts_chunk$set(warning=F, message=F, sanitize = T,
                       fig.height=4, fig.width=8, echo=T, cache = F)
 ```
 
-```{r libraries-data-paths}
+Libraries and data paths
+```{r}
 library(here)
 library(tidyverse)
+library(knitr)
 # source(here::here("code/helper_functions/libraries_and_functions.R"))
 data_path <- "data/03_processed_data/"
 theme_set(ggthemes::theme_base())
 ```
 
 Read in data
-```{r load-data}
+```{r}
 d <- read_csv(here::here(data_path, "speed_acc_novel_shifts.csv"))
 View(d)
 ```
@@ -38,26 +40,27 @@ Some questions we'd like to know about our data:
 We can answer these questions using tidyverse to generate tables. For example, the following code uses the `count()` function to tell us how many rows (i.e., trials) each particpant has in the dataset. `kable()` is a function for making the tables prettier if we were to knit this document to an html file for viewing on a browser.
 
 Participant number and number trials
-```{r number-participants-trials}
+```{r}
 d %>% 
   count(subid) %>% 
   kable()
 ```
 
 Number of unique participants
-```{r number-participants}
+```{r}
 d$subid %>%
   unique %>%
   length
 ```
 
 Group by demographics
-```{r pull-out-demographic-info-by-subject}
+```{r}
 d_by_subject <- d %>%
-  group_by(subid, gender, ethnicity_race, order_key, keep_drop, reason_excluded, age_years, age_group) %>%
+  group_by(subid, gender, ethnicity_race, order_key, keep_drop, reason_excluded, age, age_category) %>%
   summarise
 View(d_by_subject)
 # missing demographic info for SAN-071718-02/02b
+# what happened to age_group?
 ```
 
 Gender breakdown
@@ -65,6 +68,13 @@ Gender breakdown
 d_by_subject %>%
   group_by(gender) %>%
   count(gender)
+```
+
+Adults vs. children
+```{r}
+d_by_subject %>%
+  group_by(age_category) %>%
+  count(age_category)
 ```
 
 Age group breakdown
@@ -75,7 +85,7 @@ d_by_subject %>%
 ```
 
 Count the number of participants who are kept and dropped
-```{r count-exclusions}
+```{r}
 d_by_subject %>%
   group_by(keep_drop) %>%
   count(keep_drop)
@@ -86,21 +96,21 @@ d_by_subject %>%
 ```
 
 Count the number of trials per participant
-```{r count-trials-per-participant}
+```{r}
 d %>%
   group_by(subid) %>%
   count(subid)
 ```
 
 Count the number of trials per word
-```{r count-trials-per-word}
+```{r}
 d %>%
   group_by(noun) %>%
   count(noun)
 ```
 
 Count the number of trials per word per participant
-```{r count-trials-per-word-per-participant}
+```{r}
 d %>%
   group_by(subid, noun) %>%
   count(subid)
@@ -109,7 +119,7 @@ d %>%
 Trials per gaze condition per participant:
 Here is some code that uses `group_by()` to tells us how many trials are in each condition. Note the use of `arrange()` to keep the table sorted by participant id.
 
-```{r count-trials-per-gaze-condition-per-participant}
+```{r}
 d %>% 
   group_by(gaze_condition) %>% 
   count(subid) %>% 
@@ -119,7 +129,7 @@ d %>%
 ```
 
 Count trials per gaze condition
-```{r count-trials-per-gaze-condition}
+```{r}
 d %>%
   group_by(gaze_condition) %>%
   count(gaze_condition)
@@ -144,7 +154,7 @@ d_complete <- d %>%
 
 
 Filter data based on keep_drop and center start locations:
-```{r filter-data}
+```{r}
 d_keep <- d_complete %>%
   filter(keep_drop == "keep", 
          shift_start_location == "center") %>%
@@ -153,7 +163,7 @@ d_keep <- d_complete %>%
 ```
 
 If I wanted to look at ONLY pilot data:
-```{r pull-out-pilot-data, eval = FALSE}
+```{r, eval = FALSE}
 d_keep <- d %>%
   filter(reason_excluded == "pilot",
          shift_start_location == "center")
@@ -164,7 +174,7 @@ View(d_keep)
 
 TODO: remove RTs that are +/- 3 standard deviations from the mean.
 
-```{r filter-extreme-rts, eval=FALSE}
+```{r, eval=FALSE}
 # get mean RT and sd of RT
 mean_rt <- ms$m %>%
   mean()
@@ -188,23 +198,25 @@ ms_FILTERED <- ms_ss_FILTERED %>%
 ```
 
 Count number of trials after filtering
-```{r count-trials-filtered}
+```{r}
 d_keep %>%
   count(gaze_condition, trial_type, trial_num_learn_block)
 ```
 
 Summarise RT
-```{r summarise-rt}
+```{r}
 ms_ss <- d_keep %>%
   filter(!is.na(rt)) %>%
   group_by(subid, 
+           age_category,
            gaze_condition, 
            trial_type, 
            trial_num_learn_block) %>%
   summarise(m_ss = mean(rt)) 
 
 ms <- ms_ss %>%
-  group_by(gaze_condition, 
+  group_by(age_category,
+           gaze_condition, 
            trial_type, 
            trial_num_learn_block) %>%
   summarise(m = mean(m_ss))
@@ -214,10 +226,10 @@ ms <- ms_ss %>%
 
 What does the distribution of age in the sample look like? 
 
-Histogram of subjects' ages:
-```{r plot-age-distribution}
+Make a histogram of subjects' ages
+```{r}
 ggplot(data = d_by_subject) +
-   geom_histogram(mapping = aes(x= age_years),
+   geom_histogram(mapping = aes(x= age),
                   fill = "light blue",
                   color = "black",
                   binwidth = .2) +
@@ -228,8 +240,8 @@ ggplot(data = d_by_subject) +
 
 What does the distribution of Reaction Times (RT) look like overall? How about across different gaze conditions?
 
-Plot overall RT distribution:
-```{r plot-overall-rt-distribution}
+Plot overall RT distribution
+```{r}
 ggplot(data = d_keep) +
   geom_density(mapping = aes(x = rt),
                  binwidth = .1,
@@ -238,20 +250,9 @@ ggplot(data = d_keep) +
   theme_minimal()
 ```
 
-Plot RT density distributions by gaze condition in separate graphs:
-```{r plot-rt-by-gaze-condition-separate-graphs}
-ggplot(data = d_keep) +
-  geom_density(mapping = aes(x = rt),
-                 binwidth = .1,
-                 fill = "light blue",
-                 color = "black") +
-  theme_minimal() +
-  facet_wrap(facets = ~gaze_condition)
-```
 
-
-Plot RT density distributions by gaze condition in one graph:
-```{r plot-rt-by-gaze-condition-one-graph}
+Plot RT density distributions by gaze condition in one graph
+```{r}
 ggplot(data = d_keep) +
   geom_density(mapping = aes(x = rt,
                              fill = gaze_condition),
@@ -260,8 +261,8 @@ ggplot(data = d_keep) +
 ```
 
 
-Plot RT distribution by gaze condition in exposure vs. test trials:
-```{r plot-rt-by-gaze-condition-exposure-vs-test}
+Plot RT distribution by gaze condition in exposure vs. test trials
+```{r}
 ggplot(data = d_keep) +
   geom_density(mapping = aes(x = rt,
                              fill = gaze_condition),
@@ -272,7 +273,7 @@ ggplot(data = d_keep) +
 
 
 Plot RT as a function of trial number in different gaze conditions in exposure and test trials
-```{r plot-rt-by-condition-over-trials}
+```{r}
 ggplot(data = ms) +
   geom_line(mapping = aes(x = trial_num_learn_block,
                           y = m,
@@ -282,24 +283,42 @@ ggplot(data = ms) +
   labs(x = "trial number", y = "mean RT")
 ```
 
+Plot RT over trial numbers for children and adults
+```{r}
+ggplot(data = ms) +
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = m,
+                          color = gaze_condition)) +
+  theme_minimal() +
+  facet_grid(age_category ~ trial_type) +
+  labs(x = "trial number", 
+       y = "mean RT",
+       title = "First shift reaction time")
+```
+
 
 
 ### Accuracy
 
 What does first shift accuracy look like for different gaze conditions?
 
-Accuracy by condition and trial number
-```{r table-accuracy-by-condition-trial-number}
+Make a table for accuracy by condition and trial number
+```{r}
 # table for accuracy by condition
 condition_accuracy <- d_keep %>%
   group_by(gaze_condition, 
            shift_accuracy, 
            trial_num_learn_block,
-           trial_type) %>%
+           trial_type,
+           age_category) %>%
   count(shift_accuracy)
 
 # spread out table
 condition_accuracy_spread <- spread(condition_accuracy, key = shift_accuracy, value = n)
+
+# change NAs to 0
+condition_accuracy_spread[is.na(condition_accuracy_spread)] <- 0
+# do NOT run this command when there is a "total" column in the data frame!
 
 #compute proportion correct first shifts and add to df
 condition_accuracy_spread <- condition_accuracy_spread %>%
@@ -308,31 +327,46 @@ condition_accuracy_spread <- condition_accuracy_spread %>%
 ```
 
 Plot accuracy as a function of trial number for all trials
-```{r plot-accuracy-by-condition-over-all-trials-test-exposure}
+```{r}
 ggplot(data = condition_accuracy_spread) +
   geom_line(mapping = aes(x = trial_num_learn_block,
                           y = prop_correct,
                           color = gaze_condition)) +
   scale_y_continuous(limits = c(0, 1)) +
   theme_minimal() +
-  facet_wrap(facets = ~trial_type) +
-  labs(x = "trial number", y = "proportion correct")
+  facet_wrap(facets = ~trial_type, ~age_category) +
+  labs(x = "trial number", 
+       y = "proportion correct",
+       title = "First shift accuracy")
 ```
 
-Bar graph to show proportion correct for each gaze condition
-```{r bar-graph-proportion-correct-by-condition}
+Plot first shift accuracy in exposure and test trials for adults vs children
+```{r}
 ggplot(data = condition_accuracy_spread) +
-  geom_bar(mapping = aes(x = gaze_condition,
-                         y = prop_correct),
-           stat = "identity",
-           fill = "light blue") +
-  theme_minimal()
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = prop_correct,
+                          color = gaze_condition)) +
+  scale_y_continuous(limits = c(0, 1)) +
+  theme_minimal() +
+  facet_grid(age_category ~ trial_type) +
+  labs(x = "trial number", 
+       y = "proportion correct",
+       title = "First shift accuracy")
 ```
 
 
 
 
 
+
+
+
+
+
+
+
+
+Ignore all this!
 
 
 
@@ -458,10 +492,23 @@ ggplot(data = condition_accuracy) +
 
 ```
 
-What about as a function of trial number within each word learning block? (this plot should only include "test" trials without gaze)
-
-```{r}
-
+Bar graph to show proportion correct for each gaze condition
+```{r bar-graph-proportion-correct-by-condition}
+ggplot(data = condition_accuracy_spread) +
+  geom_bar(mapping = aes(x = gaze_condition,
+                         y = prop_correct),
+           stat = "identity",
+           fill = "light blue") +
+  theme_minimal()
 ```
 
-
+Plot RT density distributions by gaze condition in separate graphs:
+```{r plot-rt-by-gaze-condition-separate-graphs}
+ggplot(data = d_keep) +
+  geom_density(mapping = aes(x = rt),
+                 binwidth = .1,
+                 fill = "light blue",
+                 color = "black") +
+  theme_minimal() +
+  facet_wrap(facets = ~gaze_condition)
+```
