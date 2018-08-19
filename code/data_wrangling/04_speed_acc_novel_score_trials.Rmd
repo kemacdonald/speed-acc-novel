@@ -31,12 +31,12 @@ In the next set of chunks, we will condense the timecourse information into fewe
 d_orig <- d
 
 d_analysis <- d_orig %>% 
-  filter(t_rel_noun > 0) %>%
+  filter(t_rel_noun >= 0) %>%
   group_by(trial_num_exp, subid) %>% 
   do(filter(., t_rel_noun == min(t_rel_noun))) %>% 
   mutate(response = target_looking,
          response_onset_type = "noun") %>% 
-  select(subid, trial_num_exp, response) %>% 
+  select(subid, trial_num_exp, response, response_onset_type) %>% 
   left_join(d_orig, .) %>% 
   distinct()
 ```
@@ -52,16 +52,27 @@ The function takes in a data frame for each trial and computes an RT and whether
 Now we apply the score trial function to each trial for each participant in the tidy data frame using the do() functionality in dplyr. Note that we are using the .$ index to use a variable from the piped data frame as an argument to the score trial function.
 
 ```{r score trials}
-d %<>% 
+d_analysis %<>% 
   group_by(subid, trial_num_exp, response_onset_type) %>% 
-  filter(is.na(response_onset_type) == F) %>% 
-  do(score_trial_et(., crit_onset_type = .$response_onset_type))
+  filter(!is.na(response_onset_type), target_looking != "away") %>% 
+  do(score_trial_et(., crit_onset_type = .$response_onset_type)) 
+```
+
+Filter to just keep the first shift data.
+
+```{r}
+d_first_shifts <- d_analysis %>% 
+  ungroup() %>% 
+  select(subid, age_category, stimulus_name:trial_num_learn_block, noun, trial_type, 
+         gaze_condition, speaker, order_name, order_number, gaze, testing_date:comments, 
+         rt:shift_accuracy) %>% 
+  distinct()
 ```
 
 Check the distribution of shift types over the different response types.
 
 ```{r check freq of each shift}
-d %>% 
+d_first_shifts %>% 
   ungroup() %>% 
   distinct(subid, trial_num_exp, shift_type, trial_type, gaze_condition) %>% 
   count(shift_type, trial_type, gaze_condition) %>% 
@@ -71,8 +82,8 @@ d %>%
 Check one trial to make sure the scoring function is working. 
 
 ```{r}
-check <- d %>% 
-  filter(subid == "SAN-071218-04", trial_num_exp == 10) %>% 
+check <- d_analysis %>% 
+  filter(subid == "SAN-081618-01", trial_num_exp == 10) %>% 
   ungroup() %>% 
   select(t_stim, t_rel_noun, stimulus_name,
          rt, gaze_target, 
@@ -83,39 +94,18 @@ check <- d %>%
 
 Now we have an RT, a shift type, and a correct/incorrect value for each trial based on three different critical onset points in the trial (i.e., center fixation, sentence, and noun onset).
 
-Compute child's age at test.
+Add variable that stores information about center-initial shifts. 
 
 ```{r}
-d %<>% 
-  mutate(age_years = age,
-         age = as.double(testing_date - birth_date),
-         age_group = as.integer(age / 365))
-```
-
-Add variable that stores information about center-initial shifts. Change condition labels to make it clearer. And add variable to track block.
-
-```{r}
-d %<>% 
+d_first_shifts %<>% 
   mutate(shift_start_location = ifelse(shift_type %in% c("C_T", "C_D"), 
                                        "center", 
-                                       "not_center"),
-         shift_accuracy_clean = ifelse(str_detect(shift_type, "_T"), 
-                                       "correct", 
-                                       "incorrect"))
+                                       "not_center"))
 ```
 
 ## Save first shifts data file to disk
 
 ```{r}
-# just keep first shift data
-d_fs <- d %>% 
-  ungroup() %>% 
-  select(subid, age_category, stimulus_name:trial_num_learn_block, noun, trial_type, 
-         gaze_condition, speaker, order_name, order_number, gaze, testing_date:comments, 
-         rt:shift_accuracy_clean) %>% 
-  distinct()
-
-# write to processed data folder
 write_path <- "data/03_processed_data/"
-write_csv(d_fs, path = here::here(write_path, "speed_acc_novel_shifts.csv"))
+write_csv(d_first_shifts, path = here::here(write_path, "speed_acc_novel_shifts.csv"))
 ```
