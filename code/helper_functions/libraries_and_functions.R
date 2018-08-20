@@ -15,12 +15,36 @@ library(rstanarm);
 # load tidyverse last, so no functions get masked
 library(tidyverse); 
 
-aggregate_ss_looking <- function(df, grouping_cols, aoi_column) {
+plot_timecourse <- function(df, filter_crit, facet_type) {
+  facet_formula <- as.formula(facet_type)
+  
+  max_t <- df$time_ms_normalized %>% max() 
+  min_t <- df$time_ms_normalized %>% min() 
+  
+  df %>% 
+    ggplot(aes(x = time_ms_normalized, y = m, 
+               color = target_looking, linetype = gaze_condition)) + 
+    facet_grid(facet_formula) +
+    lims(x = c(min_t, max_t + 500), 
+         y = c(-.1, 1)) +
+    geom_line(size = 1) +  
+    guides(color = F) +
+    labs(x = "Time in msec from onset of noun",
+         y = "Proportion looking") +
+    geom_vline(xintercept = 0, lty = "dashed") +
+    geom_dl(aes(label = target_looking), method = "last.bumpup") +
+    ggthemes::theme_base() +
+    #ggthemes::scale_color_ptol() +
+    theme(text = element_text(size = 10), legend.position = "top") 
+}
+
+
+aggregate_ss_looking <- function(df, ss_grouping_cols, ms_grouping_cols, aoi_column, return_ss_df = FALSE, use_bootstrap = FALSE, na_rm = FALSE, n_boot = 1000) {
   # create group by to get the total number of looks in each time slice
-  total_looks_group_by <- rlang::syms(grouping_cols)
+  total_looks_group_by <- rlang::syms(ss_grouping_cols)
   
   # add aoi looking column to group by to get the total number of looks to an AOI in a timeslice
-  aoi_looks_group_by <- rlang::syms(c(grouping_cols, aoi_column))
+  aoi_looks_group_by <- rlang::syms(c(ss_grouping_cols, aoi_column))
   
   ss_total <- df %>% 
     count(!!! total_looks_group_by) %>% 
@@ -32,16 +56,42 @@ aggregate_ss_looking <- function(df, grouping_cols, aoi_column) {
     complete(!!! aoi_looks_group_by, fill = list(n = 0)) %>%
     rename(n_aoi_looks = n)
   
-  left_join(ss_aois, ss_total) %>%
+  ss_final <- left_join(ss_aois, ss_total) %>%
     mutate(prop_looking = n_aoi_looks / n_total_looks) %>% 
     filter(!is.nan(prop_looking))
+  
+  ## Aggreate if we want the subject level data 
+  
+  
+  if (return_ss_df) {
+    ss_final
+  } else {
+    # this code removes Sub.Num from grouping cols
+    ms_groupings_no_subid <- stringr::str_remove(ms_grouping_cols, "subid") %>% .[. != ""]   
+    
+    if(use_bootstrap) {
+      ss_final %>% 
+        group_by(!!! rlang::syms(c(ms_grouping_cols, aoi_column))) %>% 
+        summarise(m = mean(prop_looking)) %>% 
+        group_by(!!! rlang::syms(c(ms_groupings_no_subid, aoi_column))) %>% 
+        tidyboot::tidyboot_mean(column = m, nboot = n_boot, na.rm = na_rm)
+    } else {
+      ss_final %>% 
+        group_by(!!! rlang::syms(c(ms_grouping_cols, aoi_column))) %>% 
+        summarise(m = mean(prop_looking)) %>% 
+        group_by(!!! rlang::syms(c(ms_groupings_no_subid, aoi_column))) %>% 
+        summarise(m = mean(m), 
+                  n = n()) 
+    }
+  }
   
 }
 
 create_time_bin_trial <- function(trial, t_ms_diff = 33) {
   n_bins <- nrow(trial)
   max_time <- trial$t_rel_noun %>% max() * 1000
-  time_ms <- seq.int(0, max_time, by = t_ms_diff %>% round()) %>% .[1:n_bins]
+  min_time_bin <- trial$t_rel_noun %>% min() * 1000
+  time_ms <- seq.int(min_time_bin, max_time, by = t_ms_diff %>% round()) %>% .[1:n_bins]
   
   trial %>% 
     mutate(time_ms_normalized = time_ms ,
@@ -264,34 +314,37 @@ score_trial_et <- function(trial_df, crit_onset_type = "noun") {
     summarise_(min_t = interp(~ min(x), x = as.name(t_select_type))) %>% 
     arrange(min_t)
   
+  print(crit_window_responses)
+  
   # store info about the shift
   shift_start <- crit_window_responses$target_looking[1]
   shift_info <-paste(crit_window_responses$target_looking[1], crit_window_responses$target_looking[2],
                      sep = "-")
   
+  
   # check if there is only one "response" in the target_looking vector
   # if 1, then there was no shift (i_e_, no change from response at crit_onset)
-  if (nrow(crit_window_responses) == 1) {
+  if (nrow(crit_window_responses) <= 1) {
     trial_score <- trial_df %>% 
       mutate(rt = NA, shift_type = "no_shift") %>% 
       select(rt, shift_type) 
   } else {
+    t_land_shift <- crit_window_responses$min_t[2]
     # get the earliest time point when target looking switches from the critical onset value 
     trial_score <- trial_df %>% 
       filter_(t_filter_type) %>% 
-      filter(target_looking != shift_start) %>% 
-      select_(t_select_type, "target_looking") %>% 
+      filter(t_rel_noun < t_land_shift) %>% 
       group_by(target_looking) %>% 
-      summarise_(rt = interp(~ min(x), x = as.name(t_select_type))) %>% 
-      filter(rt == min(rt)) %>% 
+      summarise_(rt = interp(~ max(x), x = as.name(t_select_type))) %>%
+      filter(rt == max(rt)) %>%
       mutate(shift_type = ifelse(shift_info == "center-target", "C_T", 
                                  ifelse(shift_info == "center-distracter", "C_D",
                                         ifelse(shift_info == "target-distracter", "T_D",
                                                ifelse(shift_info== "target-center", "T_C",
                                                       ifelse(shift_info == "distracter-target", "D_T",
                                                              ifelse(shift_info == "distracter-center", "D_C", NA)))))),
-             shift_accuracy = ifelse(shift_type == "C_T", "correct", "incorrect")) %>%
-      select(rt, shift_type, shift_accuracy) 
+             shift_accuracy = ifelse(str_detect(shift_type, "_T"), "correct", "incorrect")) %>%
+      select(rt, shift_type, shift_accuracy)
   }
   
   # add the rt and score to the trial data frame

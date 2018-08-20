@@ -6,6 +6,7 @@
 ## PRELIMINARIES
 source(here::here("code/helper_functions/libraries_and_functions.R"))
 raw_data_path <- "data/02_raw_data/"
+#raw_data_path <- "data/test_data/"
 trial_info_path <- "data/00_stimuli_information/analysis_order_sheets/"
 aois_path <- "data/00_stimuli_information/analysis_order_sheets/speed-acc-novel-aois.csv"
 
@@ -86,34 +87,27 @@ all_data %>%
   count(subid, trial_num_learn_block) %>% 
   kable()
 
-## Read participant demographics 
-kid_demo <- "data/01_participant_logs/elizabeth_child_subject_log.xlsx"
-adult_demo <- "data/01_participant_logs/elizabeth_adult_subject_log.xlsx"
+## Add demographic information
 
-df_demographics_adult <- readxl::read_xlsx(here::here(adult_demo)) %>% 
-  filter(!is.na(subid)) %>% 
-  rename(order_number = order) %>% 
-  mutate(birth_date = NA, age = NA, age_category = "adults",
-         order_number = as.character(order_number)) %>% 
+demo_path <- "data/01_participant_logs/es_combined_subject_log.xlsx"
+
+df_demographics <- readxl::read_xlsx(here::here(demo_path), guess_max = 1) %>% 
+  filter(!is.na(subid)) %>%
+  rename(order_number = order,
+         age_category = child_adult) %>%
+  mutate(order_number = as.character(order_number),
+         age_years = age,
+         age_days = as.double(testing_date - birth_date),
+         age_group = as.integer(age / 365)) %>% 
   select(-contains("initials"))
 
-df_demographics_kid <- readxl::read_xlsx(here::here(kid_demo)) %>% 
-  filter(!is.na(subid)) %>% 
-  rename(order_number = order) %>% 
-  mutate(age_category = "children",
-         order_number = as.character(order_number)) %>% 
-  select(-contains("initials"))
-
-df_demo_final <- bind_rows(df_demographics_kid, df_demographics_adult) %>% 
-  select(subid:age, age_category, everything())
-
-## Join participant demographics, aoi, timing information, and eye tracking data
-all_data %<>% left_join(., df_demo_final, by = c("subid", "order_number"))
+all_data %<>% left_join(., df_demographics, by = c("subid", "order_number"))
 
 ## Read AOI information 
 df_aois <- read_csv(here::here(aois_path)) 
 buffer_pixels_x <- 200
 buffer_pixels_y <- 100
+
 df_aois %<>%
   mutate(aoi_y_max = case_when(
     aoi_type == "image" ~ aoi_y_max + buffer_pixels_y,
@@ -183,7 +177,6 @@ df_final %<>%
          t_rel_gaze = round(t_rel_gaze*sample_rate) / sample_rate,
          t_rel_sentence = round(t_rel_sentence*sample_rate) / sample_rate)
 
-
 ## Filter bad blocks of trials based on demographics sheet
 df_final %<>%
   mutate(block_excluded = ifelse(block_excluded == "NA", "none", block_excluded),
@@ -192,7 +185,6 @@ df_final %<>%
            TRUE ~ "keep"
          )) %>% 
   filter(keep_block == "keep")
-
 
 ## check if any samples are missing metadata
 check_if_meta_missing <- df_final %>% filter(is.na(target_image))
