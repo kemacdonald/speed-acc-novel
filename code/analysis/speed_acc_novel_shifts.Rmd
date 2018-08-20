@@ -283,7 +283,7 @@ ggplot(data = ms) +
   labs(x = "trial number", y = "mean RT")
 ```
 
-Plot RT over trial numbers for children and adults
+Key: Plot RT over trial numbers for children and adults
 ```{r}
 ggplot(data = ms) +
   geom_line(mapping = aes(x = trial_num_learn_block,
@@ -340,7 +340,7 @@ ggplot(data = condition_accuracy_spread) +
        title = "First shift accuracy")
 ```
 
-Plot first shift accuracy in exposure and test trials for adults vs children
+Key: Plot first shift accuracy in exposure and test trials for adults vs children
 ```{r}
 ggplot(data = condition_accuracy_spread) +
   geom_line(mapping = aes(x = trial_num_learn_block,
@@ -351,7 +351,9 @@ ggplot(data = condition_accuracy_spread) +
   facet_grid(age_category ~ trial_type) +
   labs(x = "trial number", 
        y = "proportion correct",
-       title = "First shift accuracy")
+       title = "First shift accuracy") +
+  scale_color_manual(values = c("#6a8fcc", "#c41b1b"))
+# color stuff won't work for some reason
 ```
 
 
