@@ -34,7 +34,7 @@ plot_timecourse <- function(df, filter_crit, facet_type) {
     geom_vline(xintercept = 0, lty = "dashed") +
     geom_dl(aes(label = target_looking), method = "last.bumpup") +
     ggthemes::theme_base() +
-    ggthemes::scale_color_ptol() +
+    #ggthemes::scale_color_ptol() +
     theme(text = element_text(size = 10), legend.position = "top") 
 }
 
