@@ -291,9 +291,11 @@ ggplot(data = ms) +
                           color = gaze_condition)) +
   theme_minimal() +
   facet_grid(age_category ~ trial_type) +
-  labs(x = "trial number", 
-       y = "mean RT",
-       title = "First shift reaction time")
+  labs(x = "Trial number", 
+       y = "Mean reaction time",
+       title = "First shift reaction time") +
+  theme(panel.border = element_rect(colour = "gray", fill=NA, size=1),
+        text = element_text(size = 20))
 ```
 
 
@@ -347,13 +349,16 @@ ggplot(data = condition_accuracy_spread) +
                           y = prop_correct,
                           color = gaze_condition)) +
   scale_y_continuous(limits = c(0, 1)) +
-  theme_minimal() +
   facet_grid(age_category ~ trial_type) +
-  labs(x = "trial number", 
-       y = "proportion correct",
+  labs(x = "Trial number", 
+       y = "Proportion correct",
        title = "First shift accuracy") +
-  scale_color_manual(values = c("#6a8fcc", "#c41b1b"))
-# color stuff won't work for some reason
+  theme_minimal() +
+  theme(panel.border = element_rect(colour = "gray", 
+                                    fill=NA, 
+                                    size=1),
+        text = element_text(size=20)) +
+  geom_hline(yintercept=.5, linetype="dotted", size = 1)
 ```
 
 
@@ -392,6 +397,7 @@ Accuracy by condition and trial number by participant (attempt)
 # table for accuracy by condition
 condition_accuracy_2 <- d_keep %>%
   group_by(subid,
+           age_category,
            gaze_condition, 
            shift_accuracy, 
            trial_num_learn_block,
@@ -406,7 +412,8 @@ condition_accuracy_spread_2 <- condition_accuracy_spread_2 %>%
 condition_accuracy_spread_2[is.na(condition_accuracy_spread_2)] <- 0
 
 condition_accuracy_spread_total_2 <- condition_accuracy_spread_2 %>%
-  group_by(gaze_condition,
+  group_by(age_category,
+           gaze_condition,
            trial_num_learn_block,
            trial_type) %>%
   summarise(m_prop_correct = mean(prop_correct))
@@ -417,7 +424,7 @@ ggplot(data = condition_accuracy_spread_total_2) +
                           color = gaze_condition)) +
   scale_y_continuous(limits = c(0, 1)) +
   theme_minimal() +
-  facet_wrap(facets = ~trial_type) +
+  facet_grid(age_category ~ trial_type) +
   labs(x = "trial number", y = "proportion correct")
 ```
 
