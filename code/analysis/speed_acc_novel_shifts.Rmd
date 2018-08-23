@@ -53,10 +53,15 @@ d$subid %>%
   length
 ```
 
+Add age group
+```{r}
+d$age_group <- substr(d$age, 0, 1)
+```
+
 Group by demographics
 ```{r}
 d_by_subject <- d %>%
-  group_by(subid, gender, ethnicity_race, order_key, keep_drop, reason_excluded, age, age_category) %>%
+  group_by(subid, gender, ethnicity_race, order_key, keep_drop, reason_excluded, age, age_group, age_category) %>%
   summarise
 View(d_by_subject)
 # missing demographic info for SAN-071718-02/02b
@@ -207,6 +212,7 @@ Summarise RT
 ```{r}
 ms_ss <- d_keep %>%
   filter(!is.na(rt)) %>%
+  filter(shift_accuracy == "correct") %>%
   group_by(subid, 
            age_category,
            gaze_condition, 
@@ -307,7 +313,7 @@ What does first shift accuracy look like for different gaze conditions?
 Make a table for accuracy by condition and trial number
 ```{r}
 # table for accuracy by condition
-condition_accuracy <- d_keep %>%
+cond_acc <- d_keep %>%
   group_by(gaze_condition, 
            shift_accuracy, 
            trial_num_learn_block,
@@ -316,21 +322,21 @@ condition_accuracy <- d_keep %>%
   count(shift_accuracy)
 
 # spread out table
-condition_accuracy_spread <- spread(condition_accuracy, key = shift_accuracy, value = n)
+cond_acc_spread <- spread(cond_acc, key = shift_accuracy, value = n)
 
 # change NAs to 0
-condition_accuracy_spread[is.na(condition_accuracy_spread)] <- 0
+cond_acc_spread[is.na(cond_acc_spread)] <- 0
 # do NOT run this command when there is a "total" column in the data frame!
 
 #compute proportion correct first shifts and add to df
-condition_accuracy_spread <- condition_accuracy_spread %>%
+cond_acc_spread <- cond_acc_spread %>%
   mutate(total = correct + incorrect,
          prop_correct = correct / total)
 ```
 
 Plot accuracy as a function of trial number for all trials
 ```{r}
-ggplot(data = condition_accuracy_spread) +
+ggplot(data = cond_acc_spread) +
   geom_line(mapping = aes(x = trial_num_learn_block,
                           y = prop_correct,
                           color = gaze_condition)) +
@@ -344,7 +350,7 @@ ggplot(data = condition_accuracy_spread) +
 
 Key: Plot first shift accuracy in exposure and test trials for adults vs children
 ```{r}
-ggplot(data = condition_accuracy_spread) +
+ggplot(data = cond_acc_spread) +
   geom_line(mapping = aes(x = trial_num_learn_block,
                           y = prop_correct,
                           color = gaze_condition)) +
@@ -361,10 +367,94 @@ ggplot(data = condition_accuracy_spread) +
   geom_hline(yintercept=.5, linetype="dotted", size = 1)
 ```
 
+Make table for accuracy for children based on age group:
+```{r}
+# table for accuracy by condition
+cond_acc_age <- d_keep %>%
+  filter(age_category == "child") %>%
+  group_by(gaze_condition, 
+           shift_accuracy, 
+           trial_num_learn_block,
+           trial_type,
+           age_category,
+           age_group) %>%
+  count(shift_accuracy)
 
+# spread out table
+cond_acc_age_spread <- spread(cond_acc_age, key = shift_accuracy, value = n)
 
+# change NAs to 0
+cond_acc_age_spread[is.na(cond_acc_age_spread)] <- 0
+# do NOT run this command when there is a "total" column in the data frame!
 
+#compute proportion correct first shifts and add to df
+cond_acc_age_spread <- cond_acc_age_spread %>%
+  mutate(total = correct + incorrect,
+         prop_correct = correct / total)
+```
 
+Plot accuracy over trials for children based on age group:
+```{r}
+ggplot(data = cond_acc_age_spread) +
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = prop_correct,
+                          color = gaze_condition)) +
+  scale_y_continuous(limits = c(0, 1)) +
+  facet_grid(age_group ~ trial_type) +
+  labs(x = "Trial number", 
+       y = "Proportion correct",
+       title = "First shift accuracy") +
+  theme_minimal() +
+  theme(panel.border = element_rect(colour = "gray", 
+                                    fill=NA, 
+                                    size=1),
+        text = element_text(size=10)) +
+  geom_hline(yintercept=.5, linetype="dotted", size = 1)
+```
+
+Table for overall accuracy for children in exposure and test trials based on age group
+```{r}
+# remake cond acc table without trial number
+cond_acc_age_collapsed <- d_keep %>%
+  filter(age_category == "child") %>%
+  group_by(age_group,
+           shift_accuracy,
+           gaze_condition,
+           trial_type) %>%
+  count(shift_accuracy)
+
+# spread out table
+cond_acc_age_coll_spread <- spread(cond_acc_age_collapsed, key = shift_accuracy, value = n)
+
+# change NAs to 0
+cond_acc_age_coll_spread[is.na(cond_acc_age_coll_spread)] <- 0
+# do NOT run this command when there is a "total" column in the data frame!
+
+#compute proportion correct first shifts and add to df
+cond_acc_age_coll_spread <- cond_acc_age_coll_spread %>%
+  mutate(total = correct + incorrect,
+         prop_correct = correct / total)
+```
+
+Plot overall accuracy for children in only test trials based on age group
+```{r}
+cond_acc_age_test_coll <- cond_acc_age_coll_spread %>%
+  filter(trial_type == "test")
+```
+
+Plot overall accuracy for children in exposure and test trials based on age group
+```{r}
+ggplot(data = cond_acc_age_coll_spread) +
+  geom_bar(mapping = aes(x = age_group,
+                         y = prop_correct,
+                         fill = gaze_condition),
+           stat = "identity",
+           position = "dodge") +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(x = "age group",
+       y = "prop correct") +
+  facet_wrap(~trial_type)
+```
 
 
 
