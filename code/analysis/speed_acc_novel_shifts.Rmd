@@ -86,7 +86,16 @@ Age group breakdown
 ```{r}
 d_by_subject %>%
   group_by(age_group) %>%
+  filter(keep_drop == "keep") %>%
   count(age_group)
+
+# number of trials by age group
+d_keep %>% 
+  group_by(age_group) %>%
+  count(age_group) %>%
+  kable()
+
+
 ```
 
 Count the number of participants who are kept and dropped
@@ -248,7 +257,7 @@ What does the distribution of Reaction Times (RT) look like overall? How about a
 
 Plot overall RT distribution
 ```{r}
-ggplot(data = d_keep) +
+ggplot(data = d_keep_correct) +
   geom_density(mapping = aes(x = rt),
                  binwidth = .1,
                  fill = "light blue",
@@ -259,7 +268,7 @@ ggplot(data = d_keep) +
 
 Plot RT density distributions by gaze condition in one graph
 ```{r}
-ggplot(data = d_keep) +
+ggplot(data = d_keep_correct) +
   geom_density(mapping = aes(x = rt,
                              fill = gaze_condition),
                alpha = .5)+
@@ -301,7 +310,7 @@ ggplot(data = ms) +
        y = "Mean reaction time",
        title = "First shift reaction time") +
   theme(panel.border = element_rect(colour = "gray", fill=NA, size=1),
-        text = element_text(size = 20))
+        text = element_text(size = 14))
 ```
 
 
@@ -452,7 +461,8 @@ ggplot(data = cond_acc_age_coll_spread) +
            position = "dodge") +
   scale_y_continuous(limits = c(0, 1)) +
   labs(x = "age group",
-       y = "prop correct") +
+       y = "prop correct",
+       title = "First shift accuracy") +
   facet_wrap(~trial_type)
 ```
 
