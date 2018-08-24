@@ -39,6 +39,8 @@ Some questions we'd like to know about our data:
 
 We can answer these questions using tidyverse to generate tables. For example, the following code uses the `count()` function to tell us how many rows (i.e., trials) each particpant has in the dataset. `kable()` is a function for making the tables prettier if we were to knit this document to an html file for viewing on a browser.
 
+### Basic Participant Info
+
 Participant number and number trials
 ```{r}
 d %>% 
@@ -53,7 +55,7 @@ d$subid %>%
   length
 ```
 
-Add age group
+Add column for age group
 ```{r}
 d$age_group <- substr(d$age, 0, 1)
 ```
@@ -61,7 +63,16 @@ d$age_group <- substr(d$age, 0, 1)
 Group by demographics
 ```{r}
 d_by_subject <- d %>%
-  group_by(subid, gender, ethnicity_race, order_key, keep_drop, reason_excluded, age, age_group, age_category) %>%
+  group_by(subid, 
+           gender, 
+           age,
+           age_group,
+           age_category,
+           ethnicity_race,
+           keep_drop, 
+           reason_excluded,
+           order_key,
+           order_number) %>%
   summarise
 View(d_by_subject)
 # missing demographic info for SAN-071718-02/02b
@@ -75,7 +86,7 @@ d_by_subject %>%
   count(gender)
 ```
 
-Adults vs. children
+Number of adults and children
 ```{r}
 d_by_subject %>%
   group_by(age_category) %>%
@@ -94,74 +105,88 @@ d_keep %>%
   group_by(age_group) %>%
   count(age_group) %>%
   kable()
-
-
 ```
 
-Count the number of participants who are kept and dropped
+Count number of participants kept and dropped
 ```{r}
 d_by_subject %>%
   group_by(keep_drop) %>%
   count(keep_drop)
 
+# see why they were dropped
 d_by_subject %>%
   group_by(reason_excluded) %>%
   count(reason_excluded)
 ```
 
-Count the number of trials per participant
+### Trial Numbers
+
+Count number of children per order
+```{r}
+d_by_subject %>%
+  group_by(order_key) %>%
+  count(order_key)
+```
+
+Count number of trials per participant
 ```{r}
 d %>%
   group_by(subid) %>%
   count(subid)
 ```
 
-Count the number of trials per word
+Count number of trials per word
 ```{r}
 d %>%
   group_by(noun) %>%
   count(noun)
 ```
 
-Count the number of trials per word per participant
+Count number of trials per word per participant
 ```{r}
 d %>%
-  group_by(subid, noun) %>%
+  group_by(subid, 
+           noun) %>%
   count(subid)
 ```
 
-Trials per gaze condition per participant:
-Here is some code that uses `group_by()` to tells us how many trials are in each condition. Note the use of `arrange()` to keep the table sorted by participant id.
-
+Count number of trials per gaze condition per participant
 ```{r}
 d %>% 
   group_by(gaze_condition) %>% 
   count(subid) %>% 
   arrange(subid) %>% 
   kable
-
 ```
 
-Count trials per gaze condition
+Count number of trials per gaze condition
 ```{r}
 d %>%
   group_by(gaze_condition) %>%
   count(gaze_condition)
 ```
 
+Count number of trials per order
+```{r}
+d %>%
+  group_by(order_key) %>%
+  count(order_key)
+```
 
 ## Filter data
 
 Remove shifts that do not start at center. Remove participants based on keep_drop, and extreme RTs
 
-*Note that if you want to analyze the full data set you should comment out the first filter step. only run this if you want to JUST use pilot data!
 
-Take out word blocks for reasons explained in subject log or if there is data for less than 50% of word block:
+Take out word blocks for reasons explained in subject log or if there is data for less than 50% of trials or less than 50% of word block
 ```{r}
 d_complete <- d %>%
   filter(is.na(block_excluded) | 
            block_excluded != learning_block) %>%
-  group_by(subid, learning_block) %>%
+  group_by(subid) %>%
+  filter(n() >= 16) %>%
+  group_by(subid, 
+           learning_block) %>%
   filter(n() >= 4)
 # should probably combine this with next filtering step
 ```
@@ -171,12 +196,10 @@ Filter data based on keep_drop and center start locations:
 ```{r}
 d_keep <- d_complete %>%
   filter(keep_drop == "keep", 
-         shift_start_location == "center") %>%
-  group_by(subid) %>%
-  filter(n() >= 16)
+         shift_start_location == "center")
 ```
 
-If I wanted to look at ONLY pilot data:
+If I wanted to look at ONLY pilot data...
 ```{r, eval = FALSE}
 d_keep <- d %>%
   filter(reason_excluded == "pilot",
@@ -184,37 +207,15 @@ d_keep <- d %>%
 View(d_keep)
 ```
 
-
-
-TODO: remove RTs that are +/- 3 standard deviations from the mean.
-
-```{r, eval=FALSE}
-# get mean RT and sd of RT
-mean_rt <- ms$m %>%
-  mean()
-sd_rt <- ms$m %>%
-  sd()
-
-# define RT cut-offs
-rt_lower_limit <- mean_rt - 3*sd_rt
-rt_upper_limit <- mean_rt + 3*sd_rt
-
-# filter out RTs outside cut-offs
-ms_ss_FILTERED <- ms_ss %>%
-  filter(m_ss > rt_lower_limit, m_ss < rt_upper_limit)
-View(d_keep)
-
-ms_FILTERED <- ms_ss_FILTERED %>%
-  group_by(gaze_condition, 
-           trial_type, 
-           trial_num_learn_block) %>%
-  summarise(m = mean(m_ss))
-```
-
 Count number of trials after filtering
 ```{r}
 d_keep %>%
-  count(gaze_condition, trial_type, trial_num_learn_block)
+  group_by(gaze_condition,
+           trial_type,
+           trial_num_learn_block) %>%
+  count(gaze_condition, 
+        trial_type, 
+        trial_num_learn_block)
 ```
 
 Summarise RT
@@ -265,8 +266,7 @@ ggplot(data = d_keep_correct) +
   theme_minimal()
 ```
 
-
-Plot RT density distributions by gaze condition in one graph
+Plot RT density distributions by gaze condition
 ```{r}
 ggplot(data = d_keep_correct) +
   geom_density(mapping = aes(x = rt,
@@ -275,17 +275,15 @@ ggplot(data = d_keep_correct) +
   theme_minimal()
 ```
 
-
 Plot RT distribution by gaze condition in exposure vs. test trials
 ```{r}
 ggplot(data = d_keep) +
   geom_density(mapping = aes(x = rt,
                              fill = gaze_condition),
                alpha = .5) +
-  theme_minimal() + 
-  facet_wrap(facets = ~trial_type)
+  facet_wrap(facets = ~trial_type) +
+  theme_minimal()
 ```
-
 
 Plot RT as a function of trial number in different gaze conditions in exposure and test trials
 ```{r}
@@ -293,9 +291,10 @@ ggplot(data = ms) +
   geom_line(mapping = aes(x = trial_num_learn_block,
                           y = m,
                           color = gaze_condition)) +
-  theme_minimal() +
   facet_wrap(facets = ~trial_type) +
-  labs(x = "trial number", y = "mean RT")
+  labs(x = "trial number", 
+       y = "mean RT") +
+  theme_minimal()
 ```
 
 Key: Plot RT over trial numbers for children and adults
@@ -304,12 +303,14 @@ ggplot(data = ms) +
   geom_line(mapping = aes(x = trial_num_learn_block,
                           y = m,
                           color = gaze_condition)) +
-  theme_minimal() +
   facet_grid(age_category ~ trial_type) +
   labs(x = "Trial number", 
        y = "Mean reaction time",
        title = "First shift reaction time") +
-  theme(panel.border = element_rect(colour = "gray", fill=NA, size=1),
+  theme_minimal() +
+  theme(panel.border = element_rect(color = "gray", 
+                                    fill=NA, 
+                                    size=1),
         text = element_text(size = 14))
 ```
 
@@ -331,7 +332,9 @@ cond_acc <- d_keep %>%
   count(shift_accuracy)
 
 # spread out table
-cond_acc_spread <- spread(cond_acc, key = shift_accuracy, value = n)
+cond_acc_spread <- spread(cond_acc, 
+                          key = shift_accuracy, 
+                          value = n)
 
 # change NAs to 0
 cond_acc_spread[is.na(cond_acc_spread)] <- 0
@@ -343,28 +346,17 @@ cond_acc_spread <- cond_acc_spread %>%
          prop_correct = correct / total)
 ```
 
-Plot accuracy as a function of trial number for all trials
-```{r}
-ggplot(data = cond_acc_spread) +
-  geom_line(mapping = aes(x = trial_num_learn_block,
-                          y = prop_correct,
-                          color = gaze_condition)) +
-  scale_y_continuous(limits = c(0, 1)) +
-  theme_minimal() +
-  facet_wrap(facets = ~trial_type, ~age_category) +
-  labs(x = "trial number", 
-       y = "proportion correct",
-       title = "First shift accuracy")
-```
-
 Key: Plot first shift accuracy in exposure and test trials for adults vs children
 ```{r}
 ggplot(data = cond_acc_spread) +
   geom_line(mapping = aes(x = trial_num_learn_block,
                           y = prop_correct,
                           color = gaze_condition)) +
-  scale_y_continuous(limits = c(0, 1)) +
   facet_grid(age_category ~ trial_type) +
+  geom_hline(yintercept=.5, 
+             linetype="dotted", 
+             size = 1) +
+  scale_y_continuous(limits = c(0, 1)) +
   labs(x = "Trial number", 
        y = "Proportion correct",
        title = "First shift accuracy") +
@@ -372,10 +364,11 @@ ggplot(data = cond_acc_spread) +
   theme(panel.border = element_rect(colour = "gray", 
                                     fill=NA, 
                                     size=1),
-        text = element_text(size=20)) +
-  geom_hline(yintercept=.5, linetype="dotted", size = 1)
+        text = element_text(size=14))
 ```
 
+
+### Age and Accuracy
 Make table for accuracy for children based on age group:
 ```{r}
 # table for accuracy by condition
@@ -408,8 +401,9 @@ ggplot(data = cond_acc_age_spread) +
   geom_line(mapping = aes(x = trial_num_learn_block,
                           y = prop_correct,
                           color = gaze_condition)) +
-  scale_y_continuous(limits = c(0, 1)) +
   facet_grid(age_group ~ trial_type) +
+  geom_hline(yintercept=.5, linetype="dotted", size = 1) +
+  scale_y_continuous(limits = c(0, 1)) +
   labs(x = "Trial number", 
        y = "Proportion correct",
        title = "First shift accuracy") +
@@ -417,8 +411,7 @@ ggplot(data = cond_acc_age_spread) +
   theme(panel.border = element_rect(colour = "gray", 
                                     fill=NA, 
                                     size=1),
-        text = element_text(size=10)) +
-  geom_hline(yintercept=.5, linetype="dotted", size = 1)
+        text = element_text(size=10))
 ```
 
 Table for overall accuracy for children in exposure and test trials based on age group
@@ -445,11 +438,6 @@ cond_acc_age_coll_spread <- cond_acc_age_coll_spread %>%
          prop_correct = correct / total)
 ```
 
-Plot overall accuracy for children in only test trials based on age group
-```{r}
-cond_acc_age_test_coll <- cond_acc_age_coll_spread %>%
-  filter(trial_type == "test")
-```
 
 Plot overall accuracy for children in exposure and test trials based on age group
 ```{r}
@@ -459,15 +447,68 @@ ggplot(data = cond_acc_age_coll_spread) +
                          fill = gaze_condition),
            stat = "identity",
            position = "dodge") +
+  facet_wrap(~trial_type) +
   scale_y_continuous(limits = c(0, 1)) +
   labs(x = "age group",
        y = "prop correct",
-       title = "First shift accuracy") +
-  facet_wrap(~trial_type)
+       title = "First shift accuracy")
 ```
 
 
+### Order and Accuracy
 
+Add order type column to d_keep
+```{r}
+d_keep <- mutate(d_keep, 
+                 order_type = 
+                   if_else(order_key == "nogaze_gaze_gr_ol" | 
+                             order_key == "nogaze_gaze_ol_gr", 
+                           "nogaze_gaze", 
+                           "gaze_nogaze"))
+```
+
+Make table for accuracy for children based on order
+```{r}
+# table for accuracy by order
+cond_acc_order <- d_keep %>%
+  filter(age_category == "child") %>%
+  group_by(gaze_condition, 
+           shift_accuracy, 
+           trial_type,
+           order_type) %>%
+  count(shift_accuracy)
+
+# spread out table
+cond_acc_order_spread <- spread(cond_acc_order, 
+                                key = shift_accuracy, 
+                                value = n)
+
+# change NAs to 0
+cond_acc_order_spread[is.na(cond_acc_order_spread)] <- 0
+# do NOT run this command when there is a "total" column in the data frame!
+
+#compute proportion correct first shifts and add to df
+cond_acc_order_spread <- cond_acc_order_spread %>%
+  mutate(total = correct + incorrect,
+         prop_correct = correct / total)
+```
+
+Plot overall accuracy for children based on order:
+```{r}
+ggplot(data = cond_acc_order_spread) +
+  geom_bar(mapping = aes(x = order_type,
+                         y = prop_correct,
+                         fill = gaze_condition),
+           stat = "identity",
+           position = "dodge") +
+  facet_wrap(~trial_type) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(x = "order type",
+       y = "prop correct",
+       title = "First shift accuracy") +
+  theme_minimal() +
+  theme(text = element_text(size=10))
+```
 
 
 
@@ -620,4 +661,43 @@ ggplot(data = d_keep) +
                  color = "black") +
   theme_minimal() +
   facet_wrap(facets = ~gaze_condition)
+```
+
+TODO: remove RTs that are +/- 3 standard deviations from the mean.
+
+```{r, eval=FALSE}
+# get mean RT and sd of RT
+mean_rt <- ms$m %>%
+  mean()
+sd_rt <- ms$m %>%
+  sd()
+
+# define RT cut-offs
+rt_lower_limit <- mean_rt - 3*sd_rt
+rt_upper_limit <- mean_rt + 3*sd_rt
+
+# filter out RTs outside cut-offs
+ms_ss_FILTERED <- ms_ss %>%
+  filter(m_ss > rt_lower_limit, m_ss < rt_upper_limit)
+View(d_keep)
+
+ms_FILTERED <- ms_ss_FILTERED %>%
+  group_by(gaze_condition, 
+           trial_type, 
+           trial_num_learn_block) %>%
+  summarise(m = mean(m_ss))
+```
+
+Plot accuracy as a function of trial number for all trials
+```{r}
+ggplot(data = cond_acc_spread) +
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = prop_correct,
+                          color = gaze_condition)) +
+  facet_wrap(facets = ~trial_type) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(x = "trial number", 
+       y = "proportion correct",
+       title = "First shift accuracy") +
+  theme_minimal()
 ```
