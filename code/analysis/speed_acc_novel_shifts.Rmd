@@ -22,7 +22,6 @@ theme_set(ggthemes::theme_base())
 ```
 
 Read in data
-
 ```{r}
 d <- read_csv(here::here(data_path, "speed_acc_novel_shifts.csv")) %>% 
   mutate(learn_block_half = ifelse(trial_num_learn_block <= 2, "first", "second"),
@@ -66,15 +65,6 @@ d_by_subject %>%
   count(age_category)
 ```
 
-Age group breakdown
-
-```{r}
-d_by_subject %>%
-  filter(age_category == "child") %>% 
-  group_by(age_group) %>%
-  count(age_group)
-```
-
 Count the number of participants who are kept and dropped
 
 ```{r}
@@ -93,23 +83,17 @@ d_by_subject %>%
   kable()
 ```
 
-Trials per gaze condition per participant:
+Count trials per gaze condition
 
 ```{r}
-d %>% 
-  group_by(gaze_condition) %>% 
-  count(subid) %>% 
-  arrange(subid) %>% 
-  kable()
+d %>%
+  group_by(gaze_condition) %>%
+  count(gaze_condition)
 ```
 
 ## Filter data
 
-Remove shifts that do not start at center. Remove participants based on keep_drop, and extreme RTs
-
-*Note that if you want to analyze the full data set you should comment out the first filter step. only run this if you want to JUST use pilot data!
-
-Take out word blocks for reasons explained in subject log or if there is data for less than 50% of word block:
+Remove shifts that do not start at center. Remove participants based on keep_drop, and extreme RTs. Take out word blocks for reasons explained in subject log or if there is data for less than 50% of word block:
 
 ```{r}
 d_keep <- d %>%
@@ -326,9 +310,10 @@ ggplot(data = ms_acc,
 ```{r}
 ss_acc_half <- d_keep %>% 
   filter(keep_rt == "keep") %>% 
+  mutate(correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE)) %>% 
   group_by(subid, gaze_condition, learn_block_half, age_category, trial_type) %>% 
   summarise(m_ss = mean(correct_bool), n_trials = n())  
-
+  
 ms_acc_half <- ss_acc_half %>% 
   group_by(gaze_condition, trial_type, learn_block_half, age_category) %>% 
   tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
@@ -384,11 +369,9 @@ ggplot(data = ms_acc_cond,
         panel.border = element_rect(size = 1, color = "grey", fill = NA),
         legend.position = "top")
 ```
-
-
 ### Models
 
-First shift accuracy
+First shift Acc.
 
 ```{r}
 m1 <- d_keep %>% 
@@ -411,4 +394,3 @@ m2 <- d_keep %>%
 
 summary(m2)
 ```
-
