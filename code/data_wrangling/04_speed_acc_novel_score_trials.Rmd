@@ -63,10 +63,11 @@ Filter to just keep the first shift data.
 ```{r}
 d_first_shifts <- d_analysis %>% 
   ungroup() %>% 
-  select(subid, age_category, stimulus_name:trial_num_learn_block, noun, trial_type, 
+  select(subid, age_category, age_years, age_days, stimulus_name:trial_num_learn_block, noun, trial_type, 
          gaze_condition, speaker, order_name, order_number, gaze, testing_date:comments, 
          rt:shift_accuracy) %>% 
-  distinct()
+  distinct() %>% 
+  mutate(age_group = as.integer(age_days / 365)) 
 ```
 
 Check the distribution of shift types over the different response types.
@@ -86,7 +87,7 @@ check <- d_analysis %>%
   filter(subid == "SAN-081618-01", trial_num_exp == 10) %>% 
   ungroup() %>% 
   select(t_stim, t_rel_noun, stimulus_name,
-         rt, gaze_target, 
+         rt, gaze_target, target_side,
          response, shift_type, aoi_looking_type,
          shift_accuracy) %>% 
   distinct()

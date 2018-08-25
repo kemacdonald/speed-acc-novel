@@ -23,7 +23,7 @@ familiar_stimulus_name <- c("ef177c1276275662048244274d3df8cf_1920x1080",
                             "f242c27e12c6122eeb7c89a3fdc494c5_1920x1080",
                             "2501a6ecbb85880234d5fad1010d8b19_1920x1080")
 
-keypress_events <- c("UE-keypress VolumeUp", "UE-keypress VolumeDown")
+keypress_events <- c("UE-keypress VolumeUp", "UE-keypress VolumeDown", "UE-keypress LWin")
 
 great_job_mov <- c("60c3b54031bc9996064b4e3407d26313_1920x1080", 
                    "02cd2d10c439c205f28cd62e8906bb37_1920x1080", 
@@ -88,7 +88,6 @@ all_data %>%
   kable()
 
 ## Add demographic information
-
 demo_path <- "data/01_participant_logs/es_combined_subject_log.xlsx"
 
 df_demographics <- readxl::read_xlsx(here::here(demo_path), guess_max = 1) %>% 
@@ -98,7 +97,7 @@ df_demographics <- readxl::read_xlsx(here::here(demo_path), guess_max = 1) %>%
   mutate(order_number = as.character(order_number),
          age_years = age,
          age_days = as.double(testing_date - birth_date),
-         age_group = as.integer(age / 365)) %>% 
+         age_group = as.integer(age_days / 365)) %>% 
   select(-contains("initials"))
 
 all_data %<>% left_join(., df_demographics, by = c("subid", "order_number"))
