@@ -15,12 +15,14 @@ Libraries and data paths
 library(here)
 library(tidyverse)
 library(knitr)
+library(lme4)
 # source(here::here("code/helper_functions/libraries_and_functions.R"))
 data_path <- "data/03_processed_data/"
 theme_set(ggthemes::theme_base())
 ```
 
 Read in data
+
 ```{r}
 d <- read_csv(here::here(data_path, "speed_acc_novel_shifts.csv")) %>% 
   mutate(learn_block_half = ifelse(trial_num_learn_block <= 2, "first", "second"),
@@ -34,114 +36,71 @@ d <- read_csv(here::here(data_path, "speed_acc_novel_shifts.csv")) %>%
            trial_type == "exposure" & trial_num_learn_block == 4 ~ "7",
            trial_type == "test" & trial_num_learn_block == 4 ~ "8",
            TRUE ~ "NA"
-         ))
+         ),
+         correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE))
 ```
 
 ## Check the data
 
-Some questions we'd like to know about our data:
-
-  * how many participants total? 
-  * how many adults vs. kids? boys vs. girls:
-  * how many participants in each age group?
-  * how many participants were in the pilot, drop, or keep categories?
-  * how many trials from each participant? for each word? for each gaze type?
-
-We can answer these questions using tidyverse to generate tables. For example, the following code uses the `count()` function to tell us how many rows (i.e., trials) each particpant has in the dataset. `kable()` is a function for making the tables prettier if we were to knit this document to an html file for viewing on a browser.
-
-Participant number and number trials
-```{r}
-d %>% 
-  count(subid) %>% 
-  kable()
-```
-
 Number of unique participants
+
 ```{r}
-d$subid %>%
-  unique %>%
-  length
+d$subid %>% unique() %>%length()
 ```
 
 Group by demographics
+
 ```{r}
 d_by_subject <- d %>%
-  group_by(subid, gender, ethnicity_race, order_key, keep_drop, reason_excluded, age, age_category) %>%
-  summarise
-# missing demographic info for SAN-071718-02/02b
-# what happened to age_group?
+  group_by(subid, gender, ethnicity_race, order_key, keep_drop, 
+           reason_excluded, age, age_category, age_group) %>%
+  summarise()
 ```
 
-Gender breakdown
-```{r}
-d_by_subject %>%
-  group_by(gender) %>%
-  count(gender)
-```
+Adults vs. children and gender breakdown. 
 
-Adults vs. children
 ```{r}
 d_by_subject %>%
-  group_by(age_category) %>%
+  filter(keep_drop == "keep") %>% 
+  group_by(age_category, gender) %>%
   count(age_category)
 ```
 
 Age group breakdown
+
 ```{r}
 d_by_subject %>%
+  filter(age_category == "child") %>% 
   group_by(age_group) %>%
   count(age_group)
 ```
 
 Count the number of participants who are kept and dropped
+
 ```{r}
 d_by_subject %>%
   group_by(keep_drop) %>%
   count(keep_drop)
+```
 
+Make exclusions table
+
+```{r}
 d_by_subject %>%
   group_by(reason_excluded) %>%
-  count(reason_excluded)
-```
-
-Count the number of trials per participant
-```{r}
-d %>%
-  group_by(subid) %>%
-  count(subid)
-```
-
-Count the number of trials per word
-```{r}
-d %>%
-  group_by(noun) %>%
-  count(noun)
-```
-
-Count the number of trials per word per participant
-```{r}
-d %>%
-  group_by(subid, noun) %>%
-  count(subid)
+  count(reason_excluded, sort = T) %>% 
+  na.omit() %>% 
+  kable()
 ```
 
 Trials per gaze condition per participant:
-Here is some code that uses `group_by()` to tells us how many trials are in each condition. Note the use of `arrange()` to keep the table sorted by participant id.
 
 ```{r}
 d %>% 
   group_by(gaze_condition) %>% 
   count(subid) %>% 
   arrange(subid) %>% 
-  kable
-
-```
-
-Count trials per gaze condition
-```{r}
-d %>%
-  group_by(gaze_condition) %>%
-  count(gaze_condition)
+  kable()
 ```
 
 ## Filter data
@@ -151,6 +110,7 @@ Remove shifts that do not start at center. Remove participants based on keep_dro
 *Note that if you want to analyze the full data set you should comment out the first filter step. only run this if you want to JUST use pilot data!
 
 Take out word blocks for reasons explained in subject log or if there is data for less than 50% of word block:
+
 ```{r}
 d_keep <- d %>%
   filter(is.na(block_excluded) | 
@@ -159,14 +119,16 @@ d_keep <- d %>%
   group_by(subid, learning_block) %>%
   mutate(n_trials = n()) %>% 
   filter(n_trials >= 4,
+         rt > 0,
          keep_drop == "keep", 
-         shift_start_location == "center")
+         shift_start_location == "center") %>% 
+  ungroup()
 ```
 
 Count number of trials after filtering
 
 ```{r}
-d_keep %>% count(gaze_condition, trial_type, trial_num_learn_block)
+d_keep %>% count(subid, gaze_condition, trial_type, trial_num_learn_block)
 ```
 
 Filter extreme RTs
@@ -214,13 +176,13 @@ ms_rt %>%
   ungroup() %>% 
   mutate(age_category = factor(age_category, levels = c("child", "adult"))) %>% 
   ggplot(mapping = aes(x = trial_num_learn_block,
-                     y = mean,
-                     color = gaze_condition, 
-                     group = interaction(gaze_condition))) +
+                       y = mean,
+                       color = gaze_condition, 
+                       group = interaction(gaze_condition))) +
   geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
                   position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
-  lims(y = c(0, 2)) +
+  lims(y = c(0, 2.5)) +
   facet_grid(age_category ~ trial_type) +
   labs(x = "trial number", 
        y = "mean RT (sec)",
@@ -255,9 +217,9 @@ ms_rt %>%
   ungroup() %>% 
   mutate(age_category = factor(age_category, levels = c("child", "adult"))) %>% 
   ggplot(mapping = aes(x = learn_block_half,
-                     y = mean,
-                     color = gaze_condition, 
-                     group = interaction(gaze_condition))) +
+                       y = mean,
+                       color = gaze_condition, 
+                       group = interaction(gaze_condition))) +
   geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
                   position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
@@ -294,9 +256,9 @@ ms_rt %>%
   ungroup() %>% 
   mutate(age_category = factor(age_category, levels = c("child", "adult"))) %>% 
   ggplot(mapping = aes(x = trial_num_lblock_8,
-                     y = mean,
-                     color = gaze_condition, 
-                     group = interaction(gaze_condition))) +
+                       y = mean,
+                       color = gaze_condition, 
+                       group = interaction(gaze_condition))) +
   geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
                   position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
@@ -332,10 +294,9 @@ d_keep %>%
 ```{r}
 ss_acc <- d_keep %>% 
   filter(keep_rt == "keep") %>% 
-  mutate(correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE)) %>% 
   group_by(subid, gaze_condition, trial_num_learn_block, age_category, trial_type) %>% 
   summarise(m_ss = mean(correct_bool), n_trials = n())  
-  
+
 ms_acc <- ss_acc %>% 
   group_by(gaze_condition, trial_type, trial_num_learn_block, age_category) %>% 
   tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
@@ -365,10 +326,9 @@ ggplot(data = ms_acc,
 ```{r}
 ss_acc_half <- d_keep %>% 
   filter(keep_rt == "keep") %>% 
-  mutate(correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE)) %>% 
   group_by(subid, gaze_condition, learn_block_half, age_category, trial_type) %>% 
   summarise(m_ss = mean(correct_bool), n_trials = n())  
-  
+
 ms_acc_half <- ss_acc_half %>% 
   group_by(gaze_condition, trial_type, learn_block_half, age_category) %>% 
   tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
@@ -393,121 +353,62 @@ ggplot(data = ms_acc_half,
         legend.position = "top")
 ```
 
-
-### Exploratory Visualizations
-
-What does first shift accuracy look like for different gaze conditions?
-
-Make a table for accuracy by condition and trial number
+### Summarise accuracy collapsing across time
 
 ```{r}
-# table for accuracy by condition
-condition_accuracy <- d_keep %>%
-  group_by(gaze_condition, 
-           shift_accuracy, 
-           trial_num_learn_block,
-           trial_type,
-           age_category) %>%
-  count(shift_accuracy)
+ss_acc_cond <- d_keep %>% 
+  filter(keep_rt == "keep") %>% 
+  group_by(subid, gaze_condition, age_category, trial_type) %>% 
+  summarise(m_ss = mean(correct_bool), n_trials = n())  
 
-# spread out table
-condition_accuracy_spread <- spread(condition_accuracy, key = shift_accuracy, value = n)
+ms_acc_cond <- ss_acc_half %>% 
+  group_by(gaze_condition, trial_type, age_category) %>% 
+  tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
 
-# change NAs to 0
-condition_accuracy_spread[is.na(condition_accuracy_spread)] <- 0
-# do NOT run this command when there is a "total" column in the data frame!
-
-#compute proportion correct first shifts and add to df
-condition_accuracy_spread <- condition_accuracy_spread %>%
-  mutate(total = correct + incorrect,
-         prop_correct = correct / total)
-```
-
-Plot accuracy as a function of trial number for all trials
-
-```{r}
-ggplot(data = condition_accuracy_spread) +
-  geom_line(mapping = aes(x = trial_num_learn_block,
-                          y = prop_correct,
-                          color = gaze_condition)) +
-  scale_y_continuous(limits = c(0, 1)) +
-  theme_minimal() +
-  facet_wrap(facets = ~trial_type, ~age_category) +
-  labs(x = "trial number", 
+ggplot(data = ms_acc_cond,
+       mapping = aes(x = fct_rev(age_category),
+                     y = mean,
+                     color = gaze_condition, 
+                     group = interaction(gaze_condition))) +
+  geom_hline(yintercept = 0.5, lty = "dashed") +
+  geom_line(position = position_dodge(width = 0.2)) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  position = position_dodge(width = 0.2)) +
+  scale_y_continuous(limits = c(0, 1.05)) +
+  facet_grid(~ trial_type) +
+  labs(x = "age group", 
        y = "proportion correct",
-       title = "First shift accuracy")
-```
-
-Plot first shift accuracy in exposure and test trials for adults vs children
-
-```{r}
-ggplot(data = condition_accuracy_spread) +
-  geom_line(mapping = aes(x = trial_num_learn_block,
-                          y = prop_correct,
-                          color = gaze_condition)) +
-  scale_y_continuous(limits = c(0, 1)) +
+       title = "First shift accuracy") +
   theme_minimal() +
-  facet_grid(age_category ~ trial_type) +
-  labs(x = "trial number", 
-       y = "proportion correct",
-       title = "First shift accuracy")
+  theme(text = element_text(size = 14), 
+        panel.border = element_rect(size = 1, color = "grey", fill = NA),
+        legend.position = "top")
 ```
 
 
-What does the distribution of age in the sample look like? 
+### Models
 
-Make a histogram of subjects' ages
+First shift accuracy
 
 ```{r}
-ggplot(data = d_by_subject) +
-   geom_histogram(mapping = aes(x= age),
-                  fill = "light blue",
-                  color = "black",
-                  binwidth = .2) +
-  theme_minimal()
+m1 <- d_keep %>% 
+  filter(keep_rt == "keep") %>% 
+  glmer(data = ., 
+        correct_bool ~ gaze_condition * trial_type + age_category + (gaze_condition|subid),
+        family = 'binomial')
+
+summary(m1)
 ```
 
-What does the distribution of Reaction Times (RT) look like overall? How about across different gaze conditions?
-
-Plot overall RT distribution
-```{r}
-ggplot(data = d_keep) +
-  geom_density(mapping = aes(x = rt),
-                 binwidth = .1,
-                 fill = "light blue",
-                 color = "black") +
-  theme_minimal()
-```
-
-Plot RT density distributions by gaze condition in one graph
+First shift RT
 
 ```{r}
-ggplot(data = d_keep) +
-  geom_density(mapping = aes(x = rt,
-                             fill = gaze_condition),
-               alpha = .5)+
-  theme_minimal()
+m2 <- d_keep %>% 
+  filter(keep_rt == "keep") %>% 
+  lmer(data = ., 
+     log(rt) ~ gaze_condition * trial_type + age_category + (gaze_condition|subid) + (trial_type|subid)
+     )
+
+summary(m2)
 ```
 
-Plot RT distribution by gaze condition in exposure vs. test trials
-
-```{r}
-ggplot(data = d_keep) +
-  geom_density(mapping = aes(x = rt,
-                             fill = gaze_condition),
-               alpha = .5) +
-  theme_minimal() + 
-  facet_wrap(facets = ~trial_type)
-```
-
-Plot RT as a function of trial number in different gaze conditions in exposure and test trials
-
-```{r}
-ggplot(data = ms) +
-  geom_line(mapping = aes(x = trial_num_learn_block,
-                          y = mean,
-                          color = gaze_condition)) +
-  theme_minimal() +
-  facet_wrap(facets = ~trial_type) +
-  labs(x = "trial number", y = "mean RT")
-```
