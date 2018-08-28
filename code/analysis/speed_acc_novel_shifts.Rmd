@@ -272,6 +272,7 @@ Plot overall RT distribution:
 d_keep_correct <- d_keep %>%
   filter(shift_accuracy == "correct")
 
+# plot RT distribution
 ggplot(data = d_keep_correct) +
   geom_density(mapping = aes(x = rt),
                  fill = "light blue",
