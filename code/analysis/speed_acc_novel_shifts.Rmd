@@ -7,16 +7,10 @@ output: html_document
 
 ```{r chunk_options, echo = F}
 # set some global options
-knitr::opts_chunk$set(warning=F, 
-                      message=F, 
-                      sanitize = T, 
-                      fig.height=4, 
-                      fig.width=8, 
-                      echo=T, 
-                      cache = F)
+knitr::opts_chunk$set(warning=F, message=F, sanitize = T, fig.height=4, fig.width=8, echo=T, cache = F)
 ```
 
-Libraries and data paths
+Libraries and data paths:
 ```{r}
 library(here)
 library(tidyverse)
@@ -26,7 +20,7 @@ data_path <- "data/03_processed_data/"
 theme_set(ggthemes::theme_base())
 ```
 
-Read in data
+Read in data:
 ```{r}
 d <- read_csv(here::here(data_path, "speed_acc_novel_shifts.csv"))
 View(d)
@@ -42,30 +36,29 @@ Some questions we'd like to know about our data:
   * how many participants were in the pilot, drop, or keep categories?
   * how many trials from each participant? for each word? for each gaze type?
 
-We can answer these questions using tidyverse to generate tables. For example, the following code uses the `count()` function to tell us how many rows (i.e., trials) each particpant has in the dataset. `kable()` is a function for making the tables prettier if we were to knit this document to an html file for viewing on a browser.
-
 ### Basic Participant Info
 
-Participant number and number trials
+Participant number and number trials:
 ```{r}
 d %>% 
   count(subid) %>% 
   kable()
 ```
 
-Number of unique participants
+Number of unique participants:
 ```{r}
 d$subid %>%
-  unique %>%
-  length
+  unique() %>%
+  length() %>%
+  kable()
 ```
 
-Add column for age group
+Add column for age group:
 ```{r}
 d$age_group <- substr(d$age, 0, 1)
 ```
 
-Group by demographics
+Group by demographics:
 ```{r}
 d_by_subject <- d %>%
   group_by(subid, 
@@ -78,32 +71,35 @@ d_by_subject <- d %>%
            reason_excluded,
            order_key,
            order_number) %>%
-  summarise
+  summarise()
 View(d_by_subject)
 # missing demographic info for SAN-071718-02/02b
 # what happened to age_group?
 ```
 
-Gender breakdown
+Gender breakdown:
 ```{r}
 d_by_subject %>%
   group_by(gender) %>%
-  count(gender)
+  count(gender) %>%
+  kable()
 ```
 
-Number of adults and children
+Number of adults and children:
 ```{r}
 d_by_subject %>%
   group_by(age_category) %>%
-  count(age_category)
+  count(age_category) %>%
+  kable()
 ```
 
-Age group breakdown
+Age group breakdown:
 ```{r}
 d_by_subject %>%
   group_by(age_group) %>%
   filter(keep_drop == "keep") %>%
-  count(age_group)
+  count(age_group) %>%
+  kable()
 
 # number of trials by age group
 d_keep %>% 
@@ -112,78 +108,83 @@ d_keep %>%
   kable()
 ```
 
-Count number of participants kept and dropped
+Count number of participants kept and dropped:
 ```{r}
 d_by_subject %>%
   group_by(keep_drop) %>%
-  count(keep_drop)
+  count(keep_drop) %>%
+  kable()
 
 # see why they were dropped
 d_by_subject %>%
   group_by(reason_excluded) %>%
-  count(reason_excluded)
+  count(reason_excluded) %>%
+  kable()
 ```
 
 ### Trial Numbers
 
-Count number of children per order
+Count number of children per order:
 ```{r}
 d_by_subject %>%
   group_by(order_key) %>%
-  count(order_key)
+  count(order_key) %>%
+  kable()
 ```
 
-Count number of trials per participant
+Count number of trials per participant:
 ```{r}
 d %>%
   group_by(subid) %>%
-  count(subid)
+  count(subid) %>%
+  kable()
 ```
 
-Count number of trials per word
+Count number of trials per word:
 ```{r}
 d %>%
   group_by(noun) %>%
-  count(noun)
+  count(noun) %>%
+  kable()
 ```
 
-Count number of trials per word per participant
+Count number of trials per word per participant:
 ```{r}
 d %>%
   group_by(subid, 
            noun) %>%
-  count(subid)
+  count(subid) %>%
+  kable()
 ```
 
-Count number of trials per gaze condition per participant
+Count number of trials per gaze condition per participant:
 ```{r}
 d %>% 
   group_by(gaze_condition) %>% 
   count(subid) %>% 
   arrange(subid) %>% 
-  kable
+  kable()
 ```
 
-Count number of trials per gaze condition
+Count number of trials per gaze condition:
 ```{r}
 d %>%
   group_by(gaze_condition) %>%
-  count(gaze_condition)
+  count(gaze_condition) %>%
+  kable()
 ```
 
-Count number of trials per order
+Count number of trials per order:
 ```{r}
 d %>%
   group_by(order_key) %>%
-  count(order_key)
+  count(order_key) %>%
+  kable()
 ```
 
 ## Filter data
 
-Remove shifts that do not start at center. Remove participants based on keep_drop, and extreme RTs
-
-
-Take out word blocks for reasons explained in subject log or if there is data for less than 50% of trials or less than 50% of word block
+Take out word blocks for reasons explained in subject log or if there is data for less than 50% of trials or less than 50% of word block:
 ```{r}
 d_complete <- d %>%
   filter(is.na(block_excluded) | 
@@ -199,11 +200,13 @@ d_complete <- d %>%
 Filter data based on keep_drop and center start locations:
 ```{r}
 d_keep <- d_complete %>%
-  filter(keep_drop == "keep", 
-         shift_start_location == "center")
+  filter(keep_drop == "keep")
+
+d_keep_center <- d_keep %>%
+  filter(shift_start_location == "center")
 ```
 
-If I wanted to look at ONLY pilot data...
+If I wanted to look at ONLY pilot data:
 ```{r, eval = FALSE}
 d_keep <- d %>%
   filter(reason_excluded == "pilot",
@@ -211,7 +214,7 @@ d_keep <- d %>%
 View(d_keep)
 ```
 
-Count number of trials after filtering
+Count number of trials after filtering:
 ```{r}
 d_keep %>%
   group_by(gaze_condition,
@@ -219,10 +222,11 @@ d_keep %>%
            trial_num_learn_block) %>%
   count(gaze_condition, 
         trial_type, 
-        trial_num_learn_block)
+        trial_num_learn_block) %>%
+  kable()
 ```
 
-Summarise RT
+Summarise RT:
 ```{r}
 ms_ss <- d_keep %>%
   filter(!is.na(rt)) %>%
@@ -242,11 +246,12 @@ ms <- ms_ss %>%
   summarise(m = mean(m_ss))
 ```
 
+
 ## Explore data using visualization
 
 What does the distribution of age in the sample look like? 
 
-Make a histogram of subjects' ages
+Make a histogram of subjects' ages:
 ```{r}
 ggplot(data = d_by_subject) +
    geom_histogram(mapping = aes(x = age),
@@ -256,11 +261,12 @@ ggplot(data = d_by_subject) +
   theme_minimal()
 ```
 
+
 ### Reaction Time 
 
 What does the distribution of Reaction Times (RT) look like overall? How about across different gaze conditions?
 
-Plot overall RT distribution
+Plot overall RT distribution:
 ```{r}
 # first, pull out correct first shifts
 d_keep_correct <- d_keep %>%
@@ -273,7 +279,7 @@ ggplot(data = d_keep_correct) +
   theme_minimal()
 ```
 
-Plot RT density distributions by gaze condition
+Plot RT density distributions by gaze condition:
 ```{r}
 ggplot(data = d_keep_correct) +
   geom_density(mapping = aes(x = rt,
@@ -282,7 +288,7 @@ ggplot(data = d_keep_correct) +
   theme_minimal()
 ```
 
-Plot RT distribution by gaze condition in exposure vs. test trials
+Plot RT distribution by gaze condition in exposure vs. test trials:
 ```{r}
 ggplot(data = d_keep_correct) +
   geom_density(mapping = aes(x = rt,
@@ -292,19 +298,7 @@ ggplot(data = d_keep_correct) +
   theme_minimal()
 ```
 
-Plot RT as a function of trial number in different gaze conditions in exposure and test trials
-```{r}
-ggplot(data = ms) +
-  geom_line(mapping = aes(x = trial_num_learn_block,
-                          y = m,
-                          color = gaze_condition)) +
-  facet_wrap(facets = ~trial_type) +
-  labs(x = "trial number", 
-       y = "mean RT") +
-  theme_minimal()
-```
-
-Key: Plot RT over trial numbers for children and adults
+Key: Plot RT over trial numbers for children and adults:
 ```{r}
 ggplot(data = ms) +
   geom_line(mapping = aes(x = trial_num_learn_block,
@@ -322,15 +316,14 @@ ggplot(data = ms) +
 ```
 
 
-
 ### Accuracy
 
 What does first shift accuracy look like for different gaze conditions?
 
-Make a table for accuracy by condition and trial number
+Make a table for accuracy by condition and trial number over trials:
 ```{r}
 # table for accuracy by condition
-cond_acc <- d_keep %>%
+cond_acc <- d_keep_center %>%
   group_by(gaze_condition, 
            shift_accuracy, 
            trial_num_learn_block,
@@ -353,7 +346,7 @@ cond_acc_spread <- cond_acc_spread %>%
          prop_correct = correct / total)
 ```
 
-Key: Plot first shift accuracy in exposure and test trials for adults vs children
+Key: Plot first shift accuracy in exposure and test trials for adults vs children over trials:
 ```{r}
 ggplot(data = cond_acc_spread) +
   geom_line(mapping = aes(x = trial_num_learn_block,
@@ -376,59 +369,11 @@ ggplot(data = cond_acc_spread) +
 
 
 ### Age and Accuracy
-Make table for accuracy for children based on age group:
+
+Make table for children's overall accuracy based on age group:
 ```{r}
-# table for accuracy by condition
-cond_acc_age <- d_keep %>%
-  filter(age_category == "child") %>%
-  group_by(gaze_condition, 
-           shift_accuracy, 
-           trial_num_learn_block,
-           trial_type,
-           age_category,
-           age_group) %>%
-  count(shift_accuracy)
-
-# spread out table
-cond_acc_age_spread <- spread(cond_acc_age, 
-                              key = shift_accuracy, 
-                              value = n)
-
-# change NAs to 0
-cond_acc_age_spread[is.na(cond_acc_age_spread)] <- 0
-# do NOT run this command when there is a "total" column in the data frame!
-
-#compute proportion correct first shifts and add to df
-cond_acc_age_spread <- cond_acc_age_spread %>%
-  mutate(total = correct + incorrect,
-         prop_correct = correct / total)
-```
-
-Plot accuracy over trials for children based on age group:
-```{r}
-ggplot(data = cond_acc_age_spread) +
-  geom_line(mapping = aes(x = trial_num_learn_block,
-                          y = prop_correct,
-                          color = gaze_condition)) +
-  facet_grid(age_group ~ trial_type) +
-  geom_hline(yintercept = .5, 
-             linetype = "dotted", 
-             size = 1) +
-  scale_y_continuous(limits = c(0, 1)) +
-  labs(x = "Trial number", 
-       y = "Proportion correct",
-       title = "First shift accuracy") +
-  theme_minimal() +
-  theme(panel.border = element_rect(colour = "gray", 
-                                    fill = NA, 
-                                    size = 1),
-        text = element_text(size = 10))
-```
-
-Table for overall accuracy for children in exposure and test trials based on age group
-```{r}
-# remake cond acc table without trial number
-cond_acc_age_collapsed <- d_keep %>%
+# make table for accuracy by condition and age group
+cond_acc_age <- d_keep_center %>%
   filter(age_category == "child") %>%
   group_by(age_group,
            shift_accuracy,
@@ -437,20 +382,19 @@ cond_acc_age_collapsed <- d_keep %>%
   count(shift_accuracy)
 
 # spread out table
-cond_acc_age_coll_spread <- spread(cond_acc_age_collapsed, key = shift_accuracy, value = n)
+cond_acc_age_spread <- spread(cond_acc_age, key = shift_accuracy, value = n)
 
 # change NAs to 0
-cond_acc_age_coll_spread[is.na(cond_acc_age_coll_spread)] <- 0
+cond_acc_age_spread[is.na(cond_acc_age_spread)] <- 0
 # do NOT run this command when there is a "total" column in the data frame!
 
-#compute proportion correct first shifts and add to df
-cond_acc_age_coll_spread <- cond_acc_age_coll_spread %>%
+# compute proportion correct first shifts and add to df
+cond_acc_age_spread <- cond_acc_age_spread %>%
   mutate(total = correct + incorrect,
          prop_correct = correct / total)
 ```
 
-
-Plot overall accuracy for children in exposure and test trials based on age group
+Plot children's overall accuracy based on age group:
 ```{r}
 ggplot(data = cond_acc_age_coll_spread) +
   geom_bar(mapping = aes(x = age_group,
@@ -462,15 +406,65 @@ ggplot(data = cond_acc_age_coll_spread) +
   scale_y_continuous(limits = c(0, 1)) +
   labs(x = "age group",
        y = "prop correct",
-       title = "First shift accuracy")
+       title = "Children's overall first shift accuracy by age group") +
+  theme_minimal()
+```
+
+Make table for children's accuracy over trials based on age group:
+```{r}
+# remake cond acc age table with trial numbers
+cond_acc_age_trials <- d_keep_center %>%
+  filter(age_category == "child") %>%
+  group_by(gaze_condition, 
+           shift_accuracy, 
+           trial_num_learn_block,
+           trial_type,
+           age_category,
+           age_group) %>%
+  count(shift_accuracy)
+
+# spread out table
+cond_acc_age_trials_spread <- spread(cond_acc_age_trials, 
+                              key = shift_accuracy, 
+                              value = n)
+
+# change NAs to 0
+cond_acc_age_trials_spread[is.na(cond_acc_age_trials_spread)] <- 0
+# do NOT run this command when there is a "total" column in the data frame!
+
+#compute proportion correct first shifts and add to table
+cond_acc_age_trials_spread <- cond_acc_age_trials_spread %>%
+  mutate(total = correct + incorrect,
+         prop_correct = correct / total)
+```
+
+Plot children's accuracy over trials based on age group:
+```{r}
+ggplot(data = cond_acc_age_trials_spread) +
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = prop_correct,
+                          color = gaze_condition)) +
+  facet_grid(age_group ~ trial_type) +
+  geom_hline(yintercept = .5, 
+             linetype = "dotted", 
+             size = 1) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(x = "Trial number", 
+       y = "Proportion correct",
+       title = "Children's first shift accuracy by age group over trials") +
+  theme_minimal() +
+  theme(panel.border = element_rect(colour = "gray", 
+                                    fill = NA, 
+                                    size = 1),
+        text = element_text(size = 10))
 ```
 
 
 ### Order and Accuracy
 
-Add order type column to d_keep
+Add order type column to d_keep_center:
 ```{r}
-d_keep <- mutate(d_keep, 
+d_keep_center <- mutate(d_keep_center, 
                  order_type = 
                    if_else(order_key == "nogaze_gaze_gr_ol" | 
                              order_key == "nogaze_gaze_ol_gr", 
@@ -478,10 +472,10 @@ d_keep <- mutate(d_keep,
                            "gaze_nogaze"))
 ```
 
-Make table for accuracy for children based on order
+Make table for children's overall accuracy based on order:
 ```{r}
-# table for accuracy by order
-cond_acc_order <- d_keep %>%
+# make table for accuracy by condition and order
+cond_acc_order <- d_keep_center %>%
   filter(age_category == "child") %>%
   group_by(gaze_condition, 
            shift_accuracy, 
@@ -498,13 +492,13 @@ cond_acc_order_spread <- spread(cond_acc_order,
 cond_acc_order_spread[is.na(cond_acc_order_spread)] <- 0
 # do NOT run this command when there is a "total" column in the data frame!
 
-#compute proportion correct first shifts and add to df
+#compute proportion correct first shifts and add to table
 cond_acc_order_spread <- cond_acc_order_spread %>%
   mutate(total = correct + incorrect,
          prop_correct = correct / total)
 ```
 
-Plot overall accuracy for children based on order:
+Plot children's overall accuracy based on order:
 ```{r}
 ggplot(data = cond_acc_order_spread) +
   geom_bar(mapping = aes(x = order_type,
@@ -516,7 +510,144 @@ ggplot(data = cond_acc_order_spread) +
   scale_y_continuous(limits = c(0, 1)) +
   labs(x = "order type",
        y = "prop correct",
-       title = "First shift accuracy") +
+       title = "Children's overall first shift accuracy by order type") +
   theme_minimal() +
   theme(text = element_text(size = 10))
+```
+
+Make table for children's accuracy over trials based on order:
+```{r}
+# remake cond acc order table with trial numbers
+cond_acc_order_trials <- d_keep_center %>%
+  filter(age_category == "child") %>%
+  group_by(gaze_condition, 
+           shift_accuracy, 
+           trial_type,
+           order_type,
+           trial_num_learn_block) %>%
+  count(shift_accuracy)
+
+# spread out table
+cond_acc_order_trials_spread <- spread(cond_acc_order_trials, 
+                                key = shift_accuracy, 
+                                value = n)
+
+# change NAs to 0
+cond_acc_order_trials_spread[is.na(cond_acc_order_trials_spread)] <- 0
+# do NOT run this command when there is a "total" column in the data frame!
+
+#compute proportion correct first shifts and add to df
+cond_acc_order_trials_spread <- cond_acc_order_trials_spread %>%
+  mutate(total = correct + incorrect,
+         prop_correct = correct / total)
+```
+
+Plot children's accuracy over trials based on order:
+```{r}
+ggplot(data = cond_acc_order_trials_spread) +
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = prop_correct,
+                          color = gaze_condition)) +
+  facet_grid(order_type ~ trial_type) +
+  geom_hline(yintercept = .5, 
+             linetype = "dotted", 
+             size = 1) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(x = "Trial number", 
+       y = "Proportion correct",
+       title = "Children's first shift accuracy by order type over trials") +
+  theme_minimal() +
+  theme(panel.border = element_rect(colour = "gray", 
+                                    fill = NA, 
+                                    size = 1),
+        text = element_text(size = 10))
+```
+
+
+### Looking to Speaker
+
+Make table for proportion of shifts starting from center:
+```{r}
+# table for shifts by gaze condition
+cond_acc_look_speaker <- d_keep %>%
+  group_by(age_category,
+           gaze_condition,
+           shift_start_location,
+           trial_type) %>%
+  count(shift_start_location)
+# note: took out shift accuracy
+
+# spread out table
+cond_acc_look_speaker_spread <- spread(cond_acc_look_speaker, 
+                                key = shift_start_location, 
+                                value = n)
+
+# change NAs to 0
+cond_acc_look_speaker_spread[is.na(cond_acc_look_speaker_spread)] <- 0
+# do NOT run this command when there is a "total" column in the data frame!
+
+#compute proportion correct first shifts and add to table
+cond_acc_look_speaker_spread <- cond_acc_look_speaker_spread %>%
+  mutate(total = center + not_center,
+         prop_center = center / total)
+```
+
+Plot proportion of shifts starting from center by condition:
+```{r}
+ggplot(data = cond_acc_look_speaker_spread) +
+  geom_bar(mapping = aes(x = gaze_condition,
+                         y = prop_center),
+           stat = "identity",
+           fill = "light blue",
+           position = "dodge") +
+  facet_grid(age_category ~ trial_type) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(x = "gaze condition",
+       y = "prop looking to center",
+       title = "Overall proportion looking to speaker at target noun onset") +
+  theme_minimal() +
+  theme(text = element_text(size = 10))
+```
+
+Make table for proportion of shifts starting from center over trials:
+```{r}
+# table for shifts by gaze condition
+cond_acc_look_speaker_trials <- d_keep %>%
+  group_by(age_category,
+           gaze_condition,
+           shift_start_location,
+           trial_type,
+           trial_num_learn_block) %>%
+  count(shift_start_location)
+# note: took out shift accuracy
+
+# spread out table
+cond_acc_look_speaker_trials_spread <- spread(cond_acc_look_speaker_trials, key = shift_start_location, value = n)
+
+# change NAs to 0
+cond_acc_look_speaker_trials_spread[is.na(cond_acc_look_speaker_trials_spread)] <- 0
+# do NOT run this command when there is a "total" column in the data frame!
+
+#compute proportion correct first shifts and add to table
+cond_acc_look_speaker_trials_spread <- cond_acc_look_speaker_trials_spread %>%
+  mutate(total = center + not_center,
+         prop_center = center / total)
+```
+
+Plot proportion of shifts starting from center by condition over time:
+```{r}
+ggplot(data = cond_acc_look_speaker_trials_spread) +
+  geom_line(mapping = aes(x = trial_num_learn_block,
+                          y = prop_center,
+                          color = gaze_condition)) +
+  facet_grid(age_category ~ trial_type) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(x = "Trial number", 
+       y = "Proportion correct",
+       title = "Proportion looking to speaker at target noun onset over trials") +
+  theme_minimal() +
+  theme(panel.border = element_rect(colour = "gray", 
+                                    fill = NA, 
+                                    size = 1),
+        text = element_text(size = 10))
 ```
