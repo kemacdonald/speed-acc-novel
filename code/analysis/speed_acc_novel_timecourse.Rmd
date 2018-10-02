@@ -174,7 +174,7 @@ ms_time %>%
   scale_color_manual(values = c("darkblue", "red", "darkgreen"))
 ```
 
-### timecourse as a function of order
+### Timecourse as a function of order
 
 ```{r, eval = F}
 ss_order_groups <- list("subid", "time_ms_normalized", "gaze_condition", "trial_type",
@@ -191,7 +191,7 @@ ms_order %>%
   plot_timecourse(facet_type = "order_name~trial_type")
 ```
 
-### timecourse as a function of trial number in the learning block
+### Timecourse as a function of trial number in the learning block
 
 ```{r, eval = F}
 ss_order_lblock <- list("subid", "time_ms_normalized", "gaze_condition", "trial_type",

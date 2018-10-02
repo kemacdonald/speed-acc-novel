@@ -4,6 +4,7 @@ library(knitr); library(pander); library(magrittr); library(forcats);
 library(cowplot); library(rstanarm); library(xtable);
 library(png); library(grid); library(ggthemes)
 library(kableExtra); library(rogme); library(ggridges); library(ggrepel)
+library(feather)
 
 # load tidyverse last, so no functions get masked
 library(tidyverse); 

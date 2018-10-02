@@ -1,5 +1,5 @@
 ---
-title             : "Children integrate social and statistical information to learn new words"
+title             : "Statistical and social information interact to shape visual attention during language comprehension and word learning"
 shorttitle        : "Integrating social and statistical information"
 
 author: 
@@ -8,8 +8,6 @@ author:
     corresponding : yes    # Define only one corresponding author
     address       : "450 Serra Mall, Stanford, CA 94306"
     email         : "kylem4@stanford.edu"
-  - name          : "Virginia Marchman"
-    affiliation   : "1"
   - name          : "Michael C. Frank"
     affiliation   : "1"
 
@@ -20,9 +18,9 @@ affiliation:
 authornote: |
 
 abstract: |
-  Abstract here
+  Children process words in complex contexts that lend themselves to an in principle unlimited number of possible interpretations. How do learners find the correct lexicon? Statistical accounts propose that learning unfolds via the aggregation of consistent word-object co-occurrences over time. Social-pragamatic theories emphasize how grounded interactions with social partners reduces ambiguity during individual labeling events. Here, we present three studies of eye movements during language processing that ask how learners intergrate statistical and social information to shape real-time decisions about visual fixation. First, both children (n=XXX) and adults (n=31) showed similar gaze dynamics when processing familiar words that either did or did not occur with an accompanied social cue to reference (eye gaze). Second, in a minimal cross-situational word learning task, adults (n=XXX) allocated more fixations and showed stronger memory for novel word-object mappings that were learned in the presence of a social cue. Finally, in contrast to the familiar word context, both children (n=XXX) and adults (n=XXX) were slower to look away from a speaker's face when she was likely to provide a gaze cue to disambiguate the meaning of a novel word. This differential looking pattern increased over the course of the experiment, as learners were exposed to more word-object co-occurrences and gained  experience with the speaker. Taken together, these results show that decisions about how to seek visual information during language acquisition are a function of the interaction of statistical and social information.
   
-keywords          : "eye movements; grounded language learning; information-seeking; gaze following"
+keywords          : "eye movements; word learning; language comprehension; information-seeking; gaze following"
 wordcount         : "X"
 bibliography      : ["speed-acc.bib", "r-references.bib"]
 floatsintext      : yes
@@ -88,7 +86,7 @@ d_fam <- bind_rows(d_fam_child, d_fam_adult)
 
 ## Results and Discussion
 
-# Experiment 2A
+# Experiment 2
 
 ```{r read_gaze_xsit_data}
 d_gz_xsit <- read_csv(here::here(data_path, "novel_words/gaze_xsit_tidy_trial_level.csv"))
@@ -105,10 +103,25 @@ d_gz_xsit_tc <- read_csv(here::here(data_path, "novel_words/gaze_xsit_tidy_timec
 
 ## Results and Discussion
 
-# Experiment 2B
+# Experiment 3
 
 ```{r read_speed_novel_data}
-d_novel <- 
+d_novel_fs <- read_csv(here::here(data_path, "novel_words/speed_acc_novel_shifts.csv")) %>% 
+  mutate(learn_block_half = ifelse(trial_num_learn_block <= 2, "first", "second"),
+         trial_num_lblock_8 = case_when(
+           trial_type == "exposure" & trial_num_learn_block == 1 ~ "1",
+           trial_type == "test" & trial_num_learn_block == 1 ~ "2",
+           trial_type == "exposure" & trial_num_learn_block == 2 ~ "3",
+           trial_type == "test" & trial_num_learn_block == 2 ~ "4",
+           trial_type == "exposure" & trial_num_learn_block == 3 ~ "5",
+           trial_type == "test" & trial_num_learn_block == 3 ~ "6",
+           trial_type == "exposure" & trial_num_learn_block == 4 ~ "7",
+           trial_type == "test" & trial_num_learn_block == 4 ~ "8",
+           TRUE ~ "NA"
+         ),
+         correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE))
+
+d_novel_tc <- read_feather(here::here(data_path, "novel_words/speed_acc_novel_timecourse.feather")) 
 ```
 
 ## Methods
@@ -120,7 +133,6 @@ d_novel <-
 ### Procedure
 
 ## Results and Discussion
-
 
 # General Discussion
 
