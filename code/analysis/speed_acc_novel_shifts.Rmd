@@ -1,0 +1,396 @@
+---
+title: "Speed-Acc-Novel Shifts Analysis"
+output: html_document
+---
+
+## Set up
+
+```{r chunk_options, echo = F}
+# set some global options
+knitr::opts_chunk$set(warning=F, message=F, sanitize = T, echo=T, cache = F)
+```
+
+Libraries and data paths
+```{r}
+library(here)
+library(tidyverse)
+library(knitr)
+library(lme4)
+# source(here::here("code/helper_functions/libraries_and_functions.R"))
+data_path <- "data/03_processed_data/"
+theme_set(ggthemes::theme_base())
+```
+
+Read in data
+```{r}
+d <- read_csv(here::here(data_path, "speed_acc_novel_shifts.csv")) %>% 
+  mutate(learn_block_half = ifelse(trial_num_learn_block <= 2, "first", "second"),
+         trial_num_lblock_8 = case_when(
+           trial_type == "exposure" & trial_num_learn_block == 1 ~ "1",
+           trial_type == "test" & trial_num_learn_block == 1 ~ "2",
+           trial_type == "exposure" & trial_num_learn_block == 2 ~ "3",
+           trial_type == "test" & trial_num_learn_block == 2 ~ "4",
+           trial_type == "exposure" & trial_num_learn_block == 3 ~ "5",
+           trial_type == "test" & trial_num_learn_block == 3 ~ "6",
+           trial_type == "exposure" & trial_num_learn_block == 4 ~ "7",
+           trial_type == "test" & trial_num_learn_block == 4 ~ "8",
+           TRUE ~ "NA"
+         ),
+         correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE))
+```
+
+## Check the data
+
+Number of unique participants
+
+```{r}
+d$subid %>% unique() %>%length()
+```
+
+Group by demographics
+
+```{r}
+d_by_subject <- d %>%
+  group_by(subid, gender, ethnicity_race, order_key, keep_drop, 
+           reason_excluded, age, age_category, age_group) %>%
+  summarise()
+```
+
+Adults vs. children and gender breakdown. 
+
+```{r}
+d_by_subject %>%
+  filter(keep_drop == "keep") %>% 
+  group_by(age_category, gender) %>%
+  count(age_category)
+```
+
+Count the number of participants who are kept and dropped
+
+```{r}
+d_by_subject %>%
+  group_by(keep_drop) %>%
+  count(keep_drop)
+```
+
+Make exclusions table
+
+```{r}
+d_by_subject %>%
+  group_by(reason_excluded) %>%
+  count(reason_excluded, sort = T) %>% 
+  na.omit() %>% 
+  kable()
+```
+
+Count trials per gaze condition
+
+```{r}
+d %>%
+  group_by(gaze_condition) %>%
+  count(gaze_condition)
+```
+
+## Filter data
+
+Remove shifts that do not start at center. Remove participants based on keep_drop, and extreme RTs. Take out word blocks for reasons explained in subject log or if there is data for less than 50% of word block:
+
+```{r}
+d_keep <- d %>%
+  filter(is.na(block_excluded) | 
+           block_excluded != learning_block, 
+         shift_start_location == "center") %>%
+  group_by(subid, learning_block) %>%
+  mutate(n_trials = n()) %>% 
+  filter(n_trials >= 4,
+         rt > 0,
+         keep_drop == "keep", 
+         shift_start_location == "center") %>% 
+  ungroup()
+```
+
+Count number of trials after filtering
+
+```{r}
+d_keep %>% count(subid, gaze_condition, trial_type, trial_num_learn_block)
+```
+
+Filter extreme RTs
+
+```{r}
+m_rt <- log(d_keep$rt) %>% mean()
+sd_rt <- log(d_keep$rt) %>% sd()
+
+d_keep <- d_keep %>% 
+  mutate(log_rt = log(rt),
+         keep_rt = case_when(
+           log_rt <= m_rt + 3*sd_rt & log_rt >= m_rt - 3*sd_rt ~ "keep",
+           TRUE ~ "drop"
+         ))
+```
+
+How many trials get filtered for extreme RTs?
+
+```{r}
+d_keep %>% ungroup %>% count(keep_rt)
+```
+
+## RT analysis
+
+For both children and adults, plot RT as a function of trial number, trial type, and gaze condition.
+
+```{r make key RT plot}
+ss_rt <- d_keep %>%
+  filter(!is.na(rt), keep_rt == "keep") %>%
+  group_by(subid, 
+           age_category,
+           gaze_condition, 
+           trial_type, 
+           trial_num_learn_block) %>%
+  summarise(m_ss = mean(rt), n_trials = n()) 
+
+ms_rt <- ss_rt %>%
+  group_by(age_category,
+           gaze_condition, 
+           trial_type, 
+           trial_num_learn_block) %>%
+  tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
+
+ms_rt %>% 
+  ungroup() %>% 
+  mutate(age_category = factor(age_category, levels = c("child", "adult"))) %>% 
+  ggplot(mapping = aes(x = trial_num_learn_block,
+                       y = mean,
+                       color = gaze_condition, 
+                       group = interaction(gaze_condition))) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2)) +
+  lims(y = c(0, 2.5)) +
+  facet_grid(age_category ~ trial_type) +
+  labs(x = "trial number", 
+       y = "mean RT (sec)",
+       title = "First shift reaction time") +
+  theme_minimal() +
+  theme(text = element_text(size = 14), 
+        panel.border = element_rect(size = 1, color = "grey", fill = NA),
+        legend.position = "top")
+```
+
+### Collapse across first/second half of word block
+
+```{r make key RT plot}
+ss_rt <- d_keep %>%
+  filter(!is.na(rt), keep_rt == "keep") %>%
+  group_by(subid, 
+           age_category,
+           gaze_condition, 
+           trial_type, 
+           learn_block_half,
+           age) %>%
+  summarise(m_ss = mean(rt), n_trials = n()) 
+
+ms_rt <- ss_rt %>%
+  group_by(age_category,
+           gaze_condition, 
+           trial_type, 
+           learn_block_half) %>%
+  tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
+
+ms_rt %>% 
+  ungroup() %>% 
+  mutate(age_category = factor(age_category, levels = c("child", "adult"))) %>% 
+  ggplot(mapping = aes(x = learn_block_half,
+                       y = mean,
+                       color = gaze_condition, 
+                       group = interaction(gaze_condition))) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2)) +
+  lims(y = c(0, 2)) +
+  facet_grid(age_category ~ trial_type) +
+  labs(x = "trial number", 
+       y = "mean RT (sec)",
+       title = "First shift reaction time") +
+  theme_minimal() +
+  theme(text = element_text(size = 14), 
+        panel.border = element_rect(size = 1, color = "grey", fill = NA),
+        legend.position = "top")
+```
+
+### Plot RT over all 8 trials in learning block
+
+```{r}
+ss_rt <- d_keep %>%
+  ungroup() %>% 
+  filter(!is.na(rt), keep_rt == "keep") %>%
+  group_by(subid, 
+           age_category,
+           gaze_condition, 
+           trial_num_lblock_8) %>%
+  summarise(m_ss = mean(rt), n_trials = n()) 
+
+ms_rt <- ss_rt %>%
+  group_by(age_category,
+           gaze_condition, 
+           trial_num_lblock_8) %>%
+  tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
+
+ms_rt %>% 
+  ungroup() %>% 
+  mutate(age_category = factor(age_category, levels = c("child", "adult"))) %>% 
+  ggplot(mapping = aes(x = trial_num_lblock_8,
+                       y = mean,
+                       color = gaze_condition, 
+                       group = interaction(gaze_condition))) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2)) +
+  lims(y = c(0, 2)) +
+  facet_grid(~age_category) +
+  labs(x = "trial number", 
+       y = "mean RT (sec)",
+       title = "First shift reaction time") +
+  theme_minimal() +
+  theme(text = element_text(size = 14), 
+        panel.border = element_rect(size = 1, color = "grey", fill = NA),
+        legend.position = "top")
+```
+
+### Continuous age analyses
+
+```{r}
+d_keep %>% 
+  filter(age_category == "child") %>% 
+  group_by(subid, age, gaze_condition, trial_type) %>% 
+  summarise(m_ss = mean(rt)) %>% 
+  ggplot(aes(x = age, y = m_ss, color = gaze_condition)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = F, size = 1.5) +
+  facet_grid(~trial_type) +
+  ggthemes::scale_color_ptol()
+``` 
+
+### Accuracy
+
+### Make key First Shift Accuracy plot. 
+
+```{r}
+ss_acc <- d_keep %>% 
+  filter(keep_rt == "keep") %>% 
+  group_by(subid, gaze_condition, trial_num_learn_block, age_category, trial_type) %>% 
+  summarise(m_ss = mean(correct_bool), n_trials = n())  
+
+ms_acc <- ss_acc %>% 
+  group_by(gaze_condition, trial_type, trial_num_learn_block, age_category) %>% 
+  tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
+
+ggplot(data = ms_acc,
+       mapping = aes(x = trial_num_learn_block,
+                     y = mean,
+                     color = gaze_condition, 
+                     group = interaction(gaze_condition))) +
+  geom_hline(yintercept = 0.5, lty = "dashed") +
+  geom_line(position = position_dodge(width = 0.2)) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  position = position_dodge(width = 0.2)) +
+  scale_y_continuous(limits = c(0, 1.05)) +
+  facet_grid(age_category ~ trial_type) +
+  labs(x = "trial number", 
+       y = "proportion correct",
+       title = "First shift accuracy") +
+  theme_minimal() +
+  theme(text = element_text(size = 14), 
+        panel.border = element_rect(size = 1, color = "grey", fill = NA),
+        legend.position = "top")
+```
+
+### Summarise accuracy collapsing across blocks 
+
+```{r}
+ss_acc_half <- d_keep %>% 
+  filter(keep_rt == "keep") %>% 
+  mutate(correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE)) %>% 
+  group_by(subid, gaze_condition, learn_block_half, age_category, trial_type) %>% 
+  summarise(m_ss = mean(correct_bool), n_trials = n())  
+  
+ms_acc_half <- ss_acc_half %>% 
+  group_by(gaze_condition, trial_type, learn_block_half, age_category) %>% 
+  tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
+
+ggplot(data = ms_acc_half,
+       mapping = aes(x = learn_block_half,
+                     y = mean,
+                     color = gaze_condition, 
+                     group = interaction(gaze_condition))) +
+  geom_hline(yintercept = 0.5, lty = "dashed") +
+  geom_line(position = position_dodge(width = 0.2)) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  position = position_dodge(width = 0.2)) +
+  scale_y_continuous(limits = c(0, 1.05)) +
+  facet_grid(age_category ~ trial_type) +
+  labs(x = "half of learning block", 
+       y = "proportion correct",
+       title = "First shift accuracy") +
+  theme_minimal() +
+  theme(text = element_text(size = 14), 
+        panel.border = element_rect(size = 1, color = "grey", fill = NA),
+        legend.position = "top")
+```
+
+### Summarise accuracy collapsing across time
+
+```{r}
+ss_acc_cond <- d_keep %>% 
+  filter(keep_rt == "keep") %>% 
+  group_by(subid, gaze_condition, age_category, trial_type) %>% 
+  summarise(m_ss = mean(correct_bool), n_trials = n())  
+
+ms_acc_cond <- ss_acc_half %>% 
+  group_by(gaze_condition, trial_type, age_category) %>% 
+  tidyboot::tidyboot_mean(column = m_ss, nboot = 1000)
+
+ggplot(data = ms_acc_cond,
+       mapping = aes(x = fct_rev(age_category),
+                     y = mean,
+                     color = gaze_condition, 
+                     group = interaction(gaze_condition))) +
+  geom_hline(yintercept = 0.5, lty = "dashed") +
+  geom_line(position = position_dodge(width = 0.2)) +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  position = position_dodge(width = 0.2)) +
+  scale_y_continuous(limits = c(0, 1.05)) +
+  facet_grid(~ trial_type) +
+  labs(x = "age group", 
+       y = "proportion correct",
+       title = "First shift accuracy") +
+  theme_minimal() +
+  theme(text = element_text(size = 14), 
+        panel.border = element_rect(size = 1, color = "grey", fill = NA),
+        legend.position = "top")
+```
+### Models
+
+First shift Acc.
+
+```{r}
+m1 <- d_keep %>% 
+  filter(keep_rt == "keep") %>% 
+  glmer(data = ., 
+        correct_bool ~ gaze_condition * trial_type + age_category + (gaze_condition|subid),
+        family = 'binomial')
+
+summary(m1)
+```
+
+First shift RT
+
+```{r}
+m2 <- d_keep %>% 
+  filter(keep_rt == "keep") %>% 
+  lmer(data = ., 
+     log(rt) ~ gaze_condition * trial_type + age_category + (gaze_condition|subid) + (trial_type|subid)
+     )
+
+summary(m2)
+```
