@@ -11,7 +11,7 @@ knitr::opts_chunk$set(warning=F, message=F, sanitize = T, echo=T, cache = F)
 
 ```{r}
 source(here::here("code/helper_functions/libraries_and_functions.R"))
-data_path <- "data/03_processed_data/"
+data_path <- "data/03_processed_data/novel_words"
 theme_set(ggthemes::theme_base())
 ```
 

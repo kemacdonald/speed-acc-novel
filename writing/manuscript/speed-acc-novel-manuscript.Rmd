@@ -1,0 +1,144 @@
+---
+title             : "Children integrate social and statistical information to learn new words"
+shorttitle        : "Integrating social and statistical information"
+
+author: 
+  - name          : "Kyle MacDonald"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "450 Serra Mall, Stanford, CA 94306"
+    email         : "kylem4@stanford.edu"
+  - name          : "Virginia Marchman"
+    affiliation   : "1"
+  - name          : "Michael C. Frank"
+    affiliation   : "1"
+
+affiliation:
+  - id            : "1"
+    institution   : "Stanford University"
+
+authornote: |
+
+abstract: |
+  Abstract here
+  
+keywords          : "eye movements; grounded language learning; information-seeking; gaze following"
+wordcount         : "X"
+bibliography      : ["speed-acc.bib", "r-references.bib"]
+floatsintext      : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : no
+mask              : no
+draft             : no
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r load_packages, include = FALSE}
+source(here::here("code/helper_functions/paper_helpers.R"))
+bib <- knitcitations::read.bibtex(here::here("writing/manuscript/speed-acc.bib"))
+```
+
+```{r analysis_preferences}
+knitr::opts_chunk$set(fig.pos = '!t', fig.width = 6, fig.asp=0.8, out.width = "90%", 
+                      cache = T, fig.path='figs/', fig.align = 'center',
+                      echo=F, warning=F, cache=T, 
+                      message=F, sanitize = T)
+```
+
+```{r data_paths}
+demo_path <- "data/01_participant_logs/"
+data_path <- "data/03_processed_data/"
+image_path <- "writing/manuscript/figures/figs_output/"
+```
+
+# Introduction
+
+# Experiment 1
+
+```{r read_familiar_words_data}
+d_fam_child <- read_csv(here::here(data_path, "familiar_words/speed_acc_child_gaze_fstshift_tidy.csv")) %>% 
+  rename(age_days = age) %>% 
+  mutate(age_group = as.character(age_group))
+
+d_fam_adult <- read_csv(here::here(data_path, "familiar_words/speed_acc_adult_ng_fstshift_tidy.csv")) %>% 
+  filter(noise_condition == "clear") %>% 
+  rename(run_date = dot,
+         comments = notes) %>% 
+  select(-age, -resp_onset_type_fact, -reason_excluded) %>% 
+  mutate(birthday = NA,
+         age_group = "adult", 
+         age_days = NA,
+         run_date = lubridate::as_datetime(run_date))
+
+# clean up and join kid and adult data
+d_fam <- bind_rows(d_fam_child, d_fam_adult)
+```
+
+## Methods
+
+### Participants
+
+### Materials
+
+### Procedure
+
+## Results and Discussion
+
+# Experiment 2A
+
+```{r read_gaze_xsit_data}
+d_gz_xsit <- read_csv(here::here(data_path, "novel_words/gaze_xsit_tidy_trial_level.csv"))
+d_gz_xsit_tc <- read_csv(here::here(data_path, "novel_words/gaze_xsit_tidy_timecourse.csv"))
+```
+
+## Methods
+
+### Participants
+
+### Materials
+
+### Procedure
+
+## Results and Discussion
+
+# Experiment 2B
+
+```{r read_speed_novel_data}
+d_novel <- 
+```
+
+## Methods
+
+### Participants
+
+### Materials
+
+### Procedure
+
+## Results and Discussion
+
+
+# General Discussion
+
+\newpage
+
+# References
+
+```{r create_r-references}
+#r_refs(file = here::here("writing/r-references.bib"))
+my_citations <- cite_r(file = here::here("writing/manuscript/r-references.bib"), 
+                       pkgs = c("tidyverse", "rstanarm", "papaja", "here", "knitr"), 
+                       withhold = FALSE,
+                       footnote = TRUE)
+```
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup

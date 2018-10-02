@@ -14,6 +14,8 @@ experiments/
 *.icloud
 .httr-oauth
 
+*.feather
+
 *.tmp
 # Word temporary
 ~$*.doc*

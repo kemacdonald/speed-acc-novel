@@ -1,16 +1,26 @@
 # load libraries
+library(papaja); library(here); library(lme4); library(directlabels); library(lazyeval)
 library(knitr); library(pander); library(magrittr); library(forcats); 
 library(cowplot); library(rstanarm); library(xtable);
 library(png); library(grid); library(ggthemes)
+library(kableExtra); library(rogme); library(ggridges); library(ggrepel)
 
 # load tidyverse last, so no functions get masked
 library(tidyverse); 
 
 # set ggplot theme
-theme_set(
-  ggthemes::theme_few() +
-    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-)
+theme_set(theme_minimal() + 
+            theme(panel.border = element_rect(fill = NA, color = "grey", size = 1),
+                  panel.grid.major = element_blank(), 
+                  panel.grid.minor = element_blank(),
+                  legend.position = "top",
+                  legend.text = element_text(size = 9),
+                  legend.title = element_text(size = 10),
+                  strip.text = element_text(size = 12),
+                  axis.text = element_text(size = 12),
+                  axis.title = element_text(size = 12)
+                  )
+          )
 
 
 # make function to convert logit back to probability 
