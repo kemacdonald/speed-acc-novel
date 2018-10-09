@@ -1,0 +1,254 @@
+---
+title: "Gaze-Xsit Visualizations"
+output: html_document
+---
+
+# Set up
+
+```{r set up}
+source(here::here("code/helper_functions/libraries_and_functions.R"))
+source(here::here("code/helper_functions/permutation_helpers.R"))
+source(here::here("code/helper_functions/ewma_helper_funs.R"))
+source(here::here("code/helper_functions/paper_helpers.R"))
+
+data_path <- "data/03_processed_data/novel_words"
+image_path <- "writing/figures/plots"
+```
+
+This code munges and analyzes the data for a project exploring the association between allocation of attention and cross-situational word learning in more or less ambiguous contexts.
+
+Read data.
+
+```{r read-data}
+d <- read_csv(here::here(data_path, "gaze_xsit_tidy_trial_level.csv"))
+d_time <- read_csv(here::here(data_path, "gaze_xsit_tidy_timecourse.csv"))
+```
+
+# Descriptives 
+
+Number of participants in each condition 
+
+```{r}
+d %>% 
+  select(subid, condition) %>% 
+  unique() %>% 
+  group_by(condition) %>% 
+  summarise(n_subs = n()) %>% 
+  kable()
+```
+
+# Paper figures 
+
+## Proportion looking plot
+
+Plot proportion correct and incorrect looking on exposure trials (looking at the object that will show up again at test) for each ss for each trial. We will use this to predict correct looking at test. 
+
+```{r}
+exposure_plot <- d %>% 
+  distinct(subid, trial_num, trial_type, .keep_all = T) %>% 
+  filter(trial_type == "exposure") %>% 
+  ggplot(aes(x = m_correct, color = condition)) +
+  geom_histogram(binwidth = 0.05, fill = "grey") +
+  guides(color=F) +
+  xlab("Prop. Looking") +
+  ylab("Count") +
+  facet_wrap(~condition, ncol = 1) +
+  langcog::scale_color_solarized() 
+```
+
+The distribution of correct looking is bimodal for the gaze condition and unimodal for the no-gaze condition. This makes sense and provides evidence that people were following gaze, and that they were distributing attention more broadly in the no-gaze condition. 
+
+Next we want to do a sanity check, that is, we want to make sure people were actually following gaze in the gaze condition.
+
+## Gaze following plot
+
+```{r exposure summary table}
+gf_mean <- d %>% 
+  filter(trial_type == "exposure", condition == "gaze") %>% 
+  ungroup() %>% 
+  summarise(m = mean(m_gaze_follow, na.rm = T)) %>% 
+  pull()
+
+gaze_following_plot <- d %>% 
+  filter(trial_type == "exposure", condition == "gaze") %>% 
+  ggplot(aes(x=m_gaze_follow)) +
+  geom_histogram(fill = "grey", color = "black", binwidth = 0.05) +
+  xlab("Prop. Looking to Gaze Target") +
+  ylab("Number of Trials") +
+  geom_vline(xintercept = gf_mean, 
+             color = "orange", 
+             linetype = "dashed", 
+             size = 1) +
+  theme(text = element_text(size=12))
+```
+
+Proportion gaze following on exposure trials in the gaze condition is around a mean of 80%. And the distribution is skewed towards 1, meaning people followed gaze.
+
+## Relationship between looking on exposure and test performance
+
+Create continuous accuracy scores and filter trials where there were fewer than 8 timeslices or 250ms of fixating on either exposure or test.  
+
+```{r}
+ss_test <- d_time %>% 
+  filter(trial.type != "familiar", 
+         ss_looking_char %in% c("left", "right")) %>%
+  group_by(subid, condition, trial_num = as.numeric(trial_num), trial.type) %>% 
+  summarise(n = n(),
+            mean_accuracy = mean(correct)) %>% 
+  select(-n) %>% 
+  spread(trial.type, mean_accuracy)
+```
+
+```{r}
+# plot the relation between acc on exposure and acc on test
+test_plot <- ss_test %>% 
+  ggplot(aes(x = exposure, y = test, color = condition)) +
+  geom_point(alpha = 0.25) + 
+  lims(x = c(-.02, 1.02)) +
+  geom_smooth(method = "lm", se = T, size = 2) +
+  langcog::scale_color_solarized() +
+  geom_hline(yintercept = 0.5, lty = "dashed") +
+  labs(y = "Prop. Looking Test", 
+       x = "Prop. Looking Exposure",
+       color = "Gaze Condition") +
+  theme(legend.position = "right")
+```
+
+Put the key plots together
+
+```{r}
+prop_looking_plot <- cowplot::plot_grid(gaze_following_plot, test_plot,
+                                        scale = c(0.85, 0.85),
+                                        rel_widths = c(1, 1.6), 
+                                        labels = c("A", "B"))
+
+ggsave(here::here(image_path, "gaze_xsit_prop_looking.jpeg"),
+       plot = prop_looking_plot,
+       width = 8,
+       height = 3.5)
+```
+
+## Timecourse plot
+
+```{r}
+d.filt <- d_time %>% 
+  filter(t.stim >= 0, t.stim <= 4,
+         trial_num != "fam", trial.type != "familiar",
+         ss_looking_char %in% c("left", "right", "face"))
+```
+
+First, we generate curves that represent center, target, and distractor looking over time
+
+Summarize data for each ROI for each participant and each time slice.
+
+```{r}
+# get count of looking to each picture
+ss <- d.filt %>% 
+  group_by(subid, t.stim, condition, correct_char, trial.type) %>% 
+  summarise(count_looks = n()) 
+
+# complete the cases 
+# this takes care of when there was no looking to one of the images
+ss %<>% 
+  ungroup() %>% 
+  complete(subid, t.stim, correct_char, trial.type,
+           fill = list(count_looks = 0)) %>%
+  arrange(subid)
+
+# get the total number of time slices for each trial and
+ss %<>% 
+  group_by(subid, t.stim, trial.type) %>% 
+  mutate(total_looks = sum(count_looks)) %>% 
+  filter(total_looks > 0) # remove trials without any looking data
+
+# get proportion looking to face and objects during each trial
+ss %<>% mutate(prop_looking = round(count_looks / total_looks, 2))
+```
+
+Get means and CIs for proportion looking at each time slice across particpants
+
+```{r}
+ms.means.timeslice <- ss %>% 
+  filter(is.na(condition) == F) %>% 
+  group_by(t.stim, condition, correct_char, trial.type) %>% 
+  summarise(mean = mean(prop_looking, na.rm = T))
+```
+
+Now make the Tanenhaus style curves for each type of looking.  
+
+```{r make plots}
+upper_bound <- 2.5
+x_axis_expand <- 1.5
+
+# face
+gaze_xsit_face <- ms.means.timeslice %>% 
+  mutate(correct_fact = factor(correct_char, levels = c("face", "distracter", "target"))) %>% 
+  filter(t.stim <= upper_bound, correct_char == "face") %>% 
+  ggplot(aes(x = as.numeric(t.stim), y = mean, 
+             color = condition,
+             linetype = condition)) + 
+  ylim(0,0.75) +
+  xlim(0, upper_bound + x_axis_expand) +
+  geom_line(size=1) +
+  guides(color = F, linetype = F) +
+  ggthemes::scale_color_ptol() +
+  xlab("Time in sec from onset of trial") +
+  ylab("Proportion looking") +
+  geom_dl(aes(label = condition), method = "last.bumpup") +
+  theme(legend.position = "top") +
+  facet_grid(correct_fact~trial.type)
+
+# exposure trials target and distracter
+gaze_xsit_exposure <- ms.means.timeslice %>% 
+  mutate(correct_fact = factor(correct_char, levels = c("face", "distracter", "target"))) %>% 
+  filter(t.stim <= upper_bound, correct_char != "face", trial.type == "exposure") %>% 
+  ggplot(aes(x = as.numeric(t.stim), y = mean, 
+             color = condition,
+             linetype = condition)) + 
+  ylim(0, 0.75) +
+  xlim(0, upper_bound + x_axis_expand) +
+  geom_line(size=1) +
+  guides(linetype = F, color = F) +
+  ggthemes::scale_color_ptol() +
+  geom_hline(yintercept = 0.33, linetype = "dashed") +
+  xlab("Time in sec from onset of trial") +
+  ylab("Proportion looking") +
+  geom_dl(aes(label = condition), method = "last.bumpup") +
+  theme(legend.position = "top") +
+  facet_grid(correct_char~trial.type)
+
+# test trials target and distracter
+gaze_xsit_test <- ms.means.timeslice %>% 
+  mutate(correct_fact = factor(correct_char, levels = c("face", "distracter", "target"))) %>% 
+  filter(t.stim <= upper_bound, correct_char != "face", trial.type == "test") %>% 
+  ggplot(aes(x = as.numeric(t.stim), y = mean, 
+             color = condition,
+             linetype = correct_char)) + 
+  ylim(0, 0.75) +
+  xlim(0, upper_bound + x_axis_expand) +
+  geom_line(size=1) +
+  guides(linetype = F) +
+  ggthemes::scale_color_ptol() +
+  geom_hline(yintercept = 0.33, linetype = "dashed") +
+  xlab("Time in sec from onset of trial") +
+  ylab("Proportion looking") +
+  geom_dl(aes(label = correct_char), method = "last.bumpup", color = "grey20") +
+  theme(legend.position = "right") +
+  facet_grid(~trial.type)
+```
+
+Merge and save the final timecourse plot
+
+```{r}
+gaze_xsit_tc_final <- cowplot::plot_grid(gaze_xsit_face, gaze_xsit_exposure, gaze_xsit_test,
+                                         scale = c(0.9, 0.95, 0.8),
+                                         ncol = 3,
+                                         rel_widths = c(1.45, 0.9, 1.3), 
+                                         labels = c("A", "B"))
+
+
+ggsave(here::here(image_path, "gaze_xsit_tc.jpeg"),
+       plot = gaze_xsit_tc_final,
+       width = 12,
+       height = 4)
+```

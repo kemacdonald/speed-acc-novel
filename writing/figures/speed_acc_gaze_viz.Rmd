@@ -1,0 +1,354 @@
+---
+title: "Speed-Acc-Gaze Visualizations"
+output: html_document
+---
+
+# Set up
+
+```{r set up}
+source(here::here("code/helper_functions/libraries_and_functions.R"))
+source(here::here("code/helper_functions/permutation_helpers.R"))
+source(here::here("code/helper_functions/ewma_helper_funs.R"))
+source(here::here("code/helper_functions/paper_helpers.R"))
+
+data_path <- "data/03_processed_data/familiar_words"
+image_path <- "writing/figures/plots"
+nboot <- 1000 # number of bootstrap samples to take when making CIs for timecourse plots
+pt_size <- 3
+pt_alpha <- 0.5
+pt_shape <- 21
+pt_width <- 0.15
+pt_color <- "black"
+pt_fill <- "darkgrey"
+```
+
+## Read timecourse data
+
+```{r read timecourse data}
+d_timecourse_adults <- read_csv(here::here(data_path, 
+                                           "speed_acc_adult_ng_timecourse_tidy.csv.gz")) %>%
+  mutate(age_code = "adults")
+
+d_timecourse_kids <- read_csv(here::here(data_path, 
+                                         "speed_acc_child_gaze_timecourse_tidy.csv.gz")) %>%
+  mutate(age_code = "children")
+
+d_tc <- bind_rows(d_timecourse_adults, d_timecourse_kids)
+```
+
+## Read first shifts data
+
+```{r read_familiar_words_data}
+d_fam_child <- read_csv(here::here(data_path, "speed_acc_child_gaze_fstshift_tidy.csv")) %>% 
+  rename(age_days = age) %>% 
+  mutate(age_group = as.character(age_group),
+         age_category = "children")
+
+d_fam_adult <- read_csv(here::here(data_path, "speed_acc_adult_ng_fstshift_tidy.csv")) %>% 
+  filter(noise_condition == "clear") %>% 
+  rename(run_date = dot,
+         comments = notes) %>% 
+  select(-age, -resp_onset_type_fact, -reason_excluded) %>% 
+  mutate(birthday = NA,
+         age_days = NA,
+         run_date = lubridate::as_datetime(run_date),
+         age_category = "adults")
+
+# clean up and join kid and adult data
+d_fam_fst <- bind_rows(d_fam_child, d_fam_adult)
+```
+
+# Timecourse
+
+Select plotting window and downsample the t.rel.noun time bins based on the sampling rate of the tracker. 
+
+```{r}
+samp_rate <- 30
+
+d_time_filt <- d_tc %>% 
+  filter(t.stim > 0, t.stim <= 9) %>% 
+  filter(t.rel.noun >= 0, t.rel.noun <= 2.5,
+         noise_condition %in% c("clear", "no_noise"))
+
+d_time_filt %<>% mutate(t.rel.noun = round(t.rel.noun * samp_rate) / samp_rate)
+```
+
+Summarise proportion looking at the participant level.
+
+```{r}
+# get number of trials looking at each gaze target for each time slice
+ss.d <- d_time_filt %>% 
+  group_by(subid, t.rel.noun, gaze_condition, age_code) %>% 
+  summarise(count = n()) %>% 
+  ungroup() %>% 
+  complete(nesting(subid, t.rel.noun, age_code), gaze_condition,
+           fill = list(count = 0)) %>% 
+  mutate(subid = as.character(subid))
+
+# get proportion looking by dividing the freq looking at each target by the total looking 
+# derived in step 1 of this chunk
+ss.d <- as.data.frame(xtabs(~ subid + t.rel.noun + target_looking + gaze_condition + age_code, 
+                            data = d_time_filt),
+                      stringsAsFactors = F) %>% 
+  mutate(t.rel.noun = as.numeric(t.rel.noun)) %>% 
+  left_join(x = ss.d, y = ., by = c("subid", "t.rel.noun", "gaze_condition", "age_code")) %>% 
+  mutate(proportion_looking = Freq / count)
+```
+
+Summarise at the age group and condition level by computing means and bootsrapped CIs for each timepoint.
+
+```{r, eval = F}
+ms_mean_iChart <- ss.d %>% 
+  group_by(t.rel.noun, gaze_condition, target_looking, age_code) %>% 
+  langcog::multi_boot_standard(col = "proportion_looking", na.rm = T, nboot = nboot) %>% 
+  filter(is.na(gaze_condition) == F) 
+
+write_csv(x = ms_mean_iChart, 
+          path = here::here("writing/figures/graph_values/gaze_timecourse_graph_vals.csv"))
+```
+
+Make the timecourse plot.
+
+```{r}
+gaze_time_gvs <- read_csv(here::here("writing/figures/graph_values/gaze_timecourse_graph_vals.csv"))
+
+upper_bound <- 2.25
+xlim_expand <- .25
+
+gaze_time_gvs %<>% 
+  filter(t.rel.noun <= upper_bound, !(is.na(mean))) %>% 
+  mutate(age_code = fct_relevel(age_code, "children", "adults"))
+
+gaze_timecourse_plot <- ggplot(aes(x = as.numeric(t.rel.noun), 
+                                    y = mean, 
+                                    color = gaze_condition,
+                                    linetype = target_looking), 
+                                data = gaze_time_gvs) + 
+  geom_line(size = 1) +
+  geom_linerange(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.5) +
+  xlab("Time from noun onset (sec)") +
+  ylab("Proportion looking") +
+  scale_color_brewer(palette="Dark2") +
+  guides(linetype = F) +
+  facet_wrap(~age_code, ncol = 2) +
+  geom_text_repel(
+    data = filter(gaze_time_gvs, t.rel.noun == max(t.rel.noun), 
+                  gaze_condition == "gaze"),
+    aes(label = target_looking),
+    color = "grey40",
+    size = 4,
+    nudge_x = .1,
+    segment.color = NA
+  ) +
+  lims(x = c(0, upper_bound + xlim_expand), 
+       y = c(0,1)) 
+
+gaze_timecourse_plot
+```
+
+# First shift RT and Accuracy
+
+```{r filter gaze experiment}
+d_fst <- d_fam_fst %>% 
+  filter(keep_runsheet %in% c("yes", "keep"), 
+         keep_et == "include") %>% 
+  filter(rt <= 2,
+         response_onset_type == "noun",
+         shift_start_location == "center") %>% 
+  mutate(shift_acc_num = ifelse(shift_accuracy_clean == "correct", 1, 0),
+         log_rt = log(rt))
+```
+
+Aggregate for accuracy and RT
+
+```{r}
+ss <- d_fst %>% 
+  mutate(correct_num = ifelse(shift_accuracy == "correct", 1, 0)) %>% 
+  group_by(gaze_condition, subid, age_category) %>% 
+  summarise(m_rt = median(rt),
+            se_rt = sd(rt, na.rm = T) / sqrt(n()),
+            m_acc = mean(correct_num),
+            se_acc = sd(correct_num, na.rm = T) / sqrt(n()),
+            n = n()) %>% 
+  filter(n > 4)
+```
+
+### Make within-subjects scatterplot for RT.
+
+RT within-ss scatter.
+
+```{r within-ss-rt}
+means <- ss %>% 
+  select(gaze_condition, age_category, subid, m_rt) %>%
+  spread(key=gaze_condition, value=m_rt, sep = "_m_")
+
+ses <- ss %>% 
+  select(gaze_condition, age_category, subid, se_rt) %>%
+  spread(key=gaze_condition, value= se_rt, sep = "_SE_")
+
+sums <- left_join(means, ses) %>% 
+  mutate(slower_cond = ifelse(gaze_condition_m_gaze > gaze_condition_m_straight_ahead, 
+                              "clear", "noise")) %>% 
+  filter(!is.na(slower_cond))
+
+## make plot
+lims <- c(0, 1.2)
+
+sums %>% 
+  mutate(age_category = factor(age_category, levels = c("children", "adults"))) %>% 
+  ggplot(aes(x=gaze_condition_m_gaze, 
+             y=gaze_condition_m_straight_ahead, 
+             color = slower_cond)) +
+  geom_point(size = 2.5) +
+  geom_errorbar(aes(ymin= gaze_condition_m_straight_ahead - gaze_condition_SE_straight_ahead, 
+                    ymax = gaze_condition_m_straight_ahead + gaze_condition_SE_straight_ahead)) +
+  geom_errorbarh(aes(xmin= gaze_condition_m_gaze - gaze_condition_SE_gaze, 
+                     xmax = gaze_condition_m_gaze + gaze_condition_SE_gaze)) +
+  geom_abline() +
+  guides(color = F) +
+  scale_color_brewer(palette = "Dark2") +
+  facet_grid(.~age_category) +
+  labs(x = "RT (sec) Gaze", y = "RT (sec) No-Gaze") +
+  lims(x = lims, y = lims) +
+  theme(aspect.ratio = 1)
+```
+
+Accuracy within-ss scatter.
+
+```{r within-ss-acc}
+means <- ss %>% 
+  select(gaze_condition, age_category, subid, m_acc) %>%
+  spread(key=gaze_condition, value=m_acc, sep = "_m_")
+
+ses <- ss %>% 
+  select(gaze_condition, age_category, subid, se_acc) %>%
+  spread(key=gaze_condition, value= se_acc, sep = "_SE_")
+
+sums <- left_join(means, ses) %>% 
+  mutate(slower_cond = ifelse(gaze_condition_m_gaze > gaze_condition_m_straight_ahead, 
+                              "clear", "noise")) %>% 
+  filter(!is.na(slower_cond))
+
+## Make plot
+lims <- c(0, 1)
+
+sums %>% 
+  mutate(age_category = factor(age_category, levels = c("children", "adults"))) %>% 
+  ggplot(aes(x=gaze_condition_m_gaze, 
+             y=gaze_condition_m_straight_ahead, 
+             color = slower_cond)) +
+  geom_point(size = 2.5) +
+  geom_errorbar(aes(ymin= gaze_condition_m_straight_ahead - gaze_condition_SE_straight_ahead, 
+                    ymax = gaze_condition_m_straight_ahead+gaze_condition_SE_straight_ahead)) +
+  geom_errorbarh(aes(xmin= gaze_condition_m_gaze - gaze_condition_SE_gaze, 
+                     xmax = gaze_condition_m_gaze+gaze_condition_SE_gaze)) +
+  geom_abline() +
+  guides(color = F) +
+  scale_color_brewer(palette = "Dark2") +
+  facet_grid(.~age_category) +
+  labs(x = "Prop. Correct (Gaze)", y = "Prop. Correct (No-Gaze)") +
+  lims(x = lims, y = lims) +
+  theme(aspect.ratio = 1)
+```
+
+### Make pairwise contrast plots
+
+Accuracy pairwise differences plot
+
+```{r}
+# get pairwise diffs
+diffs_df <- ss %>% 
+  select(m_acc, subid, gaze_condition, age_category) %>% 
+  spread(gaze_condition, m_acc) %>% 
+  group_by(age_category) %>% 
+  mutate(diff = gaze - straight_ahead) 
+
+ms_diffs <- diffs_df %>% 
+  group_by(age_category) %>% 
+  langcog::multi_boot_standard(col = "diff", na.rm = T, nboot = nboot) %>% 
+  rename(diff = mean)
+
+# now plot those differs
+pairwise_diffs_plot_acc <- diffs_df %>% 
+  mutate(title = "Pairwise contrast") %>%  # hack to get plots to line up nicely
+  ggplot(aes(x = fct_rev(age_category), y = diff)) +
+  geom_jitter(shape = pt_shape, 
+              width = 0.1, 
+              color = pt_color, 
+              size = pt_size,
+              fill = pt_fill,
+              alpha = pt_alpha) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  data = ms_diffs,
+                  shape = 15,
+                  size = 0.7,
+                  color = "brown3") +
+  #ylim(-0.45, 0.7) +
+  labs(x = NULL, y = "Prop. correct difference") +
+  coord_flip() +
+  facet_wrap(~title) 
+
+pairwise_diffs_plot_acc
+```
+
+Make RT pairwise differences plot
+
+```{r rt-pairwise-diffs}
+diffs_df <- ss %>% 
+  select(m_rt, subid, gaze_condition, age_category) %>% 
+  spread(gaze_condition, m_rt) %>% 
+  group_by(age_category) %>% 
+  mutate(diff = gaze - straight_ahead)  
+
+ms_diffs <- diffs_df %>% 
+  group_by(age_category) %>% 
+  langcog::multi_boot_standard(col = "diff", na.rm = T, nboot = nboot, 
+                               empirical_function = "mean") %>% 
+  rename(diff = mean)
+
+pairwise_diffs_plot_rt <- diffs_df %>% 
+  mutate(title = "Pairwise contrast") %>%  # hack to get plots to line up nicely
+  ggplot(aes(x = fct_rev(age_category), y = diff)) +
+  geom_jitter(shape = pt_shape, 
+              width = 0.1, 
+              color = pt_color, 
+              size = pt_size,
+              fill = pt_fill,
+              alpha = pt_alpha) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  data = ms_diffs,
+                  shape = 15,
+                  size = 0.7,
+                  color = "brown3") +
+  labs(x = NULL, y = "RT difference (sec)") +
+  facet_wrap(~title) +
+  coord_flip() 
+```
+
+### Merge behavioral plots and save
+
+```{r}
+gaze_fst_shifts <- plot_grid(pairwise_diffs_plot_rt, pairwise_diffs_plot_acc, 
+                              ncol = 1, 
+                              rel_heights = c(0.95,1), 
+                              labels = c("B", "C"),
+                              scale = c(0.95, 0.95))
+
+gaze_behav_plot <- plot_grid(gaze_timecourse_plot, gaze_fst_shifts, 
+                              rel_widths = c(1.5, 0.7),
+                              labels = c("A"),
+                              scale = c(0.95, 0.9))
+
+
+save_plot(gaze_behav_plot,
+          filename = here::here(image_path, "speed_acc_fam_behav.jpeg"),
+          ncol = 3,
+          nrow = 1.5,
+          base_aspect_ratio = 1)
+```
+
+# Model-based analyses
+
+

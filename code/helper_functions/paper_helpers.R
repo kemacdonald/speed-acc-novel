@@ -2,8 +2,8 @@
 library(papaja); library(here); library(lme4); library(directlabels); library(lazyeval)
 library(knitr); library(pander); library(magrittr); library(forcats); 
 library(cowplot); library(rstanarm); library(xtable);
-library(png); library(grid); library(ggthemes)
-library(kableExtra); library(rogme); library(ggridges); library(ggrepel)
+library(png); library(grid); library(ggthemes);
+library(kableExtra); library(ggridges); library(ggrepel)
 library(feather)
 
 # load tidyverse last, so no functions get masked

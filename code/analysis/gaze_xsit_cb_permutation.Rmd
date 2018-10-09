@@ -1,0 +1,37 @@
+---
+title: "Gaze-xsit Cluster-based Permutation"
+output: html_document
+---
+
+# Setup
+
+```{r setup}
+source(here::here("code/helper_functions/libraries_and_functions.R"))
+source(here::here("code/helper_functions/permutation_helpers.R"))
+source(here::here("code/helper_functions/ewma_helper_funs.R"))
+source(here::here("code/helper_functions/paper_helpers.R"))
+data_path <- "data/03_processed_data/novel_words"
+```
+
+Read data
+
+```{r read-data}
+d_gz_xsit_tc <- read_csv(here::here(data_path, "gaze_xsit_tidy_timecourse.csv"))
+```
+
+# Face curves
+
+## Exposure
+## Test
+
+# Target curves
+
+## Exposure
+
+## Test
+
+# Distracter curves
+
+## Exposure
+
+## Test

@@ -23,7 +23,7 @@
 }{}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
-            pdftitle={Both statistical and social information modulate children's eye movements during language comprehension and word learning},
+            pdftitle={Statistical and social information modulate children's eye movements during language comprehension and word learning},
             pdfauthor={Kyle MacDonald, Elizabeth Swanson, \& Michael C. Frank},
             pdfkeywords={eye movements; word learning; language comprehension;
 information-seeking; gaze following},
@@ -64,8 +64,8 @@ information-seeking; gaze following},
 \def\footnote{\protect\rmarkdownfootnote}
 
 
-  \title{Both statistical and social information modulate children's eye
-movements during language comprehension and word learning}
+  \title{Statistical and social information modulate children's eye movements
+during language comprehension and word learning}
     \author{Kyle MacDonald\textsuperscript{1}, Elizabeth Swanson\textsuperscript{1},
 \& Michael C. Frank\textsuperscript{1}}
     \date{}
@@ -93,6 +93,8 @@ movements during language comprehension and word learning}
 \newlength\longtablewidth
 \setlength{\longtablewidth}{1in}
 \newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+
 
 \authornote{
 
@@ -129,14 +131,26 @@ information.
 
 }
 
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\theoremstyle{definition}
+\newtheorem{example}{Example}[section]
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{solution}{Solution}
 \begin{document}
 \maketitle
 
-\hypertarget{introduction}{%
-\section{Introduction}\label{introduction}}
+\section{Introduction}\label{introduction}
 
-\hypertarget{analytic-approach}{%
-\section{Analytic approach}\label{analytic-approach}}
+\section{Analytic approach}\label{analytic-approach}
 
 To quantify evidence for our predictions, we follow the analysis plan of
 MacDonald, Marchman, Fernald, and Frank (2018) and present four
@@ -210,8 +224,7 @@ boundary separation estimate, this provides additional evidence that
 more accurate responses were driven by changes in information
 accumulation as opposed to processing efficiency.
 
-\hypertarget{experiment-1}{%
-\section{Experiment 1}\label{experiment-1}}
+\section{Experiment 1}\label{experiment-1}
 
 In Experiment 1, we measured the timecourse of children and adults'
 decisions about visual fixation as they processed sentences with
@@ -229,11 +242,9 @@ contrast, if listeners show parallel gaze dynmamics across the gaze and
 no-gaze conditions, this pattern suggests that hearing the familiar word
 was the primary factor driving shifts in visual attention.
 
-\hypertarget{methods}{%
-\subsection{Methods}\label{methods}}
+\subsection{Methods}\label{methods}
 
-\hypertarget{participants}{%
-\subsubsection{Participants}\label{participants}}
+\subsubsection{Participants}\label{participants}
 
 Participants were native, monolingual English-learning children (\(n=\)
 XXX; XXX F) and adults (\(n=\) XXX; XXX F). All participants had no
@@ -243,13 +254,12 @@ the analysis because either the eye tracker falied to calibrate (XXX
 children, XXX adults) or the participant did not complete the task (XXX
 children).
 
-\hypertarget{materials}{%
-\subsubsection{Materials}\label{materials}}
+\subsubsection{Materials}\label{materials}
 
 \emph{Linguistic stimuli.} The video/audio stimuli were recorded in a
 sound-proof room and featured two female speakers who used natural
 child-directed speech and said one of two phrases: \enquote{Hey! Can you
-find the (target word)} or "Look! Where's the (target word). The target
+find the (target word)} or ``Look! Where's the (target word). The target
 words were: ball, bunny, boat, bottle, cookie, juice, chicken, and shoe.
 The target words varied in length (shortest = 411.68 ms, longest =
 779.62 ms) with an average length of 586.71 ms.
@@ -257,8 +267,10 @@ The target words varied in length (shortest = 411.68 ms, longest =
 \emph{Gaze manipulation}. To create the stimuli in the gaze condition,
 the speaker waited until she finished producing the target sentence and
 then turner her head to gaze at the bottom right corner of the camera
-frame. After gazing at the named object, she returned her gaze to the
-center. The average length of the gaze cue was XXX.
+frame. After looking at the named object, she then returned her gaze to
+the center of the frame. We chose to allow the length of the gaze cue to
+vary to keep the stimuli naturalistic. The average length of gaze was
+2.12 seconds with a range from 1.78 to 3.07 seconds.
 
 \emph{Visual stimuli.} The image set consisted of colorful digitized
 pictures of objects presented in fixed pairs with no phonological
@@ -266,8 +278,7 @@ overlap between the target and the distracter image (cookie-bottle,
 boat-juice, bunny-chicken, shoe-ball). The side of the target picture
 was counterbalanced across trials.
 
-\hypertarget{procedure}{%
-\subsubsection{Procedure}\label{procedure}}
+\subsubsection{Procedure}\label{procedure}
 
 Participants viewed the task on a screen while their gaze was tracked
 using an SMI RED corneal-reflection eye-tracker mounted on an LCD
@@ -282,11 +293,26 @@ no-gaze trials) with several filler trials interspersed to maintain
 interest. The gaze manipulation was presented in a blocked design with
 the order of block counterbalanced across participants.
 
-\hypertarget{results-and-discussion}{%
-\subsection{Results and Discussion}\label{results-and-discussion}}
+\subsection{Results and Discussion}\label{results-and-discussion}
 
-\hypertarget{experiment-2}{%
-\section{Experiment 2}\label{experiment-2}}
+\begin{figure}[!t]
+
+{\centering \includegraphics[width=0.95\linewidth]{/Users/kylemacdonald/Documents/Projects/SPEED-ACC-NOVEL/writing/figures/plots/speed_acc_fam_behav} 
+
+}
+
+\caption{Timecourse looking, first shift Reaction Time (RT), and Accuracy results for children in Experiment 1. Panel A shows the overall looking to the center, target, and distracter stimulus for each context. Panel B shows the distribution of RTs for each participant. Each point represents a participant's average RT. The black squares represent the group means. And the error bars represent 95\% Highest Density Intervals around the group means. Panel C shows the same information but for participants' first shift accuracy.}\label{fig:speed-acc-gaze-results}
+\end{figure}
+
+\emph{Timecourse.}
+
+\emph{First shift RT and Accuracy.}
+
+\emph{EWMA.}
+
+\emph{HDDM.}
+
+\section{Experiment 2}\label{experiment-2}
 
 Because children hear language in environments with multiple possible
 referents, learning the meaning of even the simplest word requires
@@ -296,33 +322,29 @@ But for this aggregation process to work, learners must allocate their
 limited attention and memory resources to the relevant statistics in the
 world -- how do they select what information to store?
 
-In our prior work (discussed in Chapter 4), we found that the presence
-of a gaze cue shifted adults away from storing multiple word-object
-links and towards tracking a single hypothesis. Those experiments,
-however, relied on an offline measurement of word learning (a button
-press on test trials) and an indirect measure of attention during
-learning (self-paced decisions about how long to inspect the visual
-scene during learning trials). We begain to address these limitations in
-a pilot study where we adapted the social cross-situational learning
-paradigm to use eye-tracking methods. Moving to an eye-tracking
-procedure allowed us to ask (1) how does the presence of gaze alter the
-distribution of visual attention during labeling? and (2) does the
-presence of a gaze cue change the strength of learners' inferences about
-word-object links?
+In prior work (discussed in Chapter 4), we found that the presence of a
+gaze cue shifted adults away from storing multiple word-object links and
+towards tracking a single hypothesis. Those experiments, however, relied
+on an offline measurement of word learning (a button press on test
+trials) and an indirect measure of attention during learning (self-paced
+decisions about how long to inspect the visual scene during learning
+trials). We begain to address these limitations in a pilot study where
+we adapted the social cross-situational learning paradigm to use
+eye-tracking methods. Moving to an eye-tracking procedure allowed us to
+ask (1) how does the presence of gaze alter the distribution of visual
+attention during labeling? and (2) does the presence of a gaze cue
+change the strength of learners' inferences about word-object links?
 
-\hypertarget{methods-1}{%
-\subsection{Methods}\label{methods-1}}
+\subsection{Methods}\label{methods-1}
 
-\hypertarget{participants-1}{%
-\subsubsection{Participants}\label{participants-1}}
+\subsubsection{Participants}\label{participants-1}
 
 34 undergraduate students were recruited from the Stanford Psychology
 One credit pool (17 F). Four participants were excluded during analysis
 because the eye-tracker did not properly record their gaze coordinates.
 The final sample included 30 participants.
 
-\hypertarget{materials-1}{%
-\subsubsection{Materials}\label{materials-1}}
+\subsubsection{Materials}\label{materials-1}
 
 The experiment featured sixteen pseudo-words recorded by an AT\&T
 Natural VoicesTM speech synthesizer using the \enquote{Crystal}" voice
@@ -337,10 +359,9 @@ accompanied by two familiar words using the same speech synthesizer.
 Finally, the videos of the speaker's face were taken from from
 MacDonald, Yurovsky, and Frank (2017).
 
-\hypertarget{procedure-1}{%
-\subsubsection{Procedure}\label{procedure-1}}
+\subsubsection{Procedure}\label{procedure-1}
 
-We tracked adults' (n=30) eye movements while they watched a series of
+We tracked adults' eye movements while they watched a series of
 ambiguous word-learning events (16 novel words) organized into pairs of
 exposure and test trials (32 trials total). All trials consisted of a
 set of two novel objects and one novel word. Participants were randomly
@@ -354,42 +375,87 @@ the other object had not previously appeared in the experiment
 (\enquote{novel} object).
 
 The side of the screen of the \enquote{kept} object was counterbalanced
-throughout the experiment. Morevoer, in the gaze condition, for half of
-the test trials, the kept object was the target of the speaker's gaze
-during the exposure trial, while the other half, the kept object was the
-object that had not been the gaze target.
+throughout the experiment. In the gaze condition, for half of the test
+trials, the kept object was the target of the speaker's gaze during the
+exposure trial, while the other half, the kept object was the object
+that had not been the gaze target.
 
-\hypertarget{results-and-discussion-1}{%
-\subsection{Results and Discussion}\label{results-and-discussion-1}}
+\subsection{Results and Discussion}\label{results-and-discussion-1}
 
 \begin{figure}[!t]
 
-{\centering \includegraphics[width=0.9\linewidth]{/Users/kmacdonald/Documents/Projects/SPEED-ACC-NOVEL/writing/figures/gaze-xsit} 
+{\centering \includegraphics[width=1\linewidth]{/Users/kylemacdonald/Documents/Projects/SPEED-ACC-NOVEL/writing/figures/plots/gaze_xsit_tc} 
 
 }
 
-\caption{Panel A shows adults' allocation of visual attention during exposure trials. Panel B shows adults' stronger memory for novel word-object links when there was a gaze cue present, even when they had fixated on the target objects for similar amounts of time during learning.}\label{fig:plot-e2}
+\caption{Overview of adults' looking to the three fixation targets (Face, Target, Distracter) over the course of the trial. Panel A shows proportion looking to the speaker's face for exposure and test trials. Color and linetype represent gaze condition. Panel B shows the same information but for proportion looking to the target and distracter images.}\label{fig:gaze-xsit-tc-plot}
 \end{figure}
 
-Learning occurred in both conditions. But when a social cue was present
-during labeling, adults reliably used the cue (Figure XXX) and tended to
-focus their attention on a single object (Figure XXX). In contrast,
-people in the No-gaze condition tended to distribute their attention
-more broadly. More time attending to the \enquote{kept} object during
-exposure lead to better recall at test as shown by the linear
-relationship between exposure and test trials (Figure XXX).
+\emph{Timecourse looking.} The first question of interest was how did
+the presence of a gaze cue change adults' distribution of attention
+across the three fixation locations while processing language in
+real-time? Figure~\ref{fig:gaze-xsit-tc-plot} presents an overview of
+looking to each AOI for each processing context. This plot shows changes
+in the mean proportion of trials on which participants fixated on the
+speaker's face, the target image, or the distracter image at every 33-ms
+interval of the stimulus sentence.
 
-Critically, the presence of gaze modulated the relationship between
-visual attention on exposure trials and test performance: that is, when
-eye gaze cued adults' visual attention, they showed stronger memory for
-the word-object link compared to when a gaze cue was absent (Figure
-XXX). These data provide evidence that social information does more than
-modulate how people allocate their visual attention; instead, social
-contexts can change the strength of inferences that people make during
+At target-noun onset, adults tended to look more at the speaker's face
+on both exposure and test trials. As the target noun unfolded, the mean
+proportion looking to the center decreased as participants shifted their
+gaze to the target or the distracter images. On exposure trials tended
+to distribute their attention relatively evenly across target and
+distracter images. On test trials, proportion looking to the target
+increased sooner and reached a higher asymptote compared to proportion
+looking to the distracter for both condition, suggesting that adults
+were able to track the consistent word-object links in both conditions.
+
+There were several qualitative differences in looking behavior across
+the different gaze conditions and trial types. First, adults spent more
+time looking to a speaker's face when she provided a social gaze cue,
+especially on test trials that were preceded by gaze (Panel A of Figure
+XXX). Second, adults in the gaze condition looked slightly more to the
+target image over the course of the trial. This behavior is reasonable
+since half of the trials, the speaker's gaze was focused on the target
+image that would appear on the subsequent test trial. Third, on test
+trials, adults looked more to the images in the no-gaze context. This
+led to a higher proportion of looking to the target, but also a higher
+proportion of looking to the distracter images (Panel B of Figure XXX).
+
+Together, these looking patterns provide suggestive evidence that the
+presence of a gaze cue caused adults to spend more time gathering visual
+information from the speaker's face. Next, we ask how the social gaze
+cue modulated learning, which we operationalized as the relationship
+between looking behavior on exposure and test trials.
+
+\begin{figure}[!t]
+
+{\centering \includegraphics[width=0.9\linewidth]{/Users/kylemacdonald/Documents/Projects/SPEED-ACC-NOVEL/writing/figures/plots/gaze_xsit_prop_looking} 
+
+}
+
+\caption{Panel A shows participants’ tendency to look at the object that was the target of the speaker’s gaze on exposure trials. The vertical, dashed line represents the mean proportion of time looking to the gaze target across all trials. Panel B shows the relationship between adults' looking behavior on exposure and test trials for the gaze and no-gaze conditions.}\label{fig:gaze-xsit-prop-looking-plot}
+\end{figure}
+
+\emph{Relationship between exposure and test trials.} When the speaker
+generated a social cue during labeling, adults reliably followed that
+cue and tended to focus their attention on a single object (Figure
+XXXA). In contrast, people in the No-gaze condition tended to distribute
+their attention more broadly across the two objects. For adults in both
+gaze contexts, more time spent attending to the target object on
+exposure trials led higher proportion looking to the target, i.e.,
+better recall, at test (\(\beta_{exposure}\) = 0.43, 95\% HDI {[}0.36,
+0.50{]}). Critically, there was an interaction between the gaze
+condition and the relationship between attention on exposure and test:
+When eye gaze cued visual attention, adults showed stronger memory for
+the word-object link (\(\beta_{int}\) = -0.19, 95\% HDI {[}-0.33,
+-0.05{]}). This result provides evidence that social information does
+not only modulate people's in-the-moment decisions about how to allocate
+their visual attention; instead, the social cue changed the strength of
+the memory for word-object links that are stored during
 cross-situational word learning.
 
-\hypertarget{limitations}{%
-\subsubsection{Limitations}\label{limitations}}
+\subsubsection{Limitations}\label{limitations}
 
 There were several key limitations of our pilot study. First, we chose
 to start the liguistic stimulus as soon as the images and the speaker
@@ -407,19 +473,27 @@ processing more broadly from decisions that occur after the onset of the
 target noun -- a critical distinction for our modeling of the underlying
 decision-making process.
 
-\hypertarget{experiment-3}{%
-\section{Experiment 3}\label{experiment-3}}
+\section{Experiment 3}\label{experiment-3}
 
-Experiment 3 was designed to address the limitations of Experiment
-2.\footnote{See \url{https://osf.io/nfz85/} for a pre-registration of
-  the analysis plan and predictions.} We modified the cross-situational
-learning paradigm to parallel the design of Experiment 1. This allowed
-us to use the analytic techniques developed for analyzing participants'
-first gaze shifts to get a window onto children's decisions about visual
-fixation as they get increased exposure to statistical information
-within a social learning context.
+Experiment 3 was designed to ask how social information modulates
+learners' real-time visual information selection as they accumulate
+knowledge about novel word-object links.\footnote{See
+  \url{https://osf.io/nfz85/} for a pre-registration of the analysis
+  plan and predictions.} We also set out to address the limitations of
+Experiment 2 discussed above. There were two key modifications. First,
+we modified the cross-situational learning paradigm to include more than
+two exposures to a novel word-object link. This allowed us to measure
+changes in learners' integration of social and statistical information
+over a longer timescale. Second, we changed the linguistic stimuli to
+parallel the design of Experiment 1 such that the novel words occurred
+within a target sentence. This allowed us to leverage the analytic
+techniques developed for analyzing participants' initial gaze shifts in
+Experiment 1 to ask how decisions about visual information gathering
+from social partners changed as a function of repeated exposure to
+statistical information about word-object mappings.
 
-\noindent We aim to answer the following specific research questions:
+\noindent
+We aimed to answer the following specific research questions:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -435,68 +509,60 @@ within a social learning context.
   labeling and their memory of new words?
 \end{enumerate}
 
-\hypertarget{methods-2}{%
-\subsection{Methods}\label{methods-2}}
+\subsection{Methods}\label{methods-2}
 
-\hypertarget{participants-2}{%
-\subsubsection{Participants}\label{participants-2}}
+\subsubsection{Participants}\label{participants-2}
 
-\hypertarget{materials-2}{%
-\subsubsection{Materials}\label{materials-2}}
+\subsubsection{Materials}\label{materials-2}
 
 \begin{figure}[!t]
 
-{\centering \includegraphics[width=0.9\linewidth]{/Users/kmacdonald/Documents/Projects/SPEED-ACC-NOVEL/writing/figures/speed_acc_novel_stim} 
+{\centering \includegraphics[width=0.9\linewidth]{/Users/kylemacdonald/Documents/Projects/SPEED-ACC-NOVEL/writing/figures/plots/speed_acc_novel_stim} 
 
 }
 
 \caption{Stimuli used in Experiment 3, including trial structure, fixation targets in the visual world, and the gaze cue manipulation.}\label{fig:speed-acc-novel-stimuli}
 \end{figure}
 
-\hypertarget{procedure-2}{%
-\subsubsection{Procedure}\label{procedure-2}}
+\subsubsection{Procedure}\label{procedure-2}
 
-\hypertarget{results-and-discussion-2}{%
-\subsection{Results and Discussion}\label{results-and-discussion-2}}
+\subsection{Results and Discussion}\label{results-and-discussion-2}
 
-\hypertarget{general-discussion}{%
-\section{General Discussion}\label{general-discussion}}
+\section{General Discussion}\label{general-discussion}
 
 \newpage
 
-\hypertarget{references}{%
-\section{References}\label{references}}
+\section{References}\label{references}
 
 \begingroup
-\setlength{\parindent}{-0.5in}
-\setlength{\leftskip}{0.5in}
+\setlength{\parindent}{-0.5in} \setlength{\leftskip}{0.5in}
 
 \hypertarget{refs}{}
-\leavevmode\hypertarget{ref-gabry2016rstanarm}{}%
+\hypertarget{ref-gabry2016rstanarm}{}
 Gabry, J., \& Goodrich, B. (2016). Rstanarm: Bayesian applied regression
-modeling via stan. R package version 2.10. 0.
+modeling via stan. r package version 2.10. 0.
 
-\leavevmode\hypertarget{ref-macdonald2018speed}{}%
+\hypertarget{ref-macdonald2018speed}{}
 MacDonald, K., Marchman, V., Fernald, A., \& Frank, M. C. (2018).
 Children seek visual information during signed and spoken language
 comprehension. \emph{Preprint PsyArXiv}.
 
-\leavevmode\hypertarget{ref-macdonald2017social}{}%
+\hypertarget{ref-macdonald2017social}{}
 MacDonald, K., Yurovsky, D., \& Frank, M. C. (2017). Social cues
 modulate the representations underlying cross-situational learning.
 \emph{Cognitive Psychology}, \emph{94}, 67--84.
 
-\leavevmode\hypertarget{ref-maris2007nonparametric}{}%
+\hypertarget{ref-maris2007nonparametric}{}
 Maris, E., \& Oostenveld, R. (2007). Nonparametric statistical testing
 of eeg-and meg-data. \emph{Journal of Neuroscience Methods},
 \emph{164}(1), 177--190.
 
-\leavevmode\hypertarget{ref-vandekerckhove2007fitting}{}%
+\hypertarget{ref-vandekerckhove2007fitting}{}
 Vandekerckhove, J., \& Tuerlinckx, F. (2007). Fitting the ratcliff
 diffusion model to experimental data. \emph{Psychonomic Bulletin \&
 Review}, \emph{14}(6), 1011--1026.
 
-\leavevmode\hypertarget{ref-wiecki2013hddm}{}%
+\hypertarget{ref-wiecki2013hddm}{}
 Wiecki, T. V., Sofer, I., \& Frank, M. J. (2013). HDDM: Hierarchical
 bayesian estimation of the drift-diffusion model in python.
 \emph{Frontiers in Neuroinformatics}, \emph{7}, 14.
