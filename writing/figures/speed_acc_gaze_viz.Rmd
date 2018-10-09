@@ -13,6 +13,8 @@ source(here::here("code/helper_functions/paper_helpers.R"))
 
 data_path <- "data/03_processed_data/familiar_words"
 image_path <- "writing/figures/plots"
+
+# global variables
 nboot <- 1000 # number of bootstrap samples to take when making CIs for timecourse plots
 pt_size <- 3
 pt_alpha <- 0.5

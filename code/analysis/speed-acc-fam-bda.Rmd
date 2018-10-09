@@ -1,0 +1,213 @@
+---
+title: "Speed-acc-familiar BDA"
+output: html_document
+---
+
+## Setup
+
+This document contains the codebase for the bayesian data analysis of the Gaze experiment mentioned in the paper, "An information-seeking account of children's eye movements during grounded signed and spoken language comprehension."
+
+```{r set global_options, include=FALSE}
+source(here::here("code/helper_functions/libraries_and_functions.R"))
+source(here::here("code/helper_functions/ewma_helper_funs.R"))
+
+data_path <- "data/03_processed_data/familiar_words/"
+models_path <- "data/04_model_outputs/"
+
+options(mc.cores=parallel::detectCores())
+set.seed (3875)
+```
+
+```{r read data}
+d_kids_gaze <- read_csv(here::here(data_path, "speed_acc_child_gaze_fstshift_tidy.csv")) 
+d_adults <- read_csv(here::here(data_path, "speed_acc_adult_ng_fstshift_tidy.csv")) 
+
+# clean datasets and merge
+d_adults %<>% select(-age)
+
+d_kids_gaze %<>% mutate(noise_condition = ifelse(noise_condition == "no_noise", 
+                                                 "clear", 
+                                                 noise_condition))
+
+d <- bind_rows(mutate(d_kids_gaze, experiment = "kids_gaze", age_category = "children"),
+               mutate(d_adults, experiment = "adults_ng", age_category = "adults")) %>% 
+  select(-resp_onset_type_fact, -subid_short) %>% 
+  mutate(age_category = factor(age_category) %>% fct_rev()) 
+
+# test that we have the right number of rows after the merge (result should be TRUE)
+nrow(d_kids_gaze) + nrow(d_adults) == nrow(d)
+```
+
+## RT and Accuracy models
+
+```{r filter gaze experiment, eval = F}
+d_model <- d %>% 
+  filter(experiment != "kids_noise",
+         keep_runsheet %in% c("yes", "keep"), 
+         #keep_et == "include",
+         noise_condition == "clear")
+
+d_model %<>%
+  filter(rt <= 2,
+         response_onset_type == "noun",
+         shift_start_location == "center") %>% 
+  mutate(shift_acc_num = ifelse(shift_accuracy_clean == "correct", 1, 0),
+         log_rt = log(rt))
+```
+
+### Accuracy (Gaze)
+
+```{r fit acc gaze model, eval = T, message=FALSE}
+m_bglm_acc_e2 <- stan_glmer(
+  shift_acc_num ~ gaze_condition + age_category + (gaze_condition | subid) + (gaze_condition | target_image), 
+  data = d_model,
+  family = binomial(link = "logit"), 
+  prior = normal(0, 2),
+  prior_intercept = normal(0, 1),
+  prior_covariance = decov(regularization = 2),
+  chains = 4
+)
+```
+
+### RT (Gaze)
+
+```{r fit rt gaze model, eval = F}
+m_bglm_rt_e2 <- stan_glmer(
+  log_rt ~ gaze_condition + age_category + (gaze_condition | subid) + (gaze_condition | target_image), 
+  family = gaussian(),
+  data = d_model,
+  prior = normal(0, 2), 
+  prior_intercept = normal(0, 5),
+  prior_covariance = decov(regularization = 2),
+  chains = 4
+)
+```
+
+### Extract posterior samples gaze experiment
+
+```{r extract posterior samples gaze model}
+# get posterior samples
+samples_e2_acc <- m_bglm_acc_e2 %>% 
+  as.data.frame() %>% 
+  as_tibble() %>% 
+  dplyr::rename(gaze_children = `(Intercept)`,
+                straightahead_beta = gaze_conditionstraight_ahead,
+                age_beta = age_categoryadults) %>% 
+  select(gaze_children, straightahead_beta, age_beta)
+
+samples_e2_rt <- m_bglm_rt_e2 %>% 
+  as.data.frame() %>% 
+  as_tibble() %>% 
+  dplyr::rename(gaze_children = `(Intercept)`,
+                straightahead_beta = gaze_conditionstraight_ahead,
+                age_beta = age_categoryadults) %>% 
+  select(gaze_children, straightahead_beta, age_beta)
+
+# tidy up accuracy
+samples_e2_acc_tidy <- samples_e2_acc %>% 
+  mutate(straightahead_children = gaze_children + straightahead_beta,
+         straightahead_adults = gaze_children + age_beta + straightahead_beta, 
+         gaze_adults = gaze_children + age_beta,
+         sample_id = 1:n()) %>% 
+  gather(key = condition, value = param_est, -sample_id, -straightahead_beta, -age_beta) %>% 
+  mutate(acc_prob_scale = logit_to_prob(param_est)) %>% 
+  separate(condition, into = c("gaze_condition", "age_category"))
+
+# tidy up rt samples
+samples_e2_rt_tidy <- samples_e2_rt %>% 
+    mutate(straightahead_children = gaze_children + straightahead_beta,
+         straightahead_adults = gaze_children + age_beta + straightahead_beta, 
+         gaze_adults = gaze_children + age_beta,
+         sample_id = 1:n()) %>% 
+  gather(key = condition, value = param_est, -sample_id, -straightahead_beta, -age_beta) %>% 
+  mutate(rt_ms_scale = exp(param_est)) %>% 
+  separate(condition, into = c("gaze_condition", "age_category"))
+```
+
+## EWMA models
+
+Read in EWMA output. 
+
+```{r read ewma output gaze, eval = F}
+gaze_ewma_files <- c("speed_acc_kids_gaze_ewma_results.csv", "speed_acc_adult_ng_ewma_results.csv")
+d_ewma_gaze <- gaze_ewma_files %>% purrr::map_df(read_ewma, path = here::here(models_path))
+```
+
+Filter to select just the gaze conditions.
+
+```{r filter ewma results gaze, eval = F}
+d_ewma_gaze %<>% 
+  filter(experiment %in% c("gaze", "noise_gaze"),
+         condition %in% c("gaze", 
+                          "straight_ahead", 
+                          "gaze_clear", 
+                          "straight_ahead_clear")) %>% 
+  mutate(gaze_condition = ifelse(str_detect(condition, "gaze"), "gaze", "straight_ahead"),
+         age_category = ifelse(age_code == "child", "children", "adults")) 
+```
+
+```{r fit cutpoints model gaze, eval = F}
+ss_cutoffs_gaze <- d_ewma_gaze %>% 
+  filter(guess == "response") %>% 
+  group_by(subid, gaze_condition, age_category) %>% 
+  summarise_(cutoff = interp(~ min(x), x = as.name("rt"))) %>% 
+  mutate(log_cut = log(cutoff))
+
+# fit model
+m_cutoffs_gaze <- stan_lm(cutoff ~ gaze_condition + age_category, 
+                          data = ss_cutoffs_gaze,
+                          prior = R2(0.75, what = "mean"),
+                          adapt_delta = 0.99)
+
+# get posterior samples
+samples_ewma_cuts_gaze <- m_cutoffs_gaze %>% 
+  as.data.frame() %>% 
+  as_tibble() %>% 
+  dplyr::rename(gaze_adults = `(Intercept)`,
+                straightahead_beta = gaze_conditionstraight_ahead,
+                age_beta = age_categorychildren) %>% 
+  select(gaze_adults, straightahead_beta, age_beta) %>% 
+  mutate(gaze_children = gaze_adults + age_beta,
+         straightahead_children = gaze_children + straightahead_beta, 
+         straightahead_adults = gaze_adults + straightahead_beta,
+         sample_id = 1:n()) %>% 
+  gather(key = condition, value = param_est, -sample_id, -straightahead_beta, -age_beta)
+```
+
+### EWMA guessing model (Gaze)
+
+```{r fit ewma guessing model gaze, eval = F}
+# fit model
+m_guessing_gaze <- stan_glmer(
+  guess_num ~ gaze_condition + age_category + (gaze_condition | subid),
+  data = d_ewma_gaze,
+  prior = normal(0, 2),
+  prior_intercept = normal(0, 1),
+  prior_covariance = decov(regularization = 2), 
+  chains = 4)
+
+# get posterior samples
+samples_ewma_guess_gaze <- m_guessing_gaze %>% 
+  as.data.frame() %>% 
+  as_tibble() %>% 
+  dplyr::rename(gaze_adults = `(Intercept)`,
+                straightahead_beta = gaze_conditionstraight_ahead,
+                age_beta = age_categorychildren) %>% 
+  select(gaze_adults, straightahead_beta, age_beta) %>% 
+  mutate(gaze_children = gaze_adults + age_beta,
+         straightahead_children = gaze_adults + age_beta + straightahead_beta, 
+         straightahead_adults = gaze_adults + straightahead_beta,
+         sample_id = 1:n()) %>% 
+  gather(key = condition, value = param_est, -sample_id, -straightahead_beta, -age_beta)
+```
+
+## Save samples 
+
+```{r save samples from all models}
+posteriors <- list(rt_gaze = samples_e2_rt_tidy,
+                   acc_gaze = samples_e2_acc_tidy,
+                   ewma_cuts_gaze = samples_ewma_cuts_gaze,
+                   ewma_guess_gaze = samples_ewma_guess_gaze)
+
+saveRDS(posteriors, file = here::here(models_path, "speed-acc-gaze-posterior-samples.rds"))
+```

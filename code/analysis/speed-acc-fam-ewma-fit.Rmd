@@ -1,0 +1,226 @@
+---
+title: "Speed-acc EWMA model fit"
+author: "Kyle MacDonald"
+output: html_document
+---
+
+This script analyzes first shift accuracy and RT using an EWMA guesssing model. In the task, we vary the information value and the saliency of the center fixation and measure the effects on accuracy and RT.
+
+## Setup
+
+Load libraries and read in tidy data.
+
+```{r}
+library(here)
+source(here::here("R/helper_functions/libraries_and_functions.R"))
+source(here::here("R/helper_functions/ewma_helper_funs.R"))
+read.path <- "data/3_final_merged_data/first_shifts/"
+ewma.path <- "data/3_final_merged_data/ewma_output/"
+```
+
+Read 5 datasets with first shift accuracy and RTs:
+
+  1. Speed-acc-trio (4 datasets)
+    - ASL (27 kids: 18-54m, median age = 27 months; 16 adults): human signing
+    - Face (22 kids: 26m): human face talking
+    - Object (18 kids at 26m and 22 kids at 36m): static images of real world objects, e.g., cats
+    - Bull (22 kids at 26m): different static "bullseyes"
+  2. Speed-acc-child-noise
+  3. Speed-acc-child-gaze
+  4. Speed-acc-adult-noise-gaze
+  5. Speed-acc-adult-text
+
+```{r}
+df_trio <- read_csv(here::here(read.path, "speed_acc_child_trio_fstshift_tidy.csv"))
+df_noise_kid <- read_csv(here::here(read.path, "speed_acc_child_noise_fstshift_tidy.csv"))
+df_gaze_kid <- read_csv(here::here(read.path, "speed_acc_child_gaze_fstshift_tidy.csv"))
+df_ng_adult <- read_csv(here::here(read.path, "speed_acc_adult_ng_fstshift_tidy.csv"))
+df_text_adult <- read_csv(here::here(read.path, "speed_acc_adult_text_fstshift_tidy.csv"))
+```
+
+Set the global EWMA model parameters. These parameters are taken from Vandekerckhove and Tuerlinckxx, 2007. 
+
+```{r}
+L <- 2
+lambda <- .01
+cs <- 0.5
+sig <- 0.5
+```
+
+## Fit Models
+
+### Speed-acc-trio
+
+Clean up condition variable.
+
+```{r}
+df_trio %<>% 
+  mutate(stimuli = ifelse(stimuli %in% c("V1", "V2"), "ASL", 
+                          ifelse(stimuli == "Trio", "Object", 
+                                 ifelse(stimuli == "Bull", "Bullseye",
+                                        stimuli))),
+         stimuli = factor(stimuli, levels = c("ASL", "Face", "Object", "Bullseye"))) %>%
+  dplyr::select(Sub.Num, Tr.Num, RT_sec, stimuli, age_code, correct, Months, clean_target_img) %>% 
+  filter(is.na(RT_sec) == F) %>% 
+  mutate(RT = RT_sec, condition = as.character(stimuli)) %>% 
+  select(-RT_sec)  
+```
+
+Fit the model to the kid and adult data.
+
+```{r e1 fit ewma model}
+ss.ewma.trio <- df_trio %>% 
+  group_by(condition, age_code) %>% 
+  do(fit_ewma(., rt_column = "RT", L = L, lambda = lambda, cs = cs, sigma = sig)) %>% 
+  mutate(rt = round(as.numeric(RT), 2),
+         cs = round(as.numeric(cs), 2),
+         ucl = round(as.numeric(ucl), 2),
+         guess = ifelse(cs <= ucl, "guess", "response"),
+         guess_num = ifelse(guess == "response", 1, 0),
+         ucl_bound = abs(ucl-cs)) %>% 
+  gather(key = ewma_param, value = param_value, cs:ucl) 
+```
+
+Separate the data
+
+```{r}
+ss_ewma_kids_trio <- ss.ewma.trio %>% filter(age_code == "child")
+ss_ewma_adults_trio <- ss.ewma.trio %>% filter(age_code == "adult")
+```
+
+### Child Noise experiment
+
+Set up data.
+
+```{r}
+df_noise_kid %<>% 
+  mutate(correct = ifelse(shift_accuracy_clean == "correct", 1, 0)) %>% 
+  filter(keep_et == "include", 
+         keep_runsheet == "keep",
+         !(is.na(rt)), 
+         response_onset_type == "noun") %>% 
+  dplyr::select(subid_short, tr.num, rt, noise_condition, correct, age, age_group, target_image) %>%
+  rename(subid = subid_short) %>% 
+  mutate(RT = rt, condition = as.character(noise_condition)) %>% 
+  select(-rt)
+```
+
+Fit model
+
+```{r}
+ss.ewma.noise.kid <- df_noise_kid %>% 
+  group_by(condition) %>% 
+  do(fit_ewma(., rt_column = "RT", L = L, lambda = lambda, cs = cs, sigma = sig)) %>% 
+  mutate(rt = round(as.numeric(RT), 2),
+         cs = round(as.numeric(cs), 2),
+         ucl = round(as.numeric(ucl), 2),
+         guess = ifelse(cs <= ucl, "guess", "response"),
+         guess_num = ifelse(guess == "response", 1, 0),
+         ucl_bound = abs(ucl-cs)) %>% 
+  gather(key = ewma_param, value = param_value, cs:ucl) 
+```
+
+### Child Gaze experiment
+
+Set up data.
+
+```{r}
+df_gaze_kid %<>% 
+  mutate(correct = ifelse(shift_accuracy_clean == "correct", 1, 0)) %>% 
+  filter(keep_et == "include", 
+         keep_runsheet == "keep",
+         !(is.na(rt)), 
+         response_onset_type == "noun") %>% 
+  dplyr::select(subid_short, tr.num, rt, gaze_condition, correct, age, age_group, target_image) %>% 
+  mutate(RT = rt, condition = as.character(gaze_condition)) %>% 
+  rename(subid = subid_short) %>% 
+  select(-rt)
+```
+
+Fit model. 
+
+```{r}
+ss.ewma.gaze.kid <- df_gaze_kid %>% 
+  group_by(condition) %>% 
+  do(fit_ewma(., rt_column = "RT", L = L, lambda = lambda, cs = cs, sigma = sig)) %>% 
+  mutate(rt = round(as.numeric(RT), 2),
+         cs = round(as.numeric(cs), 2),
+         ucl = round(as.numeric(ucl), 2),
+         guess = ifelse(cs <= ucl, "guess", "response"),
+         guess_num = ifelse(guess == "response", 1, 0),
+         ucl_bound = abs(ucl-cs)) %>% 
+  gather(key = ewma_param, value = param_value, cs:ucl) 
+```
+
+### Speed-acc Adult Text
+
+Set up data.
+
+```{r}
+df_text_adult %<>% 
+  mutate(correct = ifelse(shift_accuracy == "correct", 1, 0)) %>% 
+  filter(keep_et == "include", 
+         keep_runsheet == "include",
+         !(is.na(rt)), 
+         response_onset_type == "noun") %>% 
+  dplyr::select(subid, tr.num, rt, condition, correct, target_image) %>% 
+  mutate(RT = rt, condition = as.character(condition)) %>% 
+  select(-rt)
+```
+
+Fit model. 
+
+```{r}
+ss.ewma.text.adult <- df_text_adult  %>% 
+  group_by(condition) %>% 
+  do(fit_ewma(., rt_column = "RT", L = 3, lambda = lambda, cs = cs, sigma = sig)) %>% 
+  mutate(rt = round(as.numeric(RT), 2),
+         cs = round(as.numeric(cs), 2),
+         ucl = round(as.numeric(ucl), 2),
+         guess = ifelse(cs <= ucl, "guess", "response"),
+         guess_num = ifelse(guess == "response", 1, 0),
+         ucl_bound = abs(ucl-cs)) %>% 
+  gather(key = ewma_param, value = param_value, cs:ucl) 
+```
+
+### Speed-acc adult Noise-Gaze
+
+```{r}
+df_ng_adult %<>% 
+  mutate(correct = ifelse(shift_accuracy_clean == "correct", 1, 0),
+         condition_long = paste(gaze_condition, noise_condition, sep = "_")) %>% 
+  filter(keep_et == "include", 
+         keep_runsheet == "yes",
+         !(is.na(rt)), 
+         response_onset_type == "noun") %>% 
+  dplyr::select(subid_short, tr.num, rt, condition_long, correct, target_image) %>% 
+  mutate(RT = rt, condition = as.character(condition_long)) %>% 
+  rename(subid = subid_short) %>% 
+  select(-rt)
+```
+
+Fit model. 
+
+```{r}
+ss.ewma.ng.adult <- df_ng_adult %>% 
+  group_by(condition) %>% 
+  do(fit_ewma(., rt_column = "RT", L = 3, lambda = lambda, cs = cs, sigma = sig)) %>% 
+  mutate(rt = round(as.numeric(RT), 2),
+         cs = round(as.numeric(cs), 2),
+         ucl = round(as.numeric(ucl), 2),
+         guess = ifelse(cs <= ucl, "guess", "response"),
+         guess_num = ifelse(guess == "response", 1, 0),
+         ucl_bound = abs(ucl-cs)) %>% 
+  gather(key = ewma_param, value = param_value, cs:ucl) 
+```
+
+## Write output to file
+
+```{r write emwa output, eval = T}
+write_csv(ss_ewma_kids_trio, here::here(ewma.path, "speed_acc_kids_trio_ewma_results.csv"))
+write_csv(ss_ewma_adults_trio, here::here(ewma.path, "speed_acc_adult_trio_ewma_results.csv"))
+write_csv(ss.ewma.gaze.kid, here::here(ewma.path, "speed_acc_kids_gaze_ewma_results.csv"))
+write_csv(ss.ewma.noise.kid, here::here(ewma.path, "speed_acc_kids_noise_ewma_results.csv"))
+write_csv(ss.ewma.text.adult, here::here(ewma.path, "speed_acc_adult_text_ewma_results.csv"))
+write_csv(ss.ewma.ng.adult, here::here(ewma.path, "speed_acc_adult_ng_ewma_results.csv"))
+```

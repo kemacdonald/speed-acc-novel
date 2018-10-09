@@ -1,0 +1,142 @@
+---
+title: "Speed-acc-adult Drift Diffusion Analysis"
+author: "Kyle MacDonald"
+output: html_document
+---
+
+## Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=F, warning=F, cache=F, message=F, sanitize = T)
+source(here::here("R/helper_functions/libraries_and_functions.R"))
+```
+
+```{r}
+hddm_path <- "data/3_final_merged_data/hddm_output/"
+```
+
+## Read data
+
+```{r}
+d <- read_csv(here::here(hddm_path, "hddm_tidy.csv"))
+```
+
+
+## Plots
+
+#### Kid experiments
+
+Use purrr to create a plot for each kid experiment. 
+
+```{r make the kid ddm plots}
+hddm_plots_kids <- d %>% 
+  filter(age_code == "kid") %>% 
+  split(.$experiment) %>% 
+  purrr::map(plot_hddm)
+
+cowplot::plot_grid(plotlist = hddm_plots_kids, ncol = 1, 
+                   labels = names(hddm_plots_kids))
+```
+
+```{r}
+hddm_plots_kids$noise
+```
+
+```{r}
+hddm_plots_kids$trio
+```
+
+```{r}
+hddm_plots_kids$gaze
+```
+
+#### Adult experiments
+
+Now do the same thing but for the adult experiments
+
+```{r make the adult ddm plots}
+hddm_plots_adults <- d %>% 
+  filter(age_code == "adult") %>% 
+  split(.$experiment) %>% 
+  purrr::map(plot_hddm)
+
+cowplot::plot_grid(plotlist = hddm_plots_adults, ncol = 1, 
+                   labels = names(hddm_plots_adults))
+```
+
+```{r}
+ng_plot_df <- d %>% 
+  filter(age_code == "adult", experiment == "noise_gaze") %>% 
+  mutate(gaze_condition = ifelse(str_detect(condition, "gaze"), "gaze", 
+                                 "straight_ahead"),
+         noise_condition = ifelse(str_detect(condition, "noise"), "noise", "clear")) 
+```
+
+```{r}
+ng_plot_df %>% 
+  filter(noise_condition == "clear") %>% 
+  mutate(condition = gaze_condition) %>% 
+  plot_hddm() 
+```
+
+
+```{r}
+noise_adult_bound <- ng_plot_df %>% 
+  filter(condition %in% c("straight_ahead_clear", "gaze_noise"),
+         param_name == "boundary") %>% 
+  mutate(condition = noise_condition) %>% 
+  plot_hddm(x_lims = c(0.5, 2.5)) +
+  guides(color = F)
+
+noise_kid_bound <- d %>% 
+  filter(experiment %in% c("noise"), param_name == "boundary") %>%
+  plot_hddm(x_lims = c(0.5,2.5)) +
+  guides(color = F)
+```
+
+```{r}
+noise_adult_drift <- ng_plot_df %>% 
+  filter(condition %in% c("straight_ahead_clear", "gaze_noise"),
+         param_name == "drift") %>% 
+  mutate(condition = noise_condition) %>% 
+  plot_hddm(x_lims = c(0, 2.5)) +
+  guides(color = F)
+
+noise_kid_drift <- d %>% 
+  filter(experiment %in% c("noise"), param_name == "drift") %>%
+  plot_hddm(x_lims = c(0,2.5))
+```
+
+```{r}
+plot_grid(noise_kid_bound, noise_kid_drift, noise_adult_bound, noise_adult_drift)
+```
+
+Save plot
+
+```{r e2 save ddm plot, eval = F}
+hddm_plot_final <- cowplot::plot_grid(hddm_plots_kids$trio, hddm_plots_adults$text, 
+                                      labels = c("A", "B"), nrow = 2)
+
+ggsave(hddm_plot_final, file = paste0(plot.save.path, "hddm_plot_final.png"), width=4, height=4)
+```
+
+## Stats
+
+Get means and 95% HDI
+
+```{r}
+ms.hddm <- d %>% 
+  group_by(param_name, experiment, condition, age_code) %>% 
+  summarise(Mean = mean(param_value),
+            HDI_lower = quantile(param_value, probs = 0.025),
+            HDI_upper = quantile(param_value, probs = 0.975)) %>% 
+  rename(Parameter = param_name) %>% 
+  mutate_at(vars(Mean, HDI_lower, HDI_upper), round, digits = 2) %>% 
+  arrange(experiment)
+
+
+#Print table.
+ms.hddm %>% kable()
+```
+
+

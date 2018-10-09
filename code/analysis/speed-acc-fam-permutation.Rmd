@@ -1,0 +1,63 @@
+---
+title: "Speed-acc-familiar Permutation Analysis"
+output: html_document
+---
+
+# Set up
+
+```{r set up}
+source(here::here("code/helper_functions/libraries_and_functions.R"))
+source(here::here("code/helper_functions/permutation_helpers.R"))
+data_path <- "data/03_processed_data/familiar_words"
+```
+
+## Read timecourse data
+
+```{r read timecourse data}
+d_timecourse_adults <- read_csv(here::here(data_path, "speed_acc_adult_ng_timecourse_tidy.csv.gz")) %>%
+  mutate(age_code = "adults")
+
+d_timecourse_kids <- read_csv(here::here(data_path, "speed_acc_child_gaze_timecourse_tidy.csv.gz")) %>%
+  mutate(age_code = "children")
+
+d_tc <- bind_rows(d_timecourse_adults, d_timecourse_kids)
+```
+
+# Aggregate timecourses
+
+Select analysis window and downsample the t.rel.noun time bins based on the sampling rate of the tracker. 
+
+```{r}
+samp_rate <- 30
+
+d_time_filt <- d_tc %>% 
+  filter(t.stim > 0, t.stim <= 9) %>% 
+  filter(t.rel.noun >= 0, t.rel.noun <= 2.5,
+         noise_condition %in% c("clear", "no_noise"))
+
+d_time_filt %<>% mutate(t.rel.noun = round(t.rel.noun * samp_rate) / samp_rate)
+```
+
+Summarise proportion looking at the participant level.
+
+```{r}
+# get number of trials looking at each gaze target for each time slice
+ss.d <- d_time_filt %>% 
+  group_by(subid, t.rel.noun, gaze_condition, age_code) %>% 
+  summarise(count = n()) %>% 
+  ungroup() %>% 
+  complete(nesting(subid, t.rel.noun, age_code), gaze_condition,
+           fill = list(count = 0)) %>% 
+  mutate(subid = as.character(subid))
+
+# get proportion looking by dividing the freq looking at each target by the total looking 
+# derived in step 1 of this chunk
+ss.d <- as.data.frame(xtabs(~ subid + t.rel.noun + target_looking + gaze_condition + age_code, 
+                            data = d_time_filt),
+                      stringsAsFactors = F) %>% 
+  mutate(t.rel.noun = as.numeric(t.rel.noun)) %>% 
+  left_join(x = ss.d, y = ., by = c("subid", "t.rel.noun", "gaze_condition", "age_code")) %>% 
+  mutate(proportion_looking = Freq / count)
+```
+
+# Perform permutation analysis

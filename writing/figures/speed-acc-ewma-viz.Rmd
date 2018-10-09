@@ -1,0 +1,263 @@
+---
+title: "Speed-Acc Visualize EWMA"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=F, warning=F, cache=F, message=F, sanitize = T, fig.height=6, fig.width=6)
+```
+
+```{r}
+library(here)
+ewma.path <- "data/3_final_merged_data/ewma_output/"
+plot.save.path <- "paper/figs/"
+```
+
+```{r}
+source(here::here("R/helper_functions/libraries_and_functions.R"))
+source(here::here("R/helper_functions/ewma_helper_funs.R"))
+```
+
+## Read data
+
+```{r read data}
+files <- dir(path = ewma.path, pattern = "*.csv") 
+
+# read in all files using purrr
+d <- files %>% purrr::map_df(read_ewma, path = ewma.path)
+```
+
+## Visualize EWMA results: control charts
+
+Make all the control charts. 
+
+```{r}
+ewma_control_charts_trio <- d %>% 
+  filter(rt <= 1.5, experiment == "trio") %>% 
+  split(.$experiment) %>% 
+  purrr::map(.f = aggregate_ewma) %>% 
+  purrr::map(.f = plot_ewma_chart)
+```
+
+```{r}
+ewma_control_charts <- d %>% 
+  filter(rt <= 1.2, experiment != "trio") %>% 
+  split(.$experiment) %>% 
+  purrr::map(.f = aggregate_ewma) %>% 
+  purrr::map(.f = plot_ewma_chart)
+```
+
+### Experiment 1: Trio (kids)
+
+```{r kid_ewma}
+ewma_control_charts_trio$trio
+```
+
+#### Area under the curve analysis. So we can compare to the boxplots.
+
+```{r}
+ms <- d %>% 
+  filter(rt <= 1.5, experiment == "trio") %>% 
+  split(.$experiment) %>% 
+  purrr::map(.f = aggregate_ewma) 
+
+asl_cut <- ms$trio$cutoff_summary$min_cut[2]
+face_cut <- ms$trio$cutoff_summary$min_cut[6]
+
+d_guess <- ms$trio$ewma_summary %>% 
+  filter(condition %in% c("ASL", "Face"))
+```
+
+```{r}
+curves_plot <- d_guess %>% 
+  ggplot(aes(x = rt, y = mean_param, color = ewma_param, linetype = condition)) +
+  geom_line() +
+  ylim(0.3, 0.8)
+```
+ 
+Now compute the area between the UCL and CS curves. approach using pracma package (https://stackoverflow.com/questions/4954507/calculate-the-area-under-a-curve)
+
+```{r}
+library(pracma)
+
+rt_asl <- d_guess %>% 
+  filter(ewma_param == "cs", condition == "ASL", rt <= asl_cut) %>% 
+  pull(rt)
+
+cs_asl <- d_guess %>% 
+  filter(ewma_param == "cs", condition == "ASL", rt <= asl_cut) %>% 
+  pull(mean_param)
+
+ucl_asl <- d_guess %>% 
+  filter(ewma_param == "ucl", condition == "ASL", rt <= asl_cut) %>% 
+  pull(mean_param)
+
+AUC_CS_asl = trapz(rt_asl, cs_asl)
+AUC_UCL_asl = trapz(rt_asl, ucl_asl)
+
+# difference
+diff_asl <- AUC_UCL_asl - AUC_CS_asl
+```
+
+```{r}
+rt_face <- d_guess %>% 
+  filter(ewma_param == "cs", condition == "Face", rt <= face_cut) %>% 
+  pull(rt)
+
+cs_face <- d_guess %>% 
+  filter(ewma_param == "cs", condition == "Face", rt <= face_cut) %>% 
+  pull(mean_param)
+
+ucl_face <- d_guess %>% 
+  filter(ewma_param == "ucl", condition == "Face", rt <= face_cut) %>% 
+  pull(mean_param)
+
+AUC_CS_face = trapz(rt_face, cs_face)
+AUC_UCL_face = trapz(rt_face, ucl_face)
+
+# difference
+diff_face <- AUC_UCL_face - AUC_CS_face
+```
+
+```{r}
+plot_grid(ewma_boxplots$trio, curves_plot)
+```
+
+how to compare this to boxplot?
+
+```{r}
+diff_asl < diff_face
+```
+
+
+```{r}
+d_guess %>% 
+  mutate(dt = c(diff(rt), mean(diff(rt)))) %>%
+  spread(ewma_param, mean_param) %>% 
+  mutate(guess_diff = ifelse(cs < ucl, ucl - cs, 0), 
+         signal_diff = ifelse(cs > ucl, cs - ucl, 0)) %>% 
+  group_by(condition) %>% 
+  summarise(auc_guess = sum(guess_diff * dt), 
+            auc_signal = sum(signal_diff * dt)) %>%
+  mutate(guess_ratio = auc_guess / (auc_guess + auc_signal), 
+         signal_ratio = 1-guess_ratio)
+```
+
+### Experiment 2: Text (Adults)
+
+```{r}
+ewma_control_charts$text
+```
+
+### Experiment 3: Noise and Gaze (kids)
+
+```{r, fig.width = 9, fig.height = 4}
+cowplot::plot_grid(ewma_control_charts$noise, ewma_control_charts$gaze, 
+                   ncol = 2)
+```
+
+### Experiment 3: Noise and Gaze (adults)
+
+```{r}
+emwa_ng <- d %>% 
+  filter(rt <= 0.8, experiment == "noise_gaze") %>% 
+  aggregate_ewma() %>% 
+  plot_ewma_chart()
+```
+
+```{r}
+adult_noise_control <- d %>% 
+  filter(rt <= 1, experiment == "noise_gaze") %>% 
+  mutate(gaze_condition = ifelse(str_detect(condition, "gaze"), "gaze", 
+                                 "straight_ahead"),
+         noise_condition = ifelse(str_detect(condition, "noise"), "noise", "clear")) %>% 
+  mutate(condition = noise_condition) %>%
+  aggregate_ewma() %>% 
+  plot_ewma_chart() +
+  facet_wrap(~condition, ncol = 2) +
+  ylim(0.4, 1) +
+  xlim(0,1.4) 
+```
+
+```{r}
+kid_noise_control <- ewma_control_charts$noise +
+  ylim(0.4, 1) +
+  xlim(0,1.4) +
+  facet_wrap(~condition, ncol = 2)
+```
+
+```{r}
+plot_grid(kid_noise_control, adult_noise_control, ncol = 1)
+```
+
+Save control charts.
+
+```{r save_control_charts, eval = F}
+# text
+ggsave(plot = ewma_control_charts$text, 
+       filename = paste0(plot.save.path, "e2_control_chart.png"), 
+       width = 3, height = 3.5)
+
+# noise gaze adults
+ggsave(plot = ewma_control_charts$noise_gaze, 
+       filename = paste0(plot.save.path, "adult_ng_control_chart.png"), 
+       width = 3, height = 3.5)
+
+# trio kids
+ggsave(plot = ewma_control_charts$trio, 
+       filename = paste0(plot.save.path, "e1_control_chart.png"), 
+       width = 3, height = 3.5)
+```
+
+## Visualize EWMA results: Proportion guessing boxplots 
+
+Make all the boxplots for each experiment using my own EWMA helper function. 
+
+```{r}
+ewma_boxplots <- d %>% 
+  #filter(rt <= 1.5) %>% 
+  split(.$experiment) %>% 
+  purrr::map(.f = make_ewma_boxplot)
+```
+
+Put all the boxplots together. 
+
+### Experiment 1: Trio (kids)
+
+```{r, fig.height = 4}
+ewma_boxplots$trio 
+```
+
+### Experiment 2: Text (Adults)
+
+```{r, fig.height = 4}
+ewma_boxplots$text
+```
+
+### Experiment 3: Noise and Gaze (kids)
+
+```{r, fig.height = 4}
+cowplot::plot_grid(ewma_boxplots$noise, ewma_boxplots$gaze, ncol = 2) 
+```
+
+```{r}
+kid_noise_box <- ewma_boxplots$noise
+```
+
+### Experiment 3: Noise and Gaze (adults)
+
+```{r, fig.height = 4}
+adult_noise_box <- d %>% 
+  filter(rt <= 4, experiment == "noise_gaze") %>% 
+  mutate(gaze_condition = ifelse(str_detect(condition, "gaze"), "gaze", 
+                                 "straight_ahead"),
+         noise_condition = ifelse(str_detect(condition, "noise"), "noise", "clear")) %>% 
+  mutate(condition = noise_condition) %>%
+  make_ewma_boxplot()
+```
+
+
+```{r}
+plot_grid(kid_noise_box, adult_noise_box, ncol = 1)
+```
+
