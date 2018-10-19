@@ -38,7 +38,7 @@ d_analysis <- d %>%
   filter(keep_drop == "keep",
          t_rel_noun >= 0, 
          t_rel_noun <= 3
-        )
+  )
 ```
 
 Create time bins for each participant and each trial. 
@@ -52,23 +52,29 @@ d_analysis %<>%
 Create exclusions table.
 
 ```{r}
-d %>% 
+# based on runsheet information
+d_exclusions_rs <- d %>% 
   distinct(subid, keep_drop, reason_excluded, age_category) %>% 
-  filter(keep_drop == "drop") %>% 
-  kable()
-```
+  filter(keep_drop == "drop") 
 
-Create exclusions list based on number of trials completed.
-
-```{r}
-ss_exclude <- d_analysis %>%
+# based on number of trials completed.
+d_exclusions_et <- d_analysis %>%
   filter(target_looking != "away") %>% 
-  distinct(subid, trial_num_exp) %>% 
-  count(subid) %>% 
+  distinct(subid, trial_num_exp, age_category) %>% 
+  count(subid, age_category) %>% 
   filter(n < 16) %>% 
-  pull(subid)
+  mutate(keep_drop = "drop", 
+         reason_excluded = "fewer than half trials completed") 
 
-ss_exclude
+# create subid vector for filtering later
+ss_exclude <- d_exclusions_et %>% pull(subid)
+
+# Join exclusions tables and save to disk.
+d_exclusions_final <- d_exclusions_et %>% 
+  select(-n) %>% 
+  bind_rows(d_exclusions_rs)
+
+write_csv(d_exclusions_final, path = here::here("data/03_processed_data/speed_acc_novel_exclusions.csv"))
 ```
 
 Filter participants who did not complete more than half the trials. 
@@ -155,7 +161,7 @@ gaze_onset <- d_analysis %>%
   summarise(m_gaze_onset = mean(gaze_onset_rel_noun))
 ```
 
-### timecourse as a function of trial number in block
+### Timecourse as a function of age group and gaze condition
 
 ```{r, eval = F}
 ss_groupings <- list("subid", "time_ms_normalized", "gaze_condition", "trial_type",
@@ -166,9 +172,11 @@ ms_groupings <- list("subid", "time_ms_normalized", "gaze_condition", "trial_typ
 
 ms_time <- aggregate_ss_looking(d_analysis, ss_groupings, ms_groupings, aoi_column = "target_looking") 
 
+# save graph values for timecourse plot
+write_csv(ms_time, here::here(data_path, "speed_acc_novel_tc_gvs.csv"))
+
 # Make timecourse plot
 ms_time %>% 
-  filter(age_category == "adult") %>%  
   plot_timecourse(facet_type = "age_category~trial_type") +
   geom_vline(xintercept = gaze_onset$m_gaze_onset, lty = "dashed") +
   scale_color_manual(values = c("darkblue", "red", "darkgreen"))
@@ -223,6 +231,12 @@ ms_time_block %>%
 
 ## Aggregated proportion looking plots
 
+```{r}
+d_analysis %<>% 
+  mutate(age_category = ifelse(age_category == "child", "children", "adults")) %>% 
+  mutate(age_category = factor(age_category, levels = c("children", "adults"))) 
+```
+
 ### How does looking to target change across trials within a learning block?
 
 ```{r}
@@ -234,12 +248,11 @@ ms_trials <- d_analysis %>%
   aggregate_ss_looking(ss_groupings_tr_num, ms_groupings_tr_num,
                        aoi_column = "target_looking", 
                        use_bootstrap = TRUE, 
-                       n_boot = 1000) 
+                       n_boot = 1000)
 
 # Make key plot of target looking as a function of trial number and trial type.
-ms_trials %>% 
+prop_look_plot <- ms_trials %>% 
   ungroup() %>% 
-  mutate(age_category = factor(age_category, levels = c("child", "adult"))) %>% 
   filter(target_looking == "target") %>% 
   ggplot(aes(x = trial_num_learn_block, y = mean, 
              color = gaze_condition,
@@ -251,15 +264,59 @@ ms_trials %>%
   labs(x = "Trial Number",
        y = "Prop. looking to target",
        color = "Gaze condition:"
-       #title = "Proportion Looking to Target Across Trials"
        ) +
   lims(y = c(0, 1.05)) +
   facet_grid(age_category~trial_type) +
-  theme_minimal() + 
-  #ggthemes::scale_color_ptol() +
+  ggthemes::scale_color_ptol() +
   theme(legend.position = "top",
         panel.border = element_rect(colour = "grey", fill=NA, size=1),
-        text = element_text(size = 14))
+        text = element_text(size = 15),
+        plot.background=element_blank())
+```
+
+```{r aggregate accuracy}
+ss_groupings_cond <- list("subid", "gaze_condition", "trial_type", "age_category", "trial_num_exp")
+ms_groupings_cond <- list("subid", "gaze_condition", "trial_type", "age_category")
+
+ms_cond <- d_analysis %>% 
+  filter(target_looking != "center") %>% 
+  aggregate_ss_looking(ss_groupings_cond, ms_groupings_cond,
+                       aoi_column = "target_looking", 
+                       use_bootstrap = TRUE, 
+                       n_boot = 1000) 
+# Plot
+aggregated_acc_plot <- ms_cond %>% 
+  filter(target_looking == "target") %>% 
+  ggplot(aes(x = trial_type, y = mean, 
+             color = gaze_condition,
+             group = interaction(gaze_condition))) +
+  geom_hline(yintercept = 0.5, lty = "dashed") +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
+                  position = position_dodge(width = 0.2),
+                  size = 0.7) +
+  geom_line(position = position_dodge(width = 0.2)) +
+  lims(y = c(0.1, 1.1)) +
+  labs(x = "Age Group", y = "Prop. Looking Target", color = "Gaze Condition:") + 
+  facet_grid(~age_category) +
+  guides(color = F) +
+  ggthemes::scale_color_ptol() +
+  theme(text = element_text(size = 15),
+        panel.border = element_rect(colour = "grey", fill=NA, size=1),
+        plot.background=element_blank())
+```
+
+```{r save-plot}
+acc_plot_final <- cowplot::plot_grid(prop_look_plot, aggregated_acc_plot,
+                                     scale = c(0.95, 0.65),
+                                     ncol = 2,
+                                     rel_widths = c(1, 1), 
+                                     labels = c("A", "B"))
+
+save_plot(plot = acc_plot_final, 
+          filename = here::here('writing/figures/plots/speed_acc_novel_proplook.jpeg'),
+          width = 8,
+          height = 6.5
+          )
 ```
 
 ### How does looking to target change across blocks in the experiment?
@@ -294,8 +351,7 @@ ms_blocks %>%
   lims(y = c(0.1, 1.05)) +
   facet_grid(age_category~trial_type) +
   geom_hline(yintercept = 0.5, lty = "dashed") +
-  #ggthemes::scale_color_ptol() +
-  theme_minimal() +
+  ggthemes::scale_color_ptol() +
   theme(legend.position = "top",
         panel.border = element_rect(colour = "grey", fill=NA, size=1),
         text = element_text(size = 14))
@@ -370,35 +426,6 @@ ms_block_order %>%
   theme(legend.position = "top")
 ```
 
-### Do participants look more to the target in the gaze condition?
-
-```{r}
-ss_groupings_cond <- list("subid", "gaze_condition", "trial_type", "age_category", "trial_num_exp")
-ms_groupings_cond <- list("subid", "gaze_condition", "trial_type", "age_category")
-
-ms_cond <- d_analysis %>% 
-  filter(target_looking != "center") %>% 
-  aggregate_ss_looking(ss_groupings_cond, ms_groupings_cond,
-                       aoi_column = "target_looking", 
-                       use_bootstrap = TRUE, 
-                       n_boot = 1000) 
-# Plot
-ms_cond %>% 
-  filter(target_looking == "target") %>% 
-  ggplot(aes(x = trial_type, y = mean, 
-             color = gaze_condition,
-             group = interaction(gaze_condition))) +
-  geom_hline(yintercept = 0.5, lty = "dashed") +
-  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
-                  position = position_dodge(width = 0.2),
-                  size = 0.7) +
-  geom_line(position = position_dodge(width = 0.2)) +
-  lims(y = c(0.1, 1.1)) +
-  labs(x = "Age Group", y = "Prop. Looking Target", color = "Gaze Condition:") + 
-  facet_grid(~age_category) +
- # ggthemes::scale_color_ptol() +
-  theme(text = element_text(size = 11), legend.position = "top")
-```
 
 ### How does looking to the speaker change across trials within learning block?
 

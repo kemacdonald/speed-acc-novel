@@ -1,0 +1,21 @@
+subid,age_category,keep_drop,reason_excluded
+SAN-071718-01,child,drop,fewer than half trials completed
+SAN-071918-04,child,drop,fewer than half trials completed
+SAN-071918-05,child,drop,fewer than half trials completed
+SAN-080718-05,child,drop,fewer than half trials completed
+SAN-081518-03,child,drop,fewer than half trials completed
+SAN-082018-03,child,drop,fewer than half trials completed
+SAN-082018-05,child,drop,fewer than half trials completed
+SAN-071218-02,child,drop,pilot
+SAN-071218-03,child,drop,pilot
+SAN-071218-04,child,drop,pilot
+SAN-071218-05,child,drop,pilot
+SAN-072018-01,adult,drop,pilot A
+SAN-072018-02,adult,drop,pilot B
+SAN-072018-03,adult,drop,pilot B
+SAN-072518-02,adult,drop,non-native speaker
+SAN-072518-03,adult,drop,non-native speaker
+SAN-072518-04,adult,drop,non-native speaker
+SAN-072718-02,adult,drop,non-native speaker
+SAN-072718-03,adult,drop,non-native speaker
+SAN-080118-04,adult,drop,non-native speaker

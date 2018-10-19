@@ -11,7 +11,7 @@ trial_info_path <- "data/00_stimuli_information/analysis_order_sheets/"
 aois_path <- "data/00_stimuli_information/analysis_order_sheets/speed-acc-novel-aois.csv"
 
 ## blacklisted roi files 
-processed_data_path <- "data/03_processed_data/"
+processed_data_path <- "data/03_processed_data/novel_words"
 calibration_stimulus_name <- c("cc3bd7c5c8d457694031c7630357751f", "c7280d7cf8d2071e0a099f77fef07087")
 familiar_stimulus_name <- c("ef177c1276275662048244274d3df8cf_1920x1080", 
                             "67a32392adbd5dcf905315e855d3c988_1920x1080",
@@ -71,7 +71,7 @@ all_data %<>% mutate(subid = case_when(
   filter(subid != "bing_pilot_1")
 
 ## check how many subids we have in the eye tracking data
-all_data %>% pull(subid) %>% unique() %>% length()
+all_data %>% select(subid, age_category) %>% unique() %>% count(age_category)
 
 # Read stimulus key
 df_stimulus_key <- read_csv(here::here(trial_info_path, "speed-acc-novel-analysis-order-sheet.csv")) %>% 

@@ -64,7 +64,7 @@ Filter to just keep the first shift data.
 d_first_shifts <- d_analysis %>% 
   ungroup() %>% 
   select(subid, age_category, age_years, age_days, stimulus_name:trial_num_learn_block, noun, trial_type, 
-         gaze_condition, speaker, order_name, order_number, gaze, testing_date:comments, 
+         gaze_condition, speaker, order_name, order_number, gaze, testing_date:comments, reason_excluded, 
          rt:shift_accuracy) %>% 
   distinct() %>% 
   mutate(age_group = as.integer(age_days / 365)) 
@@ -107,6 +107,6 @@ d_first_shifts %<>%
 ## Save first shifts data file to disk
 
 ```{r}
-write_path <- "data/03_processed_data/"
+write_path <- "data/03_processed_data/novel_words"
 write_csv(d_first_shifts, path = here::here(write_path, "speed_acc_novel_shifts.csv"))
 ```
