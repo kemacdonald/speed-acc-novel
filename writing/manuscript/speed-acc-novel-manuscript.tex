@@ -131,20 +131,6 @@ information.
 
 }
 
-\usepackage{amsthm}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}{Lemma}[section]
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{corollary}{Corollary}[section]
-\newtheorem{proposition}{Proposition}[section]
-\theoremstyle{definition}
-\newtheorem{example}{Example}[section]
-\theoremstyle{definition}
-\newtheorem{exercise}{Exercise}[section]
-\theoremstyle{remark}
-\newtheorem*{remark}{Remark}
-\newtheorem*{solution}{Solution}
 \begin{document}
 \maketitle
 
@@ -152,14 +138,13 @@ information.
 
 \section{Analytic approach}\label{analytic-approach}
 
-To quantify evidence for our predictions, we follow the analysis plan of
-MacDonald, Marchman, Fernald, and Frank (2018) and present four
-analyses: (1) the timecourse of listeners' looking to each area of
-interest (AOI), (2) the Reaction Time (RT) and Accuracy of listeners'
-first shifts away from the signer/speaker, (3) an Exponentially Weighted
-Moving Average (EWMA) of first shifts, and (4) a Drift Diffusion Model
-(DDM) of first shifts.\footnote{All analysis code can be found in the
-  online repository for this project:
+To quantify evidence for our predictions, we follow MacDonald, Marchman,
+Fernald, and Frank (2018) and present four analyses: (1) the timecourse
+of listeners' looking to each area of interest (AOI), (2) the Reaction
+Time (RT) and Accuracy of listeners' first shifts away from the
+speaker's face, (3) an Exponentially Weighted Moving Average (EWMA), and
+(4) a Drift Diffusion Model (DDM).\footnote{All analysis code can be
+  found in the online repository for this project:
   \url{https://github.com/kemacdonald/speed-acc-novel}.}
 
 First, we analyzed the timecourse of participants' looking to each AOI
@@ -198,15 +183,15 @@ provides a range of credible values given the data and model.
 
 Following the behavioral results, we present two model-based
 analyses.\footnote{For more details about the model-based analyses see
-  MacDonald et al. (2018)} The goal of each model is to move beyond a
-description of the data and to map behavioral differences to underlying
-psychological processes. The EWMA models changes in the tendency to
-generate random gaze shifts as a function of RT (Vandekerckhove \&
-Tuerlinckx, 2007). This model allows us to quantify the proportion of
-gaze shifts that were classified as language-driven as opposed to
-guessing. If listeners seek more visual information from the language
-source, then they should generate a higher proportion of language-driven
-shifts and fewer random responses.
+  MacDonald et al. (2018) or Chapter 3.} The goal of each model is to
+move beyond a description of the data and to map behavioral differences
+to underlying psychological processes. The EWMA models changes in the
+tendency to generate random gaze shifts as a function of RT
+(Vandekerckhove \& Tuerlinckx, 2007). This model allows us to quantify
+the proportion of gaze shifts that were classified as language-driven as
+opposed to guessing. If listeners seek more visual information from the
+language source, then they should generate a higher proportion of
+language-driven shifts and fewer random responses.
 
 Finally, following Vandekerckhove and Tuerlinckx (2007), we selected the
 gaze shifts categorized as language-driven by the EWMA and fit a
@@ -246,11 +231,27 @@ was the primary factor driving shifts in visual attention.
 
 \subsubsection{Participants}\label{participants}
 
+\begin{table}[tbp]
+\begin{center}
+\begin{threeparttable}
+\caption{\label{tab:make-ss-table}Age distributions of children in Experiments 1 and 3. All ages are reported in months.}
+\begin{tabular}{lllll}
+\toprule
+Experiment & \multicolumn{1}{c}{n} & \multicolumn{1}{c}{Mean} & \multicolumn{1}{c}{Min} & \multicolumn{1}{c}{Max}\\
+\midrule
+Experiment 1 (familiar words) & 38 & 55.50 & 35.60 & 71.04\\
+Experiment 3 (novel words) & 54 & 52.60 & 36.26 & 70.94\\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{center}
+\end{table}
+
 Participants were native, monolingual English-learning children (\(n=\)
-XXX; XXX F) and adults (\(n=\) XXX; XXX F). All participants had no
-reported history of developmental or language delay and normal vision.
-XXX participants (XXX children, XXX adults) were run but not included in
-the analysis because either the eye tracker falied to calibrate (XXX
+38; 19 F) and adults (\(n=\) 33; 23 F). All participants had no reported
+history of developmental or language delay and normal vision. XXX
+participants (XXX children, XXX adults) were run but not included in the
+analysis because either the eye tracker falied to calibrate (XXX
 children, XXX adults) or the participant did not complete the task (XXX
 children).
 
@@ -266,7 +267,7 @@ The target words varied in length (shortest = 411.68 ms, longest =
 
 \emph{Gaze manipulation}. To create the stimuli in the gaze condition,
 the speaker waited until she finished producing the target sentence and
-then turner her head to gaze at the bottom right corner of the camera
+then turned her head to gaze at the bottom right corner of the camera
 frame. After looking at the named object, she then returned her gaze to
 the center of the frame. We chose to allow the length of the gaze cue to
 vary to keep the stimuli naturalistic. The average length of gaze was
@@ -292,6 +293,15 @@ a response. Both children and adults saw 32 trials (16 gaze trials; 16
 no-gaze trials) with several filler trials interspersed to maintain
 interest. The gaze manipulation was presented in a blocked design with
 the order of block counterbalanced across participants.
+
+\begin{figure}[!t]
+
+{\centering \includegraphics[width=0.9\linewidth]{/Users/kylemacdonald/Documents/Projects/SPEED-ACC-NOVEL/writing/figures/plots/gaze_stimuli} 
+
+}
+
+\caption{Stimuli for Experiments 1 and 3. Panel A shows the timecourse of the linguistic stimuli for a single trial. Panel B shows the layout of the fixation locations for all tasks: the center stimulus, the target, and the distracter. Panel C shows a sample of the images used as novel objects in Experiment 3. Panel D shows the social gaze manipulation.}\label{fig:gaze-stimuli}
+\end{figure}
 
 \subsection{Results and Discussion}\label{results-and-discussion}
 
@@ -509,22 +519,97 @@ We aimed to answer the following specific research questions:
   labeling and their memory of new words?
 \end{enumerate}
 
+To answer these questions, we compared the timing and accuracy of eye
+movements during a real-time cross-situational learning task where
+participants process sentences that contain a novel word (e.g.,
+\enquote{Where's the \emph{dax}?}) while looking at a simplified visual
+world with 3 fixation targets (a video of a speaker and two images of
+unfamiliar objects). We had three key behavioral predictions. First, for
+all conditions, participants' distribution of attention to speakers
+compared to objects will shift over the course of learning. Early in the
+task, participants will allocate more fixations to a speaker to
+prioritize gathering visual information that disambiguates reference.
+After experiencing multiple exposures to a word-object pairing,
+participants will generate faster saccades, showing signatures of
+comprehension of the incoming speech. We further predict that later in
+learning blocks, participants will allocate more fixations to the
+objects, showing looking behaviors that support learning long-term
+associations between words and objects.
+
+Second, the presence of a gaze cue will change participants' decisions
+about visual fixation. We hypothesize that a post-nominal gaze cue
+increases the value of fixating on a speaker. This manipulation will
+cause participants to allocate more fixations to the speaker when gaze
+is present, leading to slower first shift reaction times and higher
+proportion looking, especially earlier in learning (i.e., lower trial
+numbers within each block of exposure trials to a novel word-object
+pairing). This prediction will be operationalized as a main effect of
+Gaze condition on RT, and a trial number by Gaze condition interaction
+such that the decrease in RT will be greater on exposure trials in the
+Gaze condition.
+
+Third, the Gaze condition should lead to stronger inferences about the
+correct word-object mapping, resulting in faster learning that we
+operationalize as more accurate first shifts, faster RTs, and a higher
+proportion looking to the target vs.~the distractor object on test
+trials as compared to learning words without a gaze cue across both
+exposure and test trials.
+
 \subsection{Methods}\label{methods-2}
 
 \subsubsection{Participants}\label{participants-2}
 
+Participants were native, monolingual English-learning children (\(n=\)
+54; 30 F) and adults (\(n=\) 10; 5 F). All participants had no reported
+history of developmental or language delay and normal vision. 6 adults
+were run but not included in the analysis because they were not native
+speakers of English. XXX participants were run but not included in
+analysis because either the eye tracker falied to calibrate (XXX
+children, XXX adults) or the participant did not complete the task (XXX
+children).
+
 \subsubsection{Materials}\label{materials-2}
 
-\begin{figure}[!t]
+\emph{Linguistic stimuli.} The video/audio stimuli were recorded in a
+sound-proof room and featured two female speakers who used natural
+child-directed speech and said one of two phrases: \enquote{Hey! Can you
+find the (novel word)} or ``Look! Where's the (novel word). The target
+words were four pseudo-words: bosa, modi, toma, and pifo. The novel
+words varied in length (shortest = XXX ms, longest = XXX ms) with an
+average length of XXX ms.
 
-{\centering \includegraphics[width=0.9\linewidth]{/Users/kylemacdonald/Documents/Projects/SPEED-ACC-NOVEL/writing/figures/plots/speed_acc_novel_stim} 
+\emph{Gaze manipulation}. To create the stimuli in the gaze condition,
+the speaker waited until she finished producing the novel word before
+turning her head to gaze at the bottom right corner of the frame. After
+looking at the named object, she then returned her gaze to the center of
+the frame. We chose to allow the length of the gaze cue to vary to keep
+the stimuli naturalistic. The average length of gaze was 2.12 seconds
+with a range from 1.78 to 3.07 seconds.
 
-}
-
-\caption{Stimuli used in Experiment 3, including trial structure, fixation targets in the visual world, and the gaze cue manipulation.}\label{fig:speed-acc-novel-stimuli}
-\end{figure}
+\emph{Visual stimuli.} The image set consisted of 28 colorful digitized
+pictures of objects that were selected such that children were unlikely
+to already have a label associated with them. The side of the target
+picture was counterbalanced across trials.
 
 \subsubsection{Procedure}\label{procedure-2}
+
+Participants viewed the task on a screen while their gaze was tracked
+using an SMI RED corneal-reflection eye-tracker mounted on an LCD
+monitor, sampling at 30 Hz. The eye-tracker was first calibrated for
+each participant using a 6-point calibration. Then, participants watched
+a series of ambiguous word learning events organized into pairs of one
+exposure and one test trial. On each trial, participants saw of a set of
+two unfamiliar objects and heard one novel word.
+
+Each word was learned in a block of four exposure-test pairs for a total
+of eight trials for each novel word. Critically, on each trial within a
+word block, one of the objects in the set had appeared on the previous
+trials (target object), while the other object was a randomly generated
+novel object not previously shown in the experiment (distracter object).
+Both children and adults saw 32 trials (16 gaze trials; 16 no-gaze
+trials) with several filler trials interspersed to maintain interest.
+The gaze manipulation was presented in a blocked design with the order
+of block counterbalanced across participants.
 
 \subsection{Results and Discussion}\label{results-and-discussion-2}
 

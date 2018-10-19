@@ -54,33 +54,10 @@ image_path <- "writing/figures/plots"
 ```
 
 ```{r read stimuli information}
-d_gaze_stim <- read_csv(here::here(stimuli_path, "speed-acc-child-gaze-trial-info.csv"),
-                        col_types = cols(.default = "c"))
-
-d_adult_ng_stim <- read_csv(here::here(stimuli_path, "speed-acc-adult-ng-trial-info.csv"),
-                            col_types = cols(.default = "c"))
-
-d_stim <- bind_rows(mutate(d_gaze_stim, experiment = "kids_gaze"),
-                    mutate(d_adult_ng_stim, experiment = "adults_ng"))
+d_gaze_stim <- read_csv(here::here(stimuli_path, "speed-acc-child-gaze-trial-info.csv"), col_types = cols(.default = "c"))
+d_adult_ng_stim <- read_csv(here::here(stimuli_path, "speed-acc-adult-ng-trial-info.csv"), col_types = cols(.default = "c"))
+d_stim <- bind_rows(mutate(d_gaze_stim, experiment = "kids_gaze"), mutate(d_adult_ng_stim, experiment = "adults_ng"))
 ```
-
-# Introduction
-
-# Analytic approach
-
-To quantify evidence for our predictions, we follow the analysis plan of @macdonald2018speed and present four analyses: (1) the timecourse of listeners' looking to each area of interest (AOI), (2) the Reaction Time (RT) and Accuracy of listeners' first shifts away from the signer/speaker, (3) an Exponentially Weighted Moving Average (EWMA) of first shifts, and (4) a Drift Diffusion Model (DDM) of first shifts. ^[All analysis code can be found in the online repository for this project: https://github.com/kemacdonald/speed-acc-novel.]
-
-First, we analyzed the timecourse of participants' looking to each AOI in the visual scene as the target sentence unfolded. Proportion looking reflects the mean proportion of trials on which participants fixated on the speaker, the target image, or the distracter image at every 33-ms interval of the stimulus sentence. We tested condition differences in the proportion looking to the language source -- signer or speaker -- using a nonparametric cluster-based permutation analysis, which accounts for the issue of taking multiple comparisons across many time bins in the timecourse [@maris2007nonparametric]. A higher proportion of looking to the language source in the gaze condition would indicate listeners' prioritization of seeking visual information from the speaker.
-
-Next, we analyzed the RT and Accuracy of participants' initial gaze shifts away from the speaker to objects. RT corresponds to the latency of shifting gaze away from the central stimulus to either object measured from the onset of the target noun. All reaction time distributions were trimmed to between zero and two seconds and RTs were modeled in log space. Accuracy corresponds to whether participants' first gaze shift landed on the target or the distracter object. If listeners generate slower but more accurate gaze shifts, this  provides evidence that gathering more visual information from the signer/speaker led to more robust language comprehension.
-
-We used the `rstanarm` [@gabry2016rstanarm] package to fit Bayesian mixed-effects regression models. The mixed-effects approach allowed us to model the nested structure of our data -- multiple trials for each participant and item, and a within-participants manipulation -- by including random intercepts for each participant and item, and a random slope for each item and gaze condition. We used Bayesian estimation to quantify uncertainty in our point estimates, which we communicate using a 95% Highest Density Interval (HDI). The HDI provides a range of credible values given the data and model.
-
-Following the behavioral results, we present two model-based analyses ^[For more details about the model-based analyses see @macdonald2018speed]. The goal of each model is to move beyond a description of the data and to map behavioral differences to underlying psychological processes. The EWMA models changes in the tendency to generate random gaze shifts as a function of RT [@vandekerckhove2007fitting]. This model allows us to quantify the proportion of gaze shifts that were classified as language-driven as opposed to guessing. If listeners seek more visual information from the language source, then they should generate a higher proportion of language-driven shifts and fewer random responses.
-
-Finally, following @vandekerckhove2007fitting, we selected the gaze shifts categorized as language-driven by the EWMA and fit a hierarchical Bayesian Drift-Diffusion Model (HDDM) [@wiecki2013hddm]. The DDM is a cognitive model of decision making developed over the past forty  years (Ratcliff  &  McKoon,  2008) that can quantify differences in the underlying decision process that lead to different patterns of observable behavior. Here, we focus on two parameters of interest: *boundary separation*, which indexes the amount of evidence gathered before generating a response (higher values suggest more information gathered before responding) and *drift rate*, which indexes the amount of evidence accumulated per unit time (higher values suggest more efficient processing). If listeners have a higher boundary separation estimate, this provides additional evidence that more accurate responses were driven by changes in information accumulation as opposed to processing efficiency.
-
-# Experiment 1
 
 ```{r read_familiar_words_data}
 d_fam_child <- read_csv(here::here(data_path, "familiar_words/speed_acc_child_gaze_fstshift_tidy.csv")) %>% 
@@ -101,9 +78,42 @@ d_fam_adult <- read_csv(here::here(data_path, "familiar_words/speed_acc_adult_ng
 d_fam <- bind_rows(d_fam_child, d_fam_adult)
 ```
 
-```{r read_tc}
+```{r read_speed_novel_data}
+d_novel_fs <- read_csv(here::here(data_path, "novel_words/speed_acc_novel_shifts.csv")) %>% 
+  mutate(learn_block_half = ifelse(trial_num_learn_block <= 2, "first", "second"),
+         trial_num_lblock_8 = case_when(
+           trial_type == "exposure" & trial_num_learn_block == 1 ~ "1",
+           trial_type == "test" & trial_num_learn_block == 1 ~ "2",
+           trial_type == "exposure" & trial_num_learn_block == 2 ~ "3",
+           trial_type == "test" & trial_num_learn_block == 2 ~ "4",
+           trial_type == "exposure" & trial_num_learn_block == 3 ~ "5",
+           trial_type == "test" & trial_num_learn_block == 3 ~ "6",
+           trial_type == "exposure" & trial_num_learn_block == 4 ~ "7",
+           trial_type == "test" & trial_num_learn_block == 4 ~ "8",
+           TRUE ~ "NA"
+         ),
+         correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE))
 
+d_novel_tc <- read_feather(here::here(data_path, "novel_words/speed_acc_novel_timecourse.feather")) 
 ```
+
+# Introduction
+
+# Analytic approach
+
+To quantify evidence for our predictions, we follow @macdonald2018speed and present four analyses: (1) the timecourse of listeners' looking to each area of interest (AOI), (2) the Reaction Time (RT) and Accuracy of listeners' first shifts away from the speaker's face, (3) an Exponentially Weighted Moving Average (EWMA), and (4) a Drift Diffusion Model (DDM). ^[All analysis code can be found in the online repository for this project: https://github.com/kemacdonald/speed-acc-novel.]
+
+First, we analyzed the timecourse of participants' looking to each AOI in the visual scene as the target sentence unfolded. Proportion looking reflects the mean proportion of trials on which participants fixated on the speaker, the target image, or the distracter image at every 33-ms interval of the stimulus sentence. We tested condition differences in the proportion looking to the language source -- signer or speaker -- using a nonparametric cluster-based permutation analysis, which accounts for the issue of taking multiple comparisons across many time bins in the timecourse [@maris2007nonparametric]. A higher proportion of looking to the language source in the gaze condition would indicate listeners' prioritization of seeking visual information from the speaker.
+
+Next, we analyzed the RT and Accuracy of participants' initial gaze shifts away from the speaker to objects. RT corresponds to the latency of shifting gaze away from the central stimulus to either object measured from the onset of the target noun. All reaction time distributions were trimmed to between zero and two seconds and RTs were modeled in log space. Accuracy corresponds to whether participants' first gaze shift landed on the target or the distracter object. If listeners generate slower but more accurate gaze shifts, this  provides evidence that gathering more visual information from the signer/speaker led to more robust language comprehension.
+
+We used the `rstanarm` [@gabry2016rstanarm] package to fit Bayesian mixed-effects regression models. The mixed-effects approach allowed us to model the nested structure of our data -- multiple trials for each participant and item, and a within-participants manipulation -- by including random intercepts for each participant and item, and a random slope for each item and gaze condition. We used Bayesian estimation to quantify uncertainty in our point estimates, which we communicate using a 95% Highest Density Interval (HDI). The HDI provides a range of credible values given the data and model.
+
+Following the behavioral results, we present two model-based analyses ^[For more details about the model-based analyses see @macdonald2018speed or Chapter 3.]. The goal of each model is to move beyond a description of the data and to map behavioral differences to underlying psychological processes. The EWMA models changes in the tendency to generate random gaze shifts as a function of RT [@vandekerckhove2007fitting]. This model allows us to quantify the proportion of gaze shifts that were classified as language-driven as opposed to guessing. If listeners seek more visual information from the language source, then they should generate a higher proportion of language-driven shifts and fewer random responses.
+
+Finally, following @vandekerckhove2007fitting, we selected the gaze shifts categorized as language-driven by the EWMA and fit a hierarchical Bayesian Drift-Diffusion Model (HDDM) [@wiecki2013hddm]. The DDM is a cognitive model of decision making developed over the past forty  years (Ratcliff  &  McKoon,  2008) that can quantify differences in the underlying decision process that lead to different patterns of observable behavior. Here, we focus on two parameters of interest: *boundary separation*, which indexes the amount of evidence gathered before generating a response (higher values suggest more information gathered before responding) and *drift rate*, which indexes the amount of evidence accumulated per unit time (higher values suggest more efficient processing). If listeners have a higher boundary separation estimate, this provides additional evidence that more accurate responses were driven by changes in information accumulation as opposed to processing efficiency.
+
+# Experiment 1
 
 In Experiment 1, we measured the timecourse of children and adults' decisions about visual fixation as they processed sentences with familiar words  (e.g., "Where's the ball?"). ^[See https://osf.io/2q4gw/for a pre-registration of the analysis plan.]. We manipulated whether the speaker produced a post-nominal gaze cue to the named object. The visual world consisted of three fixation targets (a center video of a person speaking, a target picture, and a distracter picture; see Figure XXX). The primary question of interest is whether listeners would delay shifting away from the speaker's face when she was likely to generate a gaze cue. We predicted that choosing to fixate longer on the speaker would allow listeners to gather more language-relevant visual information and facilitate comprehension. In contrast, if listeners show parallel gaze dynmamics across the gaze and no-gaze conditions, this pattern suggests that hearing the familiar word was the primary factor driving shifts in visual attention.
 
@@ -111,7 +121,76 @@ In Experiment 1, we measured the timecourse of children and adults' decisions ab
 
 ### Participants
 
-Participants were native, monolingual English-learning children ($n=$ XXX; XXX F) and adults ($n=$ XXX; XXX F). All participants had no reported history of developmental or language delay and normal vision. XXX participants (XXX children, XXX adults) were run but not included in the analysis because either the eye tracker falied to calibrate (XXX children, XXX adults) or the participant did not complete the task (XXX children). 
+```{r exclusions-table}
+n_exclude_et_e1 <- d_fam %>% 
+  filter(age_group != "adult") %>% 
+  select(subid, keep_et) %>% 
+  unique() %>% 
+  count(keep_et)
+
+n_exclude_runsheet_e1 <- d_fam %>% 
+  filter(age_group != "adult") %>% 
+  select(subid, keep_runsheet) %>% 
+  unique() %>% 
+  count(keep_runsheet)
+```
+
+```{r make-ss-table, results="asis"}
+d_kids <- d_novel_fs %>% 
+  filter(age_category == "child", keep_drop == "keep") %>% 
+  select(subid, age_days, gender) %>% 
+  mutate(Experiment = "Experiment 3 (novel words)") %>% 
+  unique()
+
+d_kids %<>% bind_rows(
+  d_fam %>% 
+    filter(age_group != "adult", keep_et == "include", keep_runsheet == "keep") %>% 
+    select(subid, age_days, gender) %>% 
+    unique() %>% 
+    mutate(Experiment = "Experiment 1 (familiar words)" )
+)
+
+gender_breakdown <- d_kids %>% 
+  count(Experiment, gender)
+
+kids_age_table <- d_kids %>% 
+  mutate(age_months = age_days / 30.25,
+         age_years = age_days / 365.25) %>% 
+  group_by(Experiment) %>% 
+  summarise(n = n(),
+            Mean = round(mean(age_months, na.rm = T), 1),
+            Min = min(age_months, na.rm = T),
+            Max = max(age_months, na.rm = T))
+
+kids_age_table[, -1] <- printnum(kids_age_table[, -1])
+
+apa_table(
+  kids_age_table
+  , caption = "Age distributions of children in Experiments 1 and 3. All ages are reported in months."
+)
+```
+
+```{r adults-demo}
+n_adults_gender <- d_novel_fs %>% 
+  filter(age_category == "adult", keep_drop == "keep") %>% 
+  select(subid, gender) %>% 
+  unique() %>% 
+  count(gender) %>% 
+  mutate(Experiment = "Experiment 3")
+
+n_adults_gender %<>% bind_rows(
+  d_fam %>% 
+    filter(age_group == "adult", keep_et == "include") %>% 
+    select(subid, gender) %>% 
+    unique() %>% 
+    count(gender) %>% 
+    mutate(Experiment = "Experiment 1")
+)
+
+n_adults_total <- n_adults_gender %>% group_by(Experiment) %>% summarise(n = sum(n))
+```
+
+Participants were native, monolingual English-learning children ($n=$ `r kids_age_table$n[1]`; `r gender_breakdown$n[1]` F) and adults ($n=$ `r n_adults_total$n[1]`; `r n_adults_gender$n[3]` F). All participants had no reported history of developmental or language delay and normal vision. XXX participants (XXX children, XXX adults) were run but not included in the analysis because either the eye tracker falied to calibrate (XXX children, XXX adults) or the participant did not complete the task (XXX children). 
 
 ### Materials
 
@@ -150,13 +229,19 @@ ms_gaze_length <- d_gaze_length %>%
 
 *Linguistic stimuli.* The video/audio stimuli were recorded in a sound-proof room and featured two female speakers who used natural child-directed speech and said one of two phrases: "Hey! Can you find the (target word)" or "Look! Where's the (target word). The target words were: ball, bunny, boat, bottle, cookie, juice, chicken, and shoe. The target words varied in length (shortest = `r min(ms_words_length$m)` ms, longest = `r max(ms_words_length$m)` ms) with an average length of `r mean(ms_words_length$m) %>% round(digits=2)` ms. 
 
-*Gaze manipulation*. To create the stimuli in the gaze condition, the speaker waited until she finished producing the target sentence and then turner her head to gaze at the bottom right corner of the camera frame. After looking at the named object, she then returned her gaze to the center of the frame. We chose to allow the length of the gaze cue to vary to keep the stimuli naturalistic. The average length of gaze was `r printnum(ms_gaze_length$m_gaze)` seconds with a range from `r printnum(min(d_gaze_length$gaze_length_ms) / 1000)` to `r printnum(max(d_gaze_length$gaze_length_ms) / 1000)` seconds.
+*Gaze manipulation*. To create the stimuli in the gaze condition, the speaker waited until she finished producing the target sentence and then turned her head to gaze at the bottom right corner of the camera frame. After looking at the named object, she then returned her gaze to the center of the frame. We chose to allow the length of the gaze cue to vary to keep the stimuli naturalistic. The average length of gaze was `r printnum(ms_gaze_length$m_gaze)` seconds with a range from `r printnum(min(d_gaze_length$gaze_length_ms) / 1000)` to `r printnum(max(d_gaze_length$gaze_length_ms) / 1000)` seconds.
 
 *Visual stimuli.* The image set consisted of colorful digitized pictures of objects presented in fixed pairs with no phonological overlap between the target and the distracter image (cookie-bottle, boat-juice, bunny-chicken, shoe-ball). The side of the target picture was counterbalanced across trials.
 
 ### Procedure
 
 Participants viewed the task on a screen while their gaze was tracked using an SMI RED corneal-reflection eye-tracker mounted on an LCD monitor, sampling at 30 Hz. The eye-tracker was first calibrated for each participant using a 6-point calibration. On each trial, participants saw two images of familiar objects on the screen for two seconds before the center stimulus appeared. Next, they processed the target sentence -- which consisted of a carrier phrase, a target noun, and a question -- followed by two seconds without language to allow for a response. Both children and adults saw 32 trials (16 gaze trials; 16 no-gaze trials) with several filler trials interspersed to maintain interest. The gaze manipulation was presented in a blocked design with the order of block counterbalanced across participants.
+
+```{r gaze-stimuli, fig.cap = "Stimuli for Experiments 1 and 3. Panel A shows the timecourse of the linguistic stimuli for a single trial. Panel B shows the layout of the fixation locations for all tasks: the center stimulus, the target, and the distracter. Panel C shows a sample of the images used as novel objects in Experiment 3. Panel D shows the social gaze manipulation."}
+
+knitr::include_graphics(here::here(image_path, "gaze_stimuli.jpeg"))
+```
+
 
 ## Results and Discussion
 
@@ -256,38 +341,40 @@ We aimed to answer the following specific research questions:
   1. How do decisions about where to allocate visual attention (speakers vs. objects) change as a function of learning a new word? 
   2. How does the presence of a social cue to reference (eye gaze) change the dynamics of children's gaze patterns during object labeling? 
   3. What is the relationship between chidren's gaze patterns during object labeling and their memory of new words?
+  
+To answer these questions, we compared the timing and accuracy of eye movements during a real-time cross-situational learning task where participants process sentences that contain a novel word (e.g., "Where's the *dax*?") while looking at a simplified visual world with 3 fixation targets (a video of a speaker and two images of unfamiliar objects). We had three key behavioral predictions. First, for all conditions, participants’ distribution of attention to speakers compared to objects will shift over the course of learning. Early in the task, participants will allocate more fixations to a speaker to prioritize gathering visual information that disambiguates reference. After experiencing multiple exposures to a word-object pairing, participants will generate faster saccades, showing signatures of comprehension of the incoming speech. We further predict that later in learning blocks, participants will allocate more fixations to the objects, showing looking behaviors that support learning long-term associations between words and objects.
 
-```{r read_speed_novel_data}
-d_novel_fs <- read_csv(here::here(data_path, "novel_words/speed_acc_novel_shifts.csv")) %>% 
-  mutate(learn_block_half = ifelse(trial_num_learn_block <= 2, "first", "second"),
-         trial_num_lblock_8 = case_when(
-           trial_type == "exposure" & trial_num_learn_block == 1 ~ "1",
-           trial_type == "test" & trial_num_learn_block == 1 ~ "2",
-           trial_type == "exposure" & trial_num_learn_block == 2 ~ "3",
-           trial_type == "test" & trial_num_learn_block == 2 ~ "4",
-           trial_type == "exposure" & trial_num_learn_block == 3 ~ "5",
-           trial_type == "test" & trial_num_learn_block == 3 ~ "6",
-           trial_type == "exposure" & trial_num_learn_block == 4 ~ "7",
-           trial_type == "test" & trial_num_learn_block == 4 ~ "8",
-           TRUE ~ "NA"
-         ),
-         correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE))
+Second, the presence of a gaze cue will change participants’ decisions about visual fixation. We hypothesize that a post-nominal gaze cue increases the value of fixating on a speaker. This manipulation will cause participants to allocate more fixations to the speaker when gaze is present, leading to slower first shift reaction times and higher proportion looking, especially earlier in learning (i.e., lower trial numbers within each block of exposure trials to a novel word-object pairing). This prediction will be operationalized as a main effect of Gaze condition on RT, and a trial number by Gaze condition interaction such that the decrease in RT will be greater on exposure trials in the Gaze condition.
 
-d_novel_tc <- read_feather(here::here(data_path, "novel_words/speed_acc_novel_timecourse.feather")) 
-```
+Third, the Gaze condition should lead to stronger inferences about the correct word-object mapping, resulting in faster learning that we operationalize as more accurate first shifts, faster RTs, and a higher proportion looking to the target vs. the distractor object on test trials as compared to learning words without a gaze cue across both exposure and test trials.
 
 ## Methods
 
 ### Participants
 
-### Materials
-
-```{r speed-acc-novel-stimuli, fig.cap = "Stimuli used in Experiment 3, including trial structure, fixation targets in the visual world, and the gaze cue manipulation."}
-
-knitr::include_graphics(here::here(image_path, "speed_acc_novel_stim.png"))
+```{r exclusions-e3}
+d_excluded_e3 <- d_novel_fs %>% 
+  select(subid, keep_drop, reason_excluded, age_category) %>% 
+  unique() %>% 
+  filter(keep_drop == "drop") %>% 
+  count(reason_excluded, age_category)
 ```
 
+Participants were native, monolingual English-learning children ($n=$ `r kids_age_table$n[2]`; `r gender_breakdown$n[3]` F) and adults ($n=$ `r n_adults_total$n[2]`; `r n_adults_gender$n[1]` F). All participants had no reported history of developmental or language delay and normal vision. `r d_excluded_e3$n[1]` adults were run but not included in the analysis because they were not native speakers of English. XXX participants were run but not included in analysis because either the eye tracker falied to calibrate (XXX children, XXX adults) or the participant did not complete the task (XXX children). 
+
+### Materials
+
+*Linguistic stimuli.* The video/audio stimuli were recorded in a sound-proof room and featured two female speakers who used natural child-directed speech and said one of two phrases: "Hey! Can you find the (novel word)" or "Look! Where's the (novel word). The target words were four pseudo-words: bosa, modi, toma, and pifo. The novel words varied in length (shortest = XXX ms, longest = XXX ms) with an average length of XXX ms. 
+
+*Gaze manipulation*. To create the stimuli in the gaze condition, the speaker waited until she finished producing the novel word before turning her head to gaze at the bottom right corner of the frame. After looking at the named object, she then returned her gaze to the center of the frame. We chose to allow the length of the gaze cue to vary to keep the stimuli naturalistic. The average length of gaze was `r printnum(ms_gaze_length$m_gaze)` seconds with a range from `r printnum(min(d_gaze_length$gaze_length_ms) / 1000)` to `r printnum(max(d_gaze_length$gaze_length_ms) / 1000)` seconds.
+
+*Visual stimuli.* The image set consisted of 28 colorful digitized pictures of objects that were selected such that children were unlikely to already have a label associated with them. The side of the target picture was counterbalanced across trials.
+
 ### Procedure
+
+Participants viewed the task on a screen while their gaze was tracked using an SMI RED corneal-reflection eye-tracker mounted on an LCD monitor, sampling at 30 Hz. The eye-tracker was first calibrated for each participant using a 6-point calibration. Then, participants watched a series of ambiguous word learning events organized into pairs of one exposure and one test trial. On each trial, participants saw of a set of two unfamiliar objects and heard one novel word. 
+
+Each word was learned in a block of four exposure-test pairs for a total of eight trials for each novel word. Critically, on each trial within a word block, one of the objects in the set had appeared on the previous trials (target object), while the other object was a randomly generated novel object not previously shown in the experiment (distracter object). Both children and adults saw 32 trials (16 gaze trials; 16 no-gaze trials) with several filler trials interspersed to maintain interest. The gaze manipulation was presented in a blocked design with the order of block counterbalanced across participants.
 
 ## Results and Discussion
 
