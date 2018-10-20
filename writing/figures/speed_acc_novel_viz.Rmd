@@ -575,7 +575,7 @@ fst_shifts_plot_final <- plot_grid(pairwise_diffs_plot_rt, pairwise_diffs_plot_a
                                    labels = c("(A) Reaction Time", "(B) Accuracy"),
                                    scale = c(0.85, 0.85))
 
-save_plot(filename = here::here(image_path, "speed_acc_nov_fstshifts.jpeg"), 
+save_plot(filename = here::here(image_path, "speed_acc_novel_fstshifts.jpeg"), 
           fst_shifts_plot_final,
           ncol = 2,
           nrow = 2,

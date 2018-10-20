@@ -53,6 +53,11 @@ stimuli_path <- "data/00_stimuli_information/analysis_order_sheets"
 image_path <- "writing/figures/plots"
 ```
 
+```{r model-globals}
+options (mc.cores=parallel::detectCores()) # Run on multiple cores
+set.seed (3875)
+```
+
 ```{r read stimuli information}
 d_gaze_stim <- read_csv(here::here(stimuli_path, "speed-acc-child-gaze-trial-info.csv"), col_types = cols(.default = "c"))
 d_adult_ng_stim <- read_csv(here::here(stimuli_path, "speed-acc-adult-ng-trial-info.csv"), col_types = cols(.default = "c"))
@@ -62,7 +67,7 @@ d_stim <- bind_rows(mutate(d_gaze_stim, experiment = "kids_gaze"), mutate(d_adul
 ```{r read_familiar_words_data}
 d_fam_child <- read_csv(here::here(data_path, "familiar_words/speed_acc_child_gaze_fstshift_tidy.csv")) %>% 
   rename(age_days = age) %>% 
-  mutate(age_group = as.character(age_group))
+  mutate(age_group = "children")
 
 d_fam_adult <- read_csv(here::here(data_path, "familiar_words/speed_acc_adult_ng_fstshift_tidy.csv")) %>% 
   filter(noise_condition == "clear") %>% 
@@ -70,7 +75,7 @@ d_fam_adult <- read_csv(here::here(data_path, "familiar_words/speed_acc_adult_ng
          comments = notes) %>% 
   select(-age, -resp_onset_type_fact, -reason_excluded) %>% 
   mutate(birthday = NA,
-         age_group = "adult", 
+         age_group = "adults", 
          age_days = NA,
          run_date = lubridate::as_datetime(run_date))
 
@@ -245,24 +250,36 @@ knitr::include_graphics(here::here(image_path, "gaze_stimuli.jpeg"))
 
 ## Results and Discussion
 
-```{r speed-acc-gaze-results, out.width="95%", fig.cap = "Timecourse looking, first shift Reaction Time (RT), and Accuracy results for children in Experiment 1. Panel A shows the overall looking to the center, target, and distracter stimulus for each context. Panel B shows the distribution of RTs for each participant. Each point represents a participant's average RT. The black squares represent the group means. And the error bars represent 95\\% Highest Density Intervals around the group means. Panel C shows the same information but for participants' first shift accuracy."}
+```{r speed-acc-gaze-results, out.width="95%", fig.cap = "Timecourse looking, first shift Reaction Time (RT), and Accuracy results for children in Experiment 1. Panel A shows the overall looking to the center, target, and distracter stimulus for each context. Panel B shows the distribution of pairwise contrasts between RTs in the gaze and no-gaze conditions. The square point represents the mean value for each measure. The vertical dashed line represents the null model of zero condition difference. The width each point represents the 95\\% HDI. Panel C shows the same information but for participants' first shift accuracy."}
 
 knitr::include_graphics(here::here(image_path, "speed_acc_fam_behav.jpeg"))
 ```
 
 *Timecourse.*
 
+```{r}
+d_model_fam <- d_fam %>% 
+  filter(keep_runsheet %in% c("yes", "keep"), 
+         keep_et == "include",
+         rt <= 2,
+         response_onset_type == "noun",
+         shift_start_location == "center")
+```
+
+
 ```{r blmm speed-acc-fam}
 # RT
+fit_rt_fam <- brms::brm(log(rt) ~ gaze_condition + age_group + (gaze_condition + target_image|subid), 
+                        data = d_model_fam, 
+                        family = gaussian(),
+                        silent = TRUE)
 
-# Accuracy
+coefs_san_rt <- broom::tidy(fit_rt_fam)
+
+# accuracy
 ```
 
 *First shift RT and Accuracy.*
-
-*EWMA.*
-
-*HDDM.*
 
 # Experiment 2
 
@@ -325,7 +342,7 @@ fit_gaze_xsit <- brms::brm(test ~ exposure * condition + (1|subid),
 coefs_gaze_xsit <- broom::tidy(fit_gaze_xsit)
 ```
 
-*Relationship between exposure and test trials.* When the speaker generated a social cue during labeling, adults reliably followed that cue and tended to focus their attention on a single object (Figure XXXA). In contrast, people in the No-gaze condition tended to distribute their attention more broadly across the two objects. For adults in both gaze contexts, more time spent attending to the target object on exposure trials led higher proportion looking to the target, i.e., better recall, at test ($\beta_{exposure}$ = `r printnum(coefs_gaze_xsit$estimate[2])`, 95% HDI [`r printnum(coefs_gaze_xsit$lower[2])`, `r printnum(coefs_gaze_xsit$upper[2])`]). Critically, there was an interaction between the gaze condition and the relationship between attention on exposure and test: When eye gaze cued visual attention, adults showed stronger memory for the word-object link ($\beta_{int}$ = `r printnum(coefs_gaze_xsit$estimate[4])`, 95% HDI [`r printnum(coefs_gaze_xsit$lower[4])`, `r printnum(coefs_gaze_xsit$upper[4])`]). This result provides evidence that social information does not only modulate people's in-the-moment decisions about how to allocate their visual attention; instead, the social cue changed the strength of the memory for word-object links that are stored during cross-situational word learning.
+*Relationship between performance on exposure and test trials.* When the speaker generated a social cue during labeling, adults reliably followed that cue and tended to focus their attention on a single object (Figure XXXA). In contrast, people in the No-gaze condition tended to distribute their attention more broadly across the two objects. For adults in both gaze contexts, more time spent attending to the target object on exposure trials led higher proportion looking to the target, i.e., better recall, at test ($\beta_{exposure}$ = `r printnum(coefs_gaze_xsit$estimate[2])`, 95% HDI [`r printnum(coefs_gaze_xsit$lower[2])`, `r printnum(coefs_gaze_xsit$upper[2])`]). Critically, there was an interaction between the gaze condition and the relationship between attention on exposure and test: When eye gaze cued visual attention, adults showed stronger memory for the word-object link ($\beta_{int}$ = `r printnum(coefs_gaze_xsit$estimate[4])`, 95% HDI [`r printnum(coefs_gaze_xsit$lower[4])`, `r printnum(coefs_gaze_xsit$upper[4])`]). This result provides evidence that social information does not only modulate people's in-the-moment decisions about how to allocate their visual attention; instead, the social cue changed the strength of the memory for word-object links that are stored during cross-situational word learning.
 
 ### Limitations
 
@@ -377,6 +394,36 @@ Participants viewed the task on a screen while their gaze was tracked using an S
 Each word was learned in a block of four exposure-test pairs for a total of eight trials for each novel word. Critically, on each trial within a word block, one of the objects in the set had appeared on the previous trials (target object), while the other object was a randomly generated novel object not previously shown in the experiment (distracter object). Both children and adults saw 32 trials (16 gaze trials; 16 no-gaze trials) with several filler trials interspersed to maintain interest. The gaze manipulation was presented in a blocked design with the order of block counterbalanced across participants.
 
 ## Results and Discussion
+
+### Timecourse looking
+
+```{r san-tc-plot, fig.width=3, out.width="100%", fig.cap = "Overview of children and adults' looking to the three fixation targets (Speaker, Target, Distracter) over the course of exposure and test trials. Panel A shows proportion looking to the speaker's face with color indicating gaze condition and linetype indicating age group. Panel B shows the same information but for proportion looking to the target and distracter images."}
+
+knitr::include_graphics(here::here(image_path, "speed_acc_novel_tc.jpeg"))
+```
+
+*Learning effects.*
+
+```{r san-prop-looking-plot, fig.cap = "Panel A shows participants’ tendency to look at the target object on exposure and test trials as a function of the trial number within a learning block. The horizontal, dashed line represents the tendency to distribute attention equally across the two images. Color indicates gaze condition and error bars represent 95\\% credible intervals. Panel B shows the same information but collapsed across trial to highlight the effect of the gaze cue."}
+
+knitr::include_graphics(here::here(image_path, "speed_acc_novel_proplook.jpeg"))
+```
+
+*Looking to the speaker.*
+
+```{r san-prop-looking-speaker-plot, fig.cap = "Children and adults' looking to the speaker as function of trial number within a learning block. All plotting conventions are the same as in Figure XXX."}
+
+knitr::include_graphics(here::here(image_path, "speed_acc_novel_speaker_look.jpeg"))
+```
+
+### First shift RT and Accuracy
+
+*Effect of gaze cue.*
+
+```{r speed-acc-novel-shifts, out.width="90%", fig.cap = "First shift Reaction Time (RT), and Accuracy results for children and adults in Experiment 3. Panel A shows the distribution of pairwise contrasts between RTs in the gaze and no-gaze conditions. The square point represents the mean value for each measure. The vertical dashed line represents the null model of zero condition difference. The width each point represents the 95\\% HDI. Panel B shows the same information but for participants' first shift accuracy."}
+
+knitr::include_graphics(here::here(image_path, "speed_acc_novel_fstshifts.jpeg"))
+```
 
 # General Discussion
 

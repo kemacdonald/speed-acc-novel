@@ -106,7 +106,7 @@ test_plot <- ss_test %>%
   geom_point(alpha = 0.25) + 
   lims(x = c(-.02, 1.02)) +
   geom_smooth(method = "lm", se = T, size = 2) +
-  langcog::scale_color_solarized() +
+  ggthemes::scale_color_ptol() +
   geom_hline(yintercept = 0.5, lty = "dashed") +
   labs(y = "Prop. Looking Test", 
        x = "Prop. Looking Exposure",
