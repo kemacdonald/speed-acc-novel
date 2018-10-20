@@ -135,7 +135,7 @@ How many trials get filtered for extreme RTs?
 d_keep %>% ungroup %>% count(keep_rt)
 ```
 
-## RT analysis
+## Analysis
 
 For both children and adults, plot RT as a function of trial number, trial type, and gaze condition.
 
@@ -378,7 +378,7 @@ First shift Acc.
 m1 <- d_keep %>% 
   filter(keep_rt == "keep") %>% 
   glmer(data = ., 
-        correct_bool ~ gaze_condition * trial_type + age_category + (gaze_condition|subid),
+        correct_bool ~ gaze_condition + trial_type + age_category + (gaze_condition|subid),
         family = 'binomial')
 
 summary(m1)
@@ -390,7 +390,7 @@ First shift RT
 m2 <- d_keep %>% 
   filter(keep_rt == "keep") %>% 
   lmer(data = ., 
-     log(rt) ~ gaze_condition * trial_type + age_category + (gaze_condition|subid) + (trial_type|subid)
+     log(rt) ~ gaze_condition + trial_type + age_category + (gaze_condition|subid)
      )
 
 summary(m2)

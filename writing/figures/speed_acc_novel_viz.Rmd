@@ -142,26 +142,25 @@ d_analysis %<>%
   filter(n_samples_trial >= 45)
 ```
 
-# Visualize timecourse looking to all AOIs
+# Timecourse looking to all AOIs
 
-```{r}
+```{r fix age variable}
 d_analysis %<>% 
   mutate(age_category = ifelse(age_category == "child", "children", "adults")) %>% 
   mutate(age_category = factor(age_category, levels = c("children", "adults"))) 
 ```
 
-
 ```{r compute mean gaze onset relative to noun onset}
 gaze_onset <- d_analysis %>% 
   distinct(noun_onset_seconds, gaze_onset_seconds) %>% 
   na.omit() %>% 
-  mutate(gaze_onset_rel_noun = (gaze_onset_seconds - noun_onset_seconds) * 1000) %>% 
+  mutate(gaze_onset_rel_noun = (gaze_onset_seconds - noun_onset_seconds)) %>% 
   summarise(m_gaze_onset = mean(gaze_onset_rel_noun))
 ```
 
 ## Aggregate proportion looking as a function of age group and gaze condition
 
-```{r}
+```{r aggregate-tc-data}
 ss_groupings <- list("subid", "time_ms_normalized", "gaze_condition", 
                      "trial_type", "age_category", "trial_num_exp")
 
@@ -187,7 +186,7 @@ ms_time %<>%
          t_sec = time_ms_normalized / 1000) 
 
 # face
-san_face_tc <-ms_time %>% 
+san_face_tc <- ms_time %>% 
   filter(t_sec <= upper_bound, target_looking == "face") %>% 
   ggplot(aes(x = as.numeric(t_sec), y = m, 
              color = gaze_condition,
@@ -195,6 +194,8 @@ san_face_tc <-ms_time %>%
   lims(y = c(0, 0.9),
        x = c(0, upper_bound + x_axis_expand)) +
   geom_line(size=1) +
+  geom_vline(xintercept = gaze_onset$m_gaze_onset, lty = "dashed") +
+  annotate(geom = 'text', label= "Gaze Onset", x = 1.9, y = 0.85) +
   guides(color = F, linetype = F) +
   ggthemes::scale_color_ptol() +
   xlab("Time in sec from onset of trial") +
@@ -240,20 +241,21 @@ san_test_tc <- ms_time %>%
   theme(legend.position = "right") 
 ```
 
-Merge and save the final timecourse plot
+## Merge and save the final timecourse plot
 
 ```{r}
 speed_acc_nov_tc_final <- cowplot::plot_grid(san_face_tc, san_exposure_tc, san_test_tc,
                                              scale = c(0.9, 0.9, 0.9),
                                              ncol = 3,
+                                             hjust = -0.001,
                                              rel_widths = c(1.45, 0.9, 1.3), 
-                                             labels = c("A", "B"))
+                                             labels = c("(A) Looks to speaker", "(B) Looks to target and distracter"))
 
 
 ggsave(filename = here::here(image_path, "speed_acc_novel_tc.jpeg"),
        plot = speed_acc_nov_tc_final,
-       width = 14,
-       height = 4)
+       width = 13.5,
+       height = 4.5)
 ```
 
 # How does looking to target change across trials?
@@ -385,3 +387,197 @@ ggsave(plot = speaker_look_plot,
           )
 ```
 
+# First shift plots
+
+## Read in data
+
+```{r}
+d_fs <- read_csv(here::here(data_path, "speed_acc_novel_shifts.csv")) %>% 
+  mutate(learn_block_half = ifelse(trial_num_learn_block <= 2, "first", "second"),
+         trial_num_lblock_8 = case_when(
+           trial_type == "exposure" & trial_num_learn_block == 1 ~ "1",
+           trial_type == "test" & trial_num_learn_block == 1 ~ "2",
+           trial_type == "exposure" & trial_num_learn_block == 2 ~ "3",
+           trial_type == "test" & trial_num_learn_block == 2 ~ "4",
+           trial_type == "exposure" & trial_num_learn_block == 3 ~ "5",
+           trial_type == "test" & trial_num_learn_block == 3 ~ "6",
+           trial_type == "exposure" & trial_num_learn_block == 4 ~ "7",
+           trial_type == "test" & trial_num_learn_block == 4 ~ "8",
+           TRUE ~ "NA"
+         ),
+         correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE),
+         log_rt = log(rt),
+         age_category = ifelse(age_category == "child", "children", "adults")) %>% 
+  mutate(age_category = factor(age_category, levels = c("children", "adults"))) 
+```
+
+## Filter data
+
+Remove shifts that do not start at center. Remove participants based on keep_drop, and extreme RTs. Take out word blocks for reasons explained in subject log or if there is data for less than 50% of word block:
+
+```{r}
+d_keep <- d_fs %>%
+  filter(is.na(block_excluded) | block_excluded != learning_block, 
+         shift_start_location == "center") %>%
+  group_by(subid, learning_block) %>%
+  mutate(n_trials = n()) %>% 
+  filter(rt > 0, keep_drop == "keep", 
+         n_trials >= 2) %>% 
+  ungroup()
+```
+
+Count number of trials after filtering
+
+```{r}
+d_keep %>% count(subid, gaze_condition, trial_type, trial_num_learn_block)
+```
+
+Filter extreme RTs
+
+```{r}
+m_rt <- log(d_keep$rt) %>% mean()
+sd_rt <- log(d_keep$rt) %>% sd()
+
+d_keep <- d_keep %>% 
+  mutate(log_rt = log(rt),
+         keep_rt = case_when(
+           log_rt <= m_rt + 3*sd_rt & log_rt >= m_rt - 3*sd_rt ~ "keep",
+           TRUE ~ "drop"
+         ))
+```
+
+How many trials get filtered for extreme RTs?
+
+```{r}
+d_keep %>% ungroup %>% count(keep_rt)
+```
+
+## Aggregate
+
+Aggregate for accuracy and RT
+
+```{r}
+ss <- d_keep %>% 
+  filter(!is.na(rt), keep_rt == "keep") %>%
+  mutate(gaze_on_trial = case_when(
+    gaze_condition == "gaze" & trial_type == "exposure" ~ "gaze",
+    TRUE ~ "no_gaze"
+  )) %>% 
+  group_by(subid, 
+           age_category,
+           gaze_condition,
+           trial_type) %>%
+  summarise(m_rt = median(rt),
+            se_rt = sd(rt, na.rm = T) / sqrt(n()),
+            m_acc = mean(correct_bool),
+            se_acc = sd(correct_bool, na.rm = T) / sqrt(n()),
+            n = n()) 
+```
+
+## Make first shift accuracy pairwise diffs plot
+
+```{r acc-plot}
+# global plot values
+pt_size <- 3
+pt_alpha <- 0.5
+pt_shape <- 21
+pt_width <- 0.15
+pt_color <- "black"
+pt_fill <- "darkgrey"
+nboot <- 1000
+
+# get pairwise diffs; higher values is more accurate on gaze trials
+diffs_df <- ss %>% 
+  select(m_acc, subid, gaze_condition, age_category, trial_type) %>% 
+  spread(gaze_condition, m_acc) %>% 
+  group_by(age_category) %>% 
+  mutate(diff = gaze - straight_ahead) 
+
+ms_diffs <- diffs_df %>% 
+  group_by(age_category, trial_type) %>% 
+  langcog::multi_boot_standard(col = "diff", na.rm = T, nboot = nboot) %>% 
+  rename(diff = mean)
+
+# now plot those diffs
+pairwise_diffs_plot_acc <- diffs_df %>% 
+  mutate(title = "Pairwise contrast") %>%  # hack to get plots to line up nicely
+  ggplot(aes(x = fct_rev(age_category), y = diff)) +
+  geom_jitter(shape = pt_shape, 
+              width = 0.1, 
+              color = pt_color, 
+              size = pt_size,
+              fill = pt_fill,
+              alpha = pt_alpha) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  data = ms_diffs,
+                  shape = 15,
+                  size = 0.85,
+                  color = "firebrick1") +
+  #ylim(-0.45, 0.7) +
+  labs(x = NULL, y = "Prop. correct difference") +
+  coord_flip() +
+  facet_wrap(~trial_type) +
+  theme(panel.border = element_rect(colour = "grey", fill=NA, size=1),
+        plot.background=element_blank())
+
+pairwise_diffs_plot_acc
+```
+
+## Make first shift RT pairwise diffs plot
+
+```{r first-shift-rt-plot}
+# get pairwise diffs; higher values is more accurate on gaze trials
+diffs_df <- ss %>% 
+  select(m_rt, subid, gaze_condition, age_category, trial_type) %>% 
+  spread(gaze_condition, m_rt) %>% 
+  group_by(age_category) %>% 
+  mutate(diff = gaze - straight_ahead) 
+
+ms_diffs <- diffs_df %>% 
+  group_by(age_category, trial_type) %>% 
+  langcog::multi_boot_standard(col = "diff", na.rm = T, nboot = nboot) %>% 
+  rename(diff = mean)
+
+# now plot those diffs
+pairwise_diffs_plot_rt <- diffs_df %>% 
+  mutate(title = "Pairwise contrast") %>%  # hack to get plots to line up nicely
+  ggplot(aes(x = fct_rev(age_category), y = diff)) +
+  geom_jitter(shape = pt_shape, 
+              width = 0.1, 
+              color = pt_color, 
+              size = pt_size,
+              fill = pt_fill,
+              alpha = pt_alpha) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  data = ms_diffs,
+                  shape = 15,
+                  size = 0.85,
+                  color = "firebrick1") +
+  #ylim(-0.45, 0.7) +
+  labs(x = NULL, y = "RT difference (sec)") +
+  coord_flip() +
+  facet_wrap(~trial_type) +
+  theme(panel.border = element_rect(colour = "grey", fill=NA, size=1),
+        plot.background=element_blank())
+
+pairwise_diffs_plot_rt
+```
+
+## Put first shift plots together and save.
+
+```{r}
+fst_shifts_plot_final <- plot_grid(pairwise_diffs_plot_rt, pairwise_diffs_plot_acc, 
+                                   ncol = 1, 
+                                   hjust = -0.001,
+                                   rel_widths = c(1,1), 
+                                   labels = c("(A) Reaction Time", "(B) Accuracy"),
+                                   scale = c(0.85, 0.85))
+
+save_plot(filename = here::here(image_path, "speed_acc_nov_fstshifts.jpeg"), 
+          fst_shifts_plot_final,
+          ncol = 2,
+          nrow = 2,
+          base_aspect_ratio = 1)
+```
