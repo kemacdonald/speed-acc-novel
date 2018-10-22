@@ -105,27 +105,28 @@ MacDonald, 450 Serra Mall, Stanford, CA 94306. E-mail:
 \abstract{
 Children process words in complex environments where there are often
 many things to talk about. How do children understand and learn language
-despite noisy input? Statistical accounts emphasize children's pattern
-detection and aggregation of consistent word-object co-occurrences over
-time. Social-pragmatic theories point out that language is acquired
-within interactions with social partners who can reduce ambiguity within
-individual labeling events. Here, we present three studies of eye
-movements that ask how children integrate these two sources of
-information -- statistical and social -- to shape their decisions about
-where to seek information during real-time language processing. First,
-both children and adults showed parallel gaze dynamics when processing
-familiar words that were or were not accompanied by a social cue to
-reference (speaker's eye gaze). Second, in a minimal cross-situational
-word learning task, adults looked longer at novel word-object mappings
-that were learned via a social cue. Finally, in contrast to processing
-familiar words, both children and adults fixated longer on a speaker who
-provided a disambiguating gaze cue, which, in turn, led to more looking
-to the named object and less looking to the other objects in the scene.
-Moreover, this differential looking to a helpful social partner
-increased as learners were exposed to more word-object co-occurrences.
-Together, these results suggest that learners flexibly integrate their
-knowledge of object labels and the availability of social information
-when seeking information during language processing.
+despite this kind of noisy input? Statistical accounts emphasize
+children's pattern detection and aggregation of consistent word-object
+co-occurrences over time. Social-pragmatic theories point out that
+language is acquired within interactions with social partners who can
+reduce ambiguity within individual labeling events. Here, we present
+three studies of eye movements that ask how children integrate these two
+sources of information -- statistical and social -- to shape their
+decisions about where to seek information during real-time language
+processing. First, both children and adults showed parallel gaze
+dynamics when processing familiar words that were or were not
+accompanied by a social cue to reference (speaker's eye gaze). Second,
+in a minimal cross-situational word learning task, adults looked longer
+at novel word-object mappings that were learned via a social cue.
+Finally, in contrast to processing familiar words, both children and
+adults fixated longer on a speaker who provided a disambiguating gaze
+cue, which, in turn, led to more looking to the named object and less
+looking to the other objects in the scene. Moreover, this differential
+looking to a helpful social partner increased as learners were exposed
+to more word-object co-occurrences. Together, these results suggest that
+learners flexibly integrate their knowledge of object labels and the
+availability of social information when seeking information during
+language processing.
 
 
 }
@@ -186,7 +187,7 @@ learners might integrate social and statistical information. For
 example, computational modeling work by Yu and Ballard (2007) found
 better word-object mapping performance if the model used social cues
 (eye gaze) to increase the strength of specific word-object associations
-stored from each learning instance. Moreover, M. C. Frank, Goodman, and
+stored from each learning instance. Moreover, Frank, Goodman, and
 Tenenbaum (2009) showed that adding social inferences to
 cross-situational learning models allowed them to explain a variety of
 key phenomena in early language development.
@@ -217,11 +218,10 @@ nouns, children must first map linguistic signal onto objects in the
 visual word by gathering information via visual fixation. Recent work
 has shown that how infants ability to sustain visual attention is a
 strong predictor of their novel word learning in experimental tasks and
-in correlational studies across development ({\textbf{???}}). Taken
-together, these points make children's real-time visual information
-selection a good case study for asking how social and statistical
-information are integrated to shape active processes during early word
-learning.
+in correlational studies across development (Smith \& Yu, 2013). These
+facts make children's real-time visual information selection a good case
+study for asking how social and statistical information are integrated
+to shape active processes during early word learning.
 
 \subsection{Current studies}\label{current-studies}
 
@@ -275,12 +275,10 @@ longer-term statistical learning ({\textbf{???}}).
 
 \section{Analytic approach}\label{analytic-approach}
 
-To quantify evidence for our predictions, we follow MacDonald, Marchman,
-Fernald, and Frank (2018) and present four analyses: (1) the timecourse
-of listeners' looking to each area of interest (AOI), (2) the Reaction
-Time (RT) and Accuracy of listeners' first shifts away from the
-speaker's face, (3) an Exponentially Weighted Moving Average (EWMA), and
-(4) a Drift Diffusion Model (DDM).\footnote{All analysis code can be
+To quantify evidence for our predictions, we present analyses of (1) the
+time course of listeners' looking to each area of interest (AOI) and (2)
+the Reaction Time (RT) and Accuracy of listeners' first shifts away from
+the speaker's face and to the objects.\footnote{All analysis code can be
   found in the online repository for this project:
   \url{https://github.com/kemacdonald/speed-acc-novel}.}
 
@@ -305,46 +303,32 @@ distributions were trimmed to between zero and two seconds and RTs were
 modeled in log space. Accuracy corresponds to whether participants'
 first gaze shift landed on the target or the distracter object. If
 listeners generate slower but more accurate gaze shifts, this provides
-evidence that gathering more visual information from the signer/speaker
-led to more robust language comprehension.
+evidence that gathering more visual information from the speaker led to
+more robust language processing.
 
-We used the \texttt{rstanarm} (Gabry \& Goodrich, 2016) package to fit
+In Experiments 2 and 3, which measure novel word learning as a function
+of multiple word-object exposures, we compute proportion looking to the
+speaker for each trial, which corresponds to the amount of time looking
+to the speaker over the total amount of time looking at the three AOIs.
+We interpret a higher looking to the speaker as increased information
+seeking to gather the social cue. We also compute the proportion looking
+to the target object, which corresponds to the time spent looking to the
+target over the total amount of time fixating on both the target and the
+distracter objects. Higher target looking on Exposure trials with gaze
+cues indicate that learners followed the gaze cue. We interpret higher
+target looking on test trials indicates stronger retention for the newly
+learned word-object links. In all analyses of learning, we treat trial
+number as continous and age group -- children vs.~adults -- as
+categorical.
+
+We used the \texttt{brms} (Bürkner \& others, 2017) package to fit
 Bayesian mixed-effects regression models. The mixed-effects approach
-allowed us to model the nested structure of our data -- multiple trials
-for each participant and item, and a within-participants manipulation --
-by including random intercepts for each participant and item, and a
-random slope for each item and gaze condition. We used Bayesian
-estimation to quantify uncertainty in our point estimates, which we
-communicate using a 95\% Highest Density Interval (HDI). The HDI
-provides a range of credible values given the data and model.
-
-Following the behavioral results, we present two model-based
-analyses.\footnote{For more details about the model-based analyses see
-  MacDonald et al. (2018) or Chapter 3.} The goal of each model is to
-move beyond a description of the data and to map behavioral differences
-to underlying psychological processes. The EWMA models changes in the
-tendency to generate random gaze shifts as a function of RT
-(Vandekerckhove \& Tuerlinckx, 2007). This model allows us to quantify
-the proportion of gaze shifts that were classified as language-driven as
-opposed to guessing. If listeners seek more visual information from the
-language source, then they should generate a higher proportion of
-language-driven shifts and fewer random responses.
-
-Finally, following Vandekerckhove and Tuerlinckx (2007), we selected the
-gaze shifts categorized as language-driven by the EWMA and fit a
-hierarchical Bayesian Drift-Diffusion Model (HDDM) (Wiecki, Sofer, \&
-Frank, 2013). The DDM is a cognitive model of decision making developed
-over the past forty years (Ratcliff \& McKoon, 2008) that can quantify
-differences in the underlying decision process that lead to different
-patterns of observable behavior. Here, we focus on two parameters of
-interest: \emph{boundary separation}, which indexes the amount of
-evidence gathered before generating a response (higher values suggest
-more information gathered before responding) and \emph{drift rate},
-which indexes the amount of evidence accumulated per unit time (higher
-values suggest more efficient processing). If listeners have a higher
-boundary separation estimate, this provides additional evidence that
-more accurate responses were driven by changes in information
-accumulation as opposed to processing efficiency.
+allowed us to model the nested structures in our data -- multiple trials
+for each participant and item, and a within-participants manipulation in
+Experiments 1 and 3. We used Bayesian estimation to quantify uncertainty
+in our point estimates, which we communicate using a 95\% Highest
+Density Interval (HDI), providing a range of credible values given the
+data and model.
 
 \section{Experiment 1}\label{experiment-1}
 
@@ -498,37 +482,36 @@ to fixate on the speaker's face and gather a social cue to reference
 that could have provided additional disambiguating information. The
 presence of gaze, however, did affect children's looking behavior later
 in the trial such that they were more likely to allocate attention to
-the speaker when she had gazed at the named object.
-
-While we did not predict these results, it is interesting that
-children's gaze dynamics did not change when processing highly familiar
-words in the presence of a social cue. This behavior seems reasonable if
-eye movements in response to familiar language are highly-practiced
-visual routines that do not allocate fixations to less-relevant
-locations. Moreover, if children developed an expectation that their
-goal was to find named objects quickly, then fixating the speaker
-becomes less goal-relevant.
+the speaker when she had gazed at the named object. While we did not
+predict these results, it is interesting that children's gaze dynamics
+did not change when processing highly familiar words in the presence of
+a social cue. This behavior seems reasonable if eye movements in
+response to familiar language are highly-practiced visual routines that
+do not allocate fixations to less-relevant locations. Moreover, if
+children developed an expectation that their goal was to find named
+objects quickly, then fixating the speaker becomes less goal-relevant.
 
 In our previous work, we found that both children and adults fixate
 longer on a speaker when language is more difficult to process because
-of background noise (MacDonald et al., 2018). We explained this result
-as an adaptation to the informational demands of listeners' environment
-such that they were seeking additional visual information to support
-language comprehension. The results of Experiment 1 can constrain our
-information seeking explanation by showing that children do not always
-gather more visual information; instead, they respond to the uncertainty
-in the input and adapt gaze to seek information when uncertainty is
-higher. This raises an interesting question: Would children's
-information seeking adapt when they do not know the word-object
-mappings? That is, when the learner is surrounded by novel objects, the
-value of seeking visual information from a social partner should
-increase since this action could provide highly-relevant information for
-decreasing referential uncertainty -- a point that has long been
-emphasized by social-pragmatic theories of language acquisition (P.
-Bloom, 2002; Clark, 2009; Hollich et al., 2000). Experiments 2 and 3
-explore this interesting case and ask whether learners would adapt their
-gaze patterns to seek supprortive visual information from social
-partners in the context of mapping novel words to their referents.
+of background noise (MacDonald, Marchman, Fernald, \& Frank, 2018). We
+explained this result as an adaptation to the informational demands of
+listeners' environment such that they were seeking additional visual
+information to support language comprehension. The results of Experiment
+1 can constrain our information seeking explanation by showing that
+children do not always gather more visual information; instead, they
+respond to the uncertainty in the input and adapt gaze to seek
+information when uncertainty is higher. This raises an interesting
+question: Would children's information seeking adapt when they do not
+know the word-object mappings? That is, when the learner is surrounded
+by novel objects, the value of seeking visual information from a social
+partner should increase since this action could provide highly-relevant
+information for decreasing referential uncertainty -- a point that has
+long been emphasized by social-pragmatic theories of language
+acquisition (P. Bloom, 2002; Clark, 2009; Hollich et al., 2000).
+Experiments 2 and 3 explore this interesting case and ask whether
+learners would adapt their gaze patterns to seek supprortive visual
+information from social partners in the context of mapping novel words
+to their referents.
 
 \section{Experiment 2}\label{experiment-2}
 
@@ -588,9 +571,9 @@ of the objects on exposure trials or the No-Gaze condition in which a
 speaker looked straight on exposure trials. Every exposure trial was
 followed by a test trial, where participants heard the same novel word
 paired with a new set of two novel objects. One of the objects in the
-set had appeared in the exposure trial (\enquote{kept} object), while
+set had appeared in the exposure trial (\enquote{target} object), while
 the other object had not previously appeared in the experiment
-(\enquote{novel} object).
+(\enquote{distracter} object).
 
 \begin{figure}[!t]
 
@@ -601,11 +584,11 @@ the other object had not previously appeared in the experiment
 \caption{Overview of adults' looking to the three fixation targets (Face, Target, Distracter) over the course of the trial. Panel A shows proportion looking to the speaker's face for exposure and test trials. Color and linetype represent gaze condition. Panel B shows the same information but for proportion looking to the target and distracter images.}\label{fig:gaze-xsit-tc-plot}
 \end{figure}
 
-The side of the screen of the \enquote{kept} object was counterbalanced
+The side of the screen of the target object was counterbalanced
 throughout the experiment. In the gaze condition, for half of the test
-trials, the kept object was the target of the speaker's gaze during the
-exposure trial, while the other half, the kept object was the object
-that had not been the gaze target.
+trials, the target object was the focus of the speaker's gaze during the
+exposure trial, while the other half, the target object was the object
+that had not been the focus of gaze during labeling.
 
 \subsection{Results and Discussion}\label{results-and-discussion-1}
 
@@ -616,17 +599,16 @@ real-time? Figure~\ref{fig:gaze-xsit-tc-plot} presents an overview of
 looking to each AOI for each processing context. This plot shows changes
 in the mean proportion of trials on which participants fixated on the
 speaker's face, the target image, or the distracter image at every 33-ms
-interval of the stimulus sentence.
-
-At target-noun onset, adults tended to look more at the speaker's face
-on both exposure and test trials. As the target noun unfolded, the mean
-proportion looking to the center decreased as participants shifted their
-gaze to the target or the distracter images. On exposure trials tended
-to distribute their attention relatively evenly across target and
-distracter images. On test trials, proportion looking to the target
-increased sooner and reached a higher asymptote compared to proportion
-looking to the distracter for both condition, suggesting that adults
-were able to track the consistent word-object links in both conditions.
+interval of the stimulus sentence. At target-noun onset, adults tended
+to look more at the speaker's face on both exposure and test trials. As
+the target noun unfolded, the mean proportion looking to the center
+decreased as participants shifted their gaze to the target or the
+distracter images. On exposure trials tended to distribute their
+attention relatively evenly across target and distracter images. On test
+trials, proportion looking to the target increased sooner and reached a
+higher asymptote compared to proportion looking to the distracter for
+both condition, suggesting that adults were able to track the consistent
+word-object links in both conditions.
 
 There were several qualitative differences in looking behavior across
 the different gaze conditions and trial types. First, adults spent more
@@ -997,7 +979,94 @@ not learning the novel word-object links well enough in either context.
 
 \section{General Discussion}\label{general-discussion}
 
-TODO
+During grounded language processing, looks to a speaker or to objects
+can faciliate comprehension and learning. Do children flexibly seek
+visual information to support these goals? And how does information
+seeking adapt as children gain more exposure to consistent word-object
+pairings across multiple labeling events? In this work, we pursued the
+idea that learners flexibly adapt their gaze to seek disambiguating
+information from social partners when it is useful for their
+comprehension and learning. We presented evidence for this explanation
+by tracking children and adults' eye movements as they processed both
+familiar and novel words accompanied by an ecologically-valid social cue
+to reference (eye gaze). We also measured how gaze learners' gaze
+dynamics changed as a function of accumulating statistical information
+about the target word-object mappings.
+
+In Experiment 1, we found that, children and adults showed parallel gaze
+responses while processing familiar words, shifting attention away from
+the speaker's face before she produced a post-nominal gaze cue.
+Experiment 2 showed that the presence of gaze in the context of novel
+objects focused adults' attention on a single object and modulated the
+strength of the relationship between visual attention during labeling
+and subsquent measures of recall for newly learned word-object pairs.
+Finally, in Experiment 3, we found that both children and adults fixated
+longer on a speaker who produced a gaze cue while labeling novel
+objects, and this behavior led to more attention to the target object
+and less looking to the distracter object. Both age groups, however,
+were capable of learning the novel word-object pairings from
+cross-situational stastics alone, and only adults showed evidence of
+stronger learning in the less ambiguous context of social gaze.
+
+\subsection{Limitations}\label{limitations-1}
+
+This work has several important limitations. First, we did not see
+evidence of that the effects of gaze generalized to learning
+trajectories in children in Experiment 3. Moreover, we did not see
+evidence of strong uptake of the novel word-object links overall. Our
+future work is aimed at modifying the task to increase children's
+learning and thus the opportunity to detect any effect of social
+information over a longer timescale. For example, we plan to make the
+social cue stronger by increasing the length of time the speaker gazed
+at the object, which in the current stimulus set was relatively brief
+social cue (\textasciitilde{}1 sec). We also plan to pair the
+newly-learned novel objects against one another on Test trials, which
+would reduce any attraction of novelty that pushed children to look at
+the distracter object that they had not seen before on Test trials in
+the current design.
+
+Second, while we do measure the effects of social information on
+learning over multiple labeling events, it is still a much shorter
+timescale and smaller number of exposures relative to children's
+ecological task. Moreover, the visual world paradigm, while
+well-controlled, is highly constrained in terms of the complexity of
+information seeking decisions that children make when allocating visual
+attention in their naturalistic learning environments. Thus, a valuable
+next step for this work would be to leverage tasks that move closer to
+the ecological context in which children process and learn language such
+as using head-mounted cameras and eye trackers that would allow
+measurement of where children choose to look during everyday
+interactions. It would be interesting to measure changes in children's
+looking to communicative partners when they are first introduced to
+novel objects in their day-to-day lives.
+
+Third, we used a binary manipulation of the quality of information
+available in the social context -- full disambiguating gaze cue or
+totally ambiguous absence of a gaze cue -- which does not reflect the
+complexity of children's social interactions. That is, children's social
+partners are more likely to provide intermediate levels of
+disambiguating information during novel object labeling. Morever, our
+prior work suggests that adults are sensitive to the graded changes in
+the reliability of a gaze cue, storing word-object links with greater
+fidelity as reliability increased (MacDonald et al., 2017). Thus, it
+seems useful to know how children's real-time information selection
+responds to continuous changes in referential ambiguity.
+
+\subsection{Conclusions}\label{conclusions}
+
+In this paper, we presented a set of empirical studies that integrate
+ideas from social-pragmatic and statistical accounts of language
+acquisition. We found that listeners' decisions to wait and seek social
+information depended on their uncertainty over the word-object mappings.
+Only in the case of processing novel words did learners adapt their gaze
+dynamics to seek a post-nominal social cue to reference. Moreover,
+processing novel words with an available gaze cue modulated the
+relationship between learners' real-time looking behavior during
+labeling and retention at a longer timescale. More generally, this work
+sheds light on how children can use eye movements as an active
+information gathering process within social contexts, which, in turn,
+shapes the information that comes into contact with their statistical
+learning mechanisms.
 
 \newpage
 
@@ -1036,6 +1105,11 @@ Brooks, R., \& Meltzoff, A. N. (2005). The development of gaze following
 and its relation to language. \emph{Developmental Science}, \emph{8}(6),
 535--543.
 
+\hypertarget{ref-burkner2017brms}{}
+Bürkner, P.-C., \& others. (2017). Brms: An r package for bayesian
+multilevel models using stan. \emph{Journal of Statistical Software},
+\emph{80}(1), 1--28.
+
 \hypertarget{ref-carpenter1998social}{}
 Carpenter, M., Nagell, K., Tomasello, M., Butterworth, G., \& Moore, C.
 (1998). Social cognition, joint attention, and communicative competence
@@ -1060,10 +1134,6 @@ attention in talk to young children. \emph{Journal of Child Language},
 Frank, M. C., Goodman, N. D., \& Tenenbaum, J. B. (2009). Using
 speakers' referential intentions to model early cross-situational word
 learning. \emph{Psychological Science}, \emph{20}(5), 578--585.
-
-\hypertarget{ref-gabry2016rstanarm}{}
-Gabry, J., \& Goodrich, B. (2016). Rstanarm: Bayesian applied regression
-modeling via stan. r package version 2.10. 0.
 
 \hypertarget{ref-gureckis2012self}{}
 Gureckis, T. M., \& Markant, D. B. (2012). Self-directed learning a
@@ -1148,15 +1218,10 @@ Smith, L. B., \& Yu, C. (2008). Infants rapidly learn word-referent
 mappings via cross-situational statistics. \emph{Cognition},
 \emph{106}(3), 1558--1568.
 
-\hypertarget{ref-vandekerckhove2007fitting}{}
-Vandekerckhove, J., \& Tuerlinckx, F. (2007). Fitting the ratcliff
-diffusion model to experimental data. \emph{Psychonomic Bulletin \&
-Review}, \emph{14}(6), 1011--1026.
-
-\hypertarget{ref-wiecki2013hddm}{}
-Wiecki, T. V., Sofer, I., \& Frank, M. J. (2013). HDDM: Hierarchical
-bayesian estimation of the drift-diffusion model in python.
-\emph{Frontiers in Neuroinformatics}, \emph{7}, 14.
+\hypertarget{ref-smith2013visual}{}
+Smith, L. B., \& Yu, C. (2013). Visual attention is not enough:
+Individual differences in statistical word-referent learning in infants.
+\emph{Language Learning and Development}, \emph{9}(1), 25--49.
 
 \hypertarget{ref-yu2007unified}{}
 Yu, C., \& Ballard, D. H. (2007). A unified model of early word
