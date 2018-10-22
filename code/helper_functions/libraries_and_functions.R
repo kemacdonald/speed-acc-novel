@@ -37,7 +37,6 @@ plot_timecourse <- function(df, filter_crit, facet_type) {
     theme(text = element_text(size = 10), legend.position = "top") 
 }
 
-
 aggregate_ss_looking <- function(df, ss_grouping_cols, ms_grouping_cols, aoi_column, return_ss_df = FALSE, use_bootstrap = FALSE, na_rm = FALSE, n_boot = 1000) {
   # create group by to get the total number of looks in each time slice
   total_looks_group_by <- rlang::syms(ss_grouping_cols)
