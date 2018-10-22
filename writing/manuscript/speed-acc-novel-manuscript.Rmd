@@ -1,5 +1,5 @@
 ---
-title             : "Statistical and social information modulate children's eye movements during language comprehension and word learning"
+title             : "Seeking social information during language comprehension and word learning"
 shorttitle        : "Integrating social and statistical information"
 
 author: 
@@ -20,7 +20,7 @@ affiliation:
 authornote: |
 
 abstract: |
-  Children process words in complex contexts that lend themselves to an in principle unlimited number of possible interpretations. How do learners find the correct lexicon? Statistical accounts propose that learning unfolds via the aggregation of consistent word-object co-occurrences over time. Social-pragamatic theories emphasize how grounded interactions with social partners reduces ambiguity during individual labeling events. Here, we present three studies of eye movements during language processing that ask how learners intergrate statistical and social information to shape real-time decisions about visual fixation. First, both children (n=XXX) and adults (n=31) showed similar gaze dynamics when processing familiar words that either did or did not occur with an accompanied social cue to reference (eye gaze). Second, in a minimal cross-situational word learning task, adults (n=XXX) allocated more fixations and showed stronger memory for novel word-object mappings that were learned in the presence of a social cue. Finally, in contrast to the familiar word context, both children (n=XXX) and adults (n=XXX) were slower to look away from a speaker's face when she was likely to provide a gaze cue to disambiguate the meaning of a novel word. This differential looking pattern increased over the course of the experiment, as learners were exposed to more word-object co-occurrences and gained  experience with the speaker. Taken together, these results show that decisions about how to seek visual information during language acquisition are a function of the interaction of statistical and social information.
+  Children process words in complex environments where there are often many things to talk about. How do children understand and learn language despite noisy input? Statistical accounts emphasize children’s pattern detection and aggregation of consistent word-object co-occurrences over time. Social-pragmatic theories point out that language is acquired within interactions with social partners who can reduce ambiguity within individual labeling events. Here, we present three studies of eye movements that ask how children integrate these two sources of information -- statistical and social -- to shape their decisions about where to seek information during real-time language processing. First, both children and adults showed parallel gaze dynamics when processing familiar words that were or were not accompanied by a social cue to reference (speaker’s eye gaze). Second, in a minimal cross-situational word learning task, adults looked longer at novel word-object mappings that were learned via a social cue. Finally, in contrast to processing familiar words, both children and adults fixated longer on a speaker who provided a disambiguating gaze cue, which, in turn, led to more looking to the named object and less looking to the other objects in the scene. Moreover, this differential looking to a helpful social partner increased as learners were exposed to more word-object co-occurrences. Together, these results suggest that learners flexibly integrate their knowledge of object labels and the availability of social information when seeking information during language processing.
   
 keywords          : "eye movements; word learning; language comprehension; information-seeking; gaze following"
 wordcount         : "X"
@@ -43,6 +43,9 @@ knitr::opts_chunk$set(fig.pos = '!t', fig.width = 6, fig.asp=0.8, out.width = "9
                       echo=F, warning=F, message=F, 
                       sanitize = T)
 
+source(here::here("code/helper_functions/libraries_and_functions.R"))
+source(here::here("code/helper_functions/permutation_helpers.R"))
+source(here::here("code/helper_functions/ewma_helper_funs.R"))
 source(here::here("code/helper_functions/paper_helpers.R"))
 bib <- knitcitations::read.bibtex(here::here("writing/manuscript/speed-acc-novel.bib"))
 
@@ -54,6 +57,7 @@ image_path <- "writing/figures/plots"
 ```
 
 ```{r model-globals}
+library(tidybayes)
 options (mc.cores=parallel::detectCores()) # Run on multiple cores
 set.seed (3875)
 ```
@@ -95,14 +99,57 @@ d_novel_fs <- read_csv(here::here(data_path, "novel_words/speed_acc_novel_shifts
            trial_type == "test" & trial_num_learn_block == 3 ~ "6",
            trial_type == "exposure" & trial_num_learn_block == 4 ~ "7",
            trial_type == "test" & trial_num_learn_block == 4 ~ "8",
-           TRUE ~ "NA"
-         ),
-         correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE))
+           TRUE ~ "NA"),
+         correct_bool = ifelse(shift_accuracy == "correct", TRUE, FALSE),
+         correct_num = ifelse(shift_accuracy == "correct", 1, 0),
+         log_rt = log(rt),
+         age_category = ifelse(age_category == "child", "children", "adults")) %>% 
+  mutate(age_category = factor(age_category, levels = c("children", "adults")),
+         gaze_on_trial = case_when(
+           gaze_condition == "gaze" & trial_type == "exposure" ~ "gaze",
+           TRUE ~ "no_gaze"
+           )
+         )
 
-d_novel_tc <- read_feather(here::here(data_path, "novel_words/speed_acc_novel_timecourse.feather")) 
+d_novel_tc <- read_feather(here::here(data_path, "novel_words/speed_acc_novel_timecourse.feather")) %>% 
+  mutate(learn_block_half = ifelse(trial_num_learn_block <= 2, "first", "second"),
+         trial_num_lblock_8 = case_when(
+           trial_type == "exposure" & trial_num_learn_block == 1 ~ "1",
+           trial_type == "test" & trial_num_learn_block == 1 ~ "2",
+           trial_type == "exposure" & trial_num_learn_block == 2 ~ "3",
+           trial_type == "test" & trial_num_learn_block == 2 ~ "4",
+           trial_type == "exposure" & trial_num_learn_block == 3 ~ "5",
+           trial_type == "test" & trial_num_learn_block == 3 ~ "6",
+           trial_type == "exposure" & trial_num_learn_block == 4 ~ "7",
+           trial_type == "test" & trial_num_learn_block == 4 ~ "8",
+           TRUE ~ "NA"
+         ))
 ```
 
 # Introduction
+
+How is it that children, who are just learning how to walk, are able to segment units from a continuous stream of linguistic information and map them to their corresponding conceptual representations. This word-to-meaning mapping becomes even more striking when we consider that a speaker’s intended meaning is largely unconstrained by the co-occurring context; a point made famous by W.V. Quine’s example of a field linguist trying to select the target meaning of a new word (“gavagai”) from the set of possible meanings consistent with the event of a rabbit running (e.g., "white," "rabbit," "dinner," etc.) [@quine19600].
+
+Research on early lexical development has pursued several solutions to the problem of referential uncertainty. First, lab-based studies and computational models have explored how statistical learning mechanisms can reduce ambiguity during word learning. Under these *cross-situational* learning accounts, children overcome referential uncertainty within a specific labeling event by tracking the elements of a context that remain consistent across multiple exposures to a new word [@yu2007rapid; @siskind1996computational; @roy2002learning]. Experiments show that 12-month-old infants are capable of learning novel words via repeated exposures to consistent word-object pairings [ @smith2008infants]. Moreover, simulation studies show that models of a simple cross-situational learner can acquire an adult-sized vocabulary from exposures that fall well within the bounds of children’s language experience [@blythe2010learning] and even when referential uncertainty is high [@blythe2016word].
+
+Social-pragmatic theories argue that the complexity of word learning is reduced via children’s ecological context of learning words within grounded, social interactions [@clark2009first; @bloom2002children; @hollich2000breaking]. Observational studies show that adults are skilled at using gesture and eye gaze to structure language interactions with children [@estigarribia2007getting]. And, from a young age, children can use social cues to infer word meanings [@baldwin1993infants] and can produce gestures such as reaches and points to share attention and elicit labels from other people [@liszkowski2012prelinguistic]. Finally, correlational studies have demonstrated links between early gaze following and later vocabulary growth [@brooks2005development; @carpenter1998social].
+
+Thus, word learners have access to a variety of ways to reduce their uncertainty about new word meanings. These learning mechanisms, however, are unlikely to operate in isolation, highlighting the importance of developing an integrative explanation and corresponding empirical work that attempts to explain how different sources of information might mutually influence one another to support language acquisition. Several models of word learning have pursued integrative accounts of how learners might integrate social and statistical information. For example, computational modeling work by @yu2007unified found better word-object mapping performance if the model used social cues (eye gaze) to increase the strength of specific word-object associations stored from each learning instance. Moreover, @frank2009using showed that adding social inferences to cross-situational learning models allowed them to explain a variety of key phenomena in early language development.
+
+In addition to the need for integration, the accounts of word learning reviewed above reflect a somewhat passive construal of the learner. In contrast, children can exert control over their environment via actions such as choosing where to look, pointing, asking verbal questions. A body of research outside the domain of language acquisition shows the benefits of *active learning*  or giving learners control to structure their learning experiences [@gureckis2012self; @settles2012active; @castro2009human]. The upshot of this work is that active learning can be superior because it allows people to use their prior experience and current uncertainty to select the most helpful examples (e.g., asking a question about something that is particularly confusing). Recent empirical and modeling work has begun to explore the role of active control in word learning [@partridge2015young; @hidaka2017quantifying]. For example, @kachergis2013actively showed that adults who were given control over what novel objects would be labeled showed stronger word learning compared to adults who passively experienced the word-object pairings. 
+
+Selecting an entire set of objects to be labeled is a complex active learning behavior; one that might not yet be possible for younger word learners. Children, however, are relatively well-practiced at choosing where to allocate their visual attention. Moreover, to learn concrete nouns, children must first map linguistic signal onto objects in the visual word by gathering information via visual fixation. Recent work has shown that how infants ability to sustain visual attention is a strong predictor of their novel word learning in experimental tasks and in correlational studies across development [@XXX].  Taken together, these points make children’s real-time visual information selection a good case study for asking how social and statistical information are integrated to shape active processes during early word learning. 
+
+## Current studies
+
+In the current paper, we present a set of studies that synthesize ideas from the social, statistical, and active learning. We ask how children's real-time information selection via their eye movements is shaped by social information present in the labeling moment and by statistical information that is accumulated over time. We draw on ideas from theories of goal-based vision that characterize eye movements as information seeking decisions that aim to minimize uncertainty about the world [@hayhoe2005eye]. Under this account, learners should integrate statistical and social information in their decisions of where to fixate by computing the usefulness of an eye movement with respect to their current goals.
+
+The studies are designed to answer several open questions for theories of word learning. First, how do statistical learning mechanisms operate over fundamentally social input? The majority of prior work on statistical word learning has used linguistic stimuli that come from a disembodied voice, removing a rich set of multimodal cues (e.g., gestures, facial expressions, mouth movements) that occur during face-to-face communication. By including a social partner as a fixation target, this work will add to our understanding of how social contexts shape the input to statistical word learning mechanisms. 
+
+Second, how do children use visual information to support their language learning? In this work, we frame the learner's task as decision making under time constraints. Using this theoretical framework allows us to leverage analytic tools developed over the past several decades designed to study the dynamics of rapid choice: Drift Diffusion Models [@ratcliff2015individual]. The benefit of this modeling approach is that it provides a tool for quantifying differences in underlying psychological constructs of interest -- the speed of processing vs. cautious response strategies -- that might lead to measurable behavioral differences. At a higher level, this approach moves towards an integration of top-down, goal-based models of vision [@hayhoe2005eye] with work on language-driven eye movements [@allopenna1998tracking] that often use eye movements as outputs of the underlying language comprehension process.
+
+Finally, this study will increase our understanding of how children's in-the-moment behaviors, such as decisions about visual fixation, connect to learning that unfolds over longer timescales. Following @mcmurray2012word, we separate situation-time behaviors (figuring out the referent of a word) from developmental-time processes (slowly forming mappings between words and concepts). Moreover, by studying changes in patterns of eye movements over the course of learning, we will add to a recent body of empirical work that emphasizes the importance of linking real-time information selection to longer-term statistical learning [@yu2011you]. 
+
 
 # Analytic approach
 
@@ -240,46 +287,75 @@ ms_gaze_length <- d_gaze_length %>%
 
 ### Procedure
 
-Participants viewed the task on a screen while their gaze was tracked using an SMI RED corneal-reflection eye-tracker mounted on an LCD monitor, sampling at 30 Hz. The eye-tracker was first calibrated for each participant using a 6-point calibration. On each trial, participants saw two images of familiar objects on the screen for two seconds before the center stimulus appeared. Next, they processed the target sentence -- which consisted of a carrier phrase, a target noun, and a question -- followed by two seconds without language to allow for a response. Both children and adults saw 32 trials (16 gaze trials; 16 no-gaze trials) with several filler trials interspersed to maintain interest. The gaze manipulation was presented in a blocked design with the order of block counterbalanced across participants.
-
 ```{r gaze-stimuli, fig.cap = "Stimuli for Experiments 1 and 3. Panel A shows the timecourse of the linguistic stimuli for a single trial. Panel B shows the layout of the fixation locations for all tasks: the center stimulus, the target, and the distracter. Panel C shows a sample of the images used as novel objects in Experiment 3. Panel D shows the social gaze manipulation."}
 
 knitr::include_graphics(here::here(image_path, "gaze_stimuli.jpeg"))
 ```
 
+Participants viewed the task on a screen while their gaze was tracked using an SMI RED corneal-reflection eye-tracker mounted on an LCD monitor, sampling at 30 Hz. The eye-tracker was first calibrated for each participant using a 6-point calibration. On each trial, participants saw two images of familiar objects on the screen for two seconds before the center stimulus appeared. Next, they processed the target sentence -- which consisted of a carrier phrase, a target noun, and a question -- followed by two seconds without language to allow for a response. Both children and adults saw 32 trials (16 gaze trials; 16 no-gaze trials) with several filler trials interspersed to maintain interest. The gaze manipulation was presented in a blocked design with the order of block counterbalanced across participants.
 
 ## Results and Discussion
+
+*Timecourse looking.* We first analyzed how the presence of gaze influenced listeners' distribution of attention across the three fixation locations while processing familair words. At target-noun onset, listeners tended to look more at the speaker than the objects. As the target noun unfolded, the mean proportion looking to the center decreased as participants shifted their gaze to the images. Proportion looking to the target increased sooner and reached a higher asymptote compared to proportion looking to the distracter for both gaze conditions with adults spending more time looking at the target compared to children. After looking to the named referent, listeners tended to shift their gaze back to the speaker's face. 
 
 ```{r speed-acc-gaze-results, out.width="95%", fig.cap = "Timecourse looking, first shift Reaction Time (RT), and Accuracy results for children in Experiment 1. Panel A shows the overall looking to the center, target, and distracter stimulus for each context. Panel B shows the distribution of pairwise contrasts between RTs in the gaze and no-gaze conditions. The square point represents the mean value for each measure. The vertical dashed line represents the null model of zero condition difference. The width each point represents the 95\\% HDI. Panel C shows the same information but for participants' first shift accuracy."}
 
 knitr::include_graphics(here::here(image_path, "speed_acc_fam_behav.jpeg"))
 ```
 
-*Timecourse.*
+We did not see evidence that the presence of a post-nominal gaze cue changed how children or adults allocated attention early in the target word. Children in the gaze condition, however, tended to shift their attention back to the speaker earlier in the time course and spent more time fixating on the speaker's face throughout the rest of the trial ($p < .001$; nonparametric cluster-based permutation analysis). Next, we ask how these different processing contexts changed the timing and accuracy of children's initial decisions to shift away from the center stimulus.
 
-```{r}
+```{r filter for blmm}
 d_model_fam <- d_fam %>% 
   filter(keep_runsheet %in% c("yes", "keep"), 
          keep_et == "include",
          rt <= 2,
          response_onset_type == "noun",
-         shift_start_location == "center")
+         shift_start_location == "center") %>% 
+  mutate(correct_num = ifelse(shift_accuracy_clean == "correct", 1, 0))
 ```
 
-
-```{r blmm speed-acc-fam}
+```{r blmm speed-acc-fam, include = FALSE}
 # RT
 fit_rt_fam <- brms::brm(log(rt) ~ gaze_condition + age_group + (gaze_condition + target_image|subid), 
                         data = d_model_fam, 
                         family = gaussian(),
                         silent = TRUE)
 
-coefs_san_rt <- broom::tidy(fit_rt_fam)
+params <- rownames(fixef(fit_rt_fam))
+
+coefs_rt_fam <- fixef(fit_rt_fam) %>% 
+  as_tibble() %>% 
+  mutate(param = params) %>% 
+  mutate_if(is.numeric, round, 2)
+
+ms_rt_fam <- d_model_fam %>% 
+  group_by(age_group, gaze_condition) %>% 
+  summarise(m = mean(rt * 1000) %>% round(3))
 
 # accuracy
+fit_acc_fam <- brms::brm(correct_num ~ gaze_condition + age_group + (gaze_condition + target_image|subid), 
+                        data = d_model_fam, 
+                        family = binomial(link = 'logit'),
+                        silent = TRUE)
+
+coefs_acc_fam <- fixef(fit_acc_fam) %>% 
+  as_tibble() %>% 
+  mutate(param = params) %>% 
+  mutate_if(is.numeric, round, 2)
+
+ms_acc_fam <- d_model_fam %>% 
+  group_by(age_group, gaze_condition) %>% 
+  summarise(m = mean(correct_num) %>% round(2))
 ```
 
-*First shift RT and Accuracy.*
+*First shift RT and Accuracy.* To quantify differences across the groups, we fit a Bayesian linear mixed-effects regression predicting first shift RT as a function of gaze condition and age group: *Log(RT) $\sim$ gaze condition + age group +  (gaze_condition + item | subject)*. Both children and adults generated similar RTs in the gaze (children $M_{rt}$ = `r ms_rt_fam$m[3]` ms, adults $M_{rt}$ = `r ms_rt_fam$m[1]` ms) and no-gaze (children $M_{rt}$ = `r ms_rt_fam$m[4]` ms, adults $M_{rt}$ = `r ms_rt_fam$m[2]` ms) conditions, with the null value of zero condition differences falling within the 95% credible interval ($\beta$ = `r coefs_rt_fam$Estimate[2]`, 95% HDI [`r coefs_rt_fam$Q2.5[2]`, `r  coefs_rt_fam$Q97.5[2]`]). Next, we fit the same model to estimate first shift accuracy. Adults generated more accurate gaze shifts ($M$ = `r ms_acc_fam$m[1]`) compared to children ($M$ = `r ms_acc_fam$m[3]`) with the null value falling within the 95% HDI ($\beta_{age}$ = `r coefs_acc_fam$Estimate[3]`, 95% HDI [`r coefs_acc_fam$Q2.5[3]`, `r coefs_acc_fam$Q97.5[3]`]). Similar to the RT analysis, we did not find strong evidence of a difference in performance across the gaze conditions ($\beta$ = `r coefs_acc_fam$Estimate[2]`, 95% HDI [`r coefs_acc_fam$Q2.5[2]`, `r coefs_acc_fam$Q97.5[2]`]).
+
+Taken together, the time course and first shift analyses suggest that hearing a familiar noun was sufficient for both adults and children to drive visual attention away from the speaker to seek the named referent. Morever, neither age group showed evidence of delaying their gaze shifts to fixate on the speaker's face and gather a social cue to reference that could have provided additional disambiguating information. The presence of gaze, however, did affect children's looking behavior later in the trial such that they were more likely to allocate attention to the speaker when she had gazed at the named object.
+
+While we did not predict these results, it is interesting that children's gaze dynamics did not change when processing highly familiar words in the presence of a social cue. This behavior seems reasonable if eye movements in response to familiar language are highly-practiced visual routines that do not allocate fixations to less-relevant locations. Moreover, if children developed an expectation that their goal was to find named objects quickly, then fixating the speaker becomes less goal-relevant. 
+
+In our previous work, we found that both children and adults fixate longer on a speaker when language is more difficult to process because of background noise [@macdonald2018speed]. We explained this result as an adaptation to the informational demands of listeners' environment such that they were seeking additional visual information to support language comprehension. The results of Experiment 1 can constrain our information seeking explanation by showing that children do not always gather more visual information; instead, they respond to the uncertainty in the input and adapt gaze to seek information when uncertainty is higher. This raises an interesting question: Would children's information seeking adapt when they do not know the word-object mappings? That is, when the learner is surrounded by novel objects, the value of seeking visual information from a social partner should increase since this action could provide highly-relevant information for decreasing referential uncertainty -- a point that has long been emphasized by social-pragmatic theories of language acquisition [@bloom2002children; @clark2009first; @hollich2000breaking]. Experiments 2 and 3 explore this interesting case and ask whether learners would adapt their gaze patterns to seek supprortive visual information from social partners in the context of mapping novel words to their referents. 
 
 # Experiment 2
 
@@ -306,14 +382,16 @@ The experiment featured sixteen pseudo-words recorded by an AT&T Natural VoicesT
 
 We tracked adults' eye movements while they watched a series of ambiguous word-learning events (16 novel words) organized into pairs of exposure and test trials (32 trials total). All trials consisted of a set of two novel objects and one novel word. Participants were randomly assigned to either the Gaze condition in which a speaker looked at one of the objects on exposure trials or the No-Gaze condition in which a speaker looked straight on exposure trials. Every exposure trial was followed by a test trial, where participants heard the same novel word paired with a new set of two novel objects. One of the objects in the set had appeared in the exposure trial ("kept" object), while the other object had not previously appeared in the experiment ("novel" object). 
 
-The side of the screen of the "kept" object was counterbalanced throughout the experiment. In the gaze condition, for half of the test trials, the kept object was the target of the speaker’s gaze during the exposure trial, while the other half, the kept object was the object that had not been the gaze target.
-
-## Results and Discussion
-
 ```{r gaze-xsit-tc-plot, fig.width=3, out.width="100%", fig.cap = "Overview of adults' looking to the three fixation targets (Face, Target, Distracter) over the course of the trial. Panel A shows proportion looking to the speaker's face for exposure and test trials. Color and linetype represent gaze condition. Panel B shows the same information but for proportion looking to the target and distracter images."}
 
 knitr::include_graphics(here::here(image_path, "gaze_xsit_tc.jpeg"))
 ```
+
+
+The side of the screen of the "kept" object was counterbalanced throughout the experiment. In the gaze condition, for half of the test trials, the kept object was the target of the speaker’s gaze during the exposure trial, while the other half, the kept object was the object that had not been the gaze target.
+
+## Results and Discussion
+
 
 *Timecourse looking.* The first question of interest was how did the presence of a gaze cue change adults' distribution of attention across the three fixation locations while processing language in real-time? Figure\ \ref{fig:gaze-xsit-tc-plot} presents an overview of looking to each AOI for each processing context. This plot shows changes in the mean proportion of trials on which participants fixated on the speaker's face, the target image, or the distracter image at every 33-ms interval of the stimulus sentence. 
 
@@ -321,7 +399,7 @@ At target-noun onset, adults tended to look more at the speaker's face on both e
 
 There were several qualitative differences in looking behavior across the different gaze conditions and trial types. First, adults spent more time looking to a speaker's face when she provided a social gaze cue, especially on test trials that were preceded by gaze (Panel A of Figure XXX). Second, adults in the gaze condition looked slightly more to the target image over the course of the trial. This behavior is reasonable since half of the trials, the speaker's gaze was focused on the target image that would appear on the subsequent test trial. Third, on test trials, adults looked more to the images in the no-gaze context. This led to a higher proportion of looking to the target, but also a higher proportion of looking to the distracter images (Panel B of Figure XXX). 
 
-Together, these looking patterns provide suggestive evidence that the presence of a gaze cue caused adults to spend more time gathering visual information from the speaker's face. Next, we ask how the social gaze cue modulated learning, which we operationalized as the relationship between looking behavior on exposure and test trials.
+Together, these looking patterns provide preliminary evidence that the presence of a gaze cue caused adults to spend more time gathering visual information from the speaker's face. Next, we ask how the social gaze cue modulated learning, which we operationalized as the relationship between looking behavior on exposure and test trials.
 
 ```{r gaze-xsit-prop-looking-plot, fig.cap = "Panel A shows participants’ tendency to look at the object that was the target of the speaker’s gaze on exposure trials. The vertical, dashed line represents the mean proportion of time looking to the gaze target across all trials. Panel B shows the relationship between adults' looking behavior on exposure and test trials for the gaze and no-gaze conditions."}
 
@@ -346,7 +424,7 @@ coefs_gaze_xsit <- broom::tidy(fit_gaze_xsit)
 
 ### Limitations
 
-There were several key limitations of our pilot study. First, we chose to start the liguistic stimulus as soon as the images and the speaker appeared on the screen (i.e., at trial onset). This made it difficult to analyze the timing and accuracy of first shifts decisions away from the speaker and to the objects. Second, this trial structure did not allow us to measure decisions about visual fixation that occur before the start of language comprehension while learners are first gathering information about the visual world. Finally, the linguistic stimuli consisted of sixteen pseudowords recorded by a speech synthesizer and presented in isolation, thus removing any sentential context. Presenting isolated words is unlikely to work with younger age groups and does not allow us to separate decisions about fixations made during language processing more broadly from decisions that occur after the onset of the target noun -- a critical distinction for our modeling of the underlying decision-making process. 
+There were several key limitations of our pilot study. First, we chose to start the liguistic stimulus as soon as the images and the speaker appeared on the screen (i.e., at trial onset). This made it difficult to analyze the timing and accuracy of first shifts decisions away from the speaker and to the objects. Second, this trial structure did not allow us to measure decisions about visual fixation that occur before the start of language comprehension while learners are first gathering information about the visual world. Finally, the linguistic stimuli consisted of sixteen pseudowords recorded by a speech synthesizer and presented in isolation, thus removing any sentential context. Presenting isolated words is unlikely to work with younger age groups and does not allow us to separate decisions about fixations made during language processing more broadly from decisions that occur after the onset of the target noun -- a critical distinction for our modeling of the underlying decision-making process. Experiment 3 was designed to address these limitations and to ask how learners' information seeking from social partners changes as a function of increased exposure to word-object mappings (i.e., disambiguating statistical information).
 
 # Experiment 3
 
@@ -359,7 +437,11 @@ We aimed to answer the following specific research questions:
   2. How does the presence of a social cue to reference (eye gaze) change the dynamics of children's gaze patterns during object labeling? 
   3. What is the relationship between chidren's gaze patterns during object labeling and their memory of new words?
   
-To answer these questions, we compared the timing and accuracy of eye movements during a real-time cross-situational learning task where participants process sentences that contain a novel word (e.g., "Where's the *dax*?") while looking at a simplified visual world with 3 fixation targets (a video of a speaker and two images of unfamiliar objects). We had three key behavioral predictions. First, for all conditions, participants’ distribution of attention to speakers compared to objects will shift over the course of learning. Early in the task, participants will allocate more fixations to a speaker to prioritize gathering visual information that disambiguates reference. After experiencing multiple exposures to a word-object pairing, participants will generate faster saccades, showing signatures of comprehension of the incoming speech. We further predict that later in learning blocks, participants will allocate more fixations to the objects, showing looking behaviors that support learning long-term associations between words and objects.
+To answer these questions, we compared the timing and accuracy of eye movements during a real-time cross-situational learning task where participants process sentences that contain a novel word (e.g., "Where's the *dax*?") while looking at a simplified visual world with 3 fixation targets (a video of a speaker and two images of unfamiliar objects).
+
+## Predictions
+
+We had three key behavioral predictions. First, for all conditions, participants’ distribution of attention to speakers compared to objects will shift over the course of learning. Early in the task, participants will allocate more fixations to a speaker to prioritize gathering visual information that disambiguates reference. After experiencing multiple exposures to a word-object pairing, participants will generate faster saccades, showing signatures of comprehension of the incoming speech. We further predict that later in learning blocks, participants will allocate more fixations to the objects, showing looking behaviors that support learning long-term associations between words and objects.
 
 Second, the presence of a gaze cue will change participants’ decisions about visual fixation. We hypothesize that a post-nominal gaze cue increases the value of fixating on a speaker. This manipulation will cause participants to allocate more fixations to the speaker when gaze is present, leading to slower first shift reaction times and higher proportion looking, especially earlier in learning (i.e., lower trial numbers within each block of exposure trials to a novel word-object pairing). This prediction will be operationalized as a main effect of Gaze condition on RT, and a trial number by Gaze condition interaction such that the decrease in RT will be greater on exposure trials in the Gaze condition.
 
@@ -402,30 +484,317 @@ Each word was learned in a block of four exposure-test pairs for a total of eigh
 knitr::include_graphics(here::here(image_path, "speed_acc_novel_tc.jpeg"))
 ```
 
-*Learning effects.*
+*Looking to the speaker.* How did the presence of a gaze cue change learners' decisions to fixate on the speaker? In Figure XXXA, we see that both children and adults tended to start looking at the speaker at noun onset and shifted their gaze away as the noun unfolded, with adults doing so sooner compared to children. On Exposure trials when there was a gaze cue, both adults and children tended to look more to the face at noun onset as indicated by the higher intercept of the blue curves. Moreover, around one second after noun onset, listeners tended to shift their attention back to the speaker's face more often and especially so for children. On Test trials that were preceded by an Exposure trial with a gaze cue, children and adults tended to look more to the speaker even though there was no gaze cue present. This pattern of results provides suggestive evidence that the presence of gaze modulated learners' expectations of dismabiguating information from the speaker.
 
-```{r san-prop-looking-plot, fig.cap = "Panel A shows participants’ tendency to look at the target object on exposure and test trials as a function of the trial number within a learning block. The horizontal, dashed line represents the tendency to distribute attention equally across the two images. Color indicates gaze condition and error bars represent 95\\% credible intervals. Panel B shows the same information but collapsed across trial to highlight the effect of the gaze cue."}
+*Looking to the target and distracter.* Next, we asked how learners divided attention between the target and distracter objects. On Exposure trials, looking to both objects increased over the course of the trial but more so for looks to the named object as indicated by the higher asymptote of the target looking curves. Adults spent more time looking to the target and less time looking to the distracter as compared to children. For both children and adults, there was evidence that proportion looking to the target was higher on Exposure trials in the gaze condintion. There was a developmental difference, however, such that higher proportion looking to the target generalized to Test trials for adults but not for children who showed less robust learning of the word-object links and similar performance across the gaze conditions. The strongest effect of gaze was on the tendency to look at the distracter object, with learners allocating fewer fixations to the distracter when they could use a disambiguating gaze cue on Exposure trials and even on Test trials that were preceded by Exposure trials with a gaze cue.
+
+
+### Proportion looking
+
+```{r filter timecourse data}
+d_analysis_nov <- d_novel_tc %>% 
+  filter(keep_drop == "keep",
+         t_rel_noun >= 0, 
+         t_rel_noun <= 3)
+
+d_analysis_nov %<>% 
+  split(.$subid) %>%  
+  purrr::map_dfr(create_time_bins_ss, t_ms_diff = 33)
+
+# exclude based on runsheet information
+d_exclusions_rs <- d_novel_tc %>% 
+  distinct(subid, keep_drop, reason_excluded, age_category) %>% 
+  filter(keep_drop == "drop") 
+
+# exclude based on number of trials completed.
+d_exclusions_et <- d_analysis_nov %>%
+  filter(target_looking != "away") %>% 
+  distinct(subid, trial_num_exp, age_category) %>% 
+  dplyr::count(subid, age_category) %>% 
+  filter(n < 16) %>% 
+  mutate(keep_drop = "drop", 
+         reason_excluded = "fewer than half trials completed") 
+
+# create subid vector for filtering later
+ss_exclude <- d_exclusions_et %>% pull(subid)
+
+# Join exclusions tables and save to disk.
+d_exclusions_final <- d_exclusions_et %>% 
+  dplyr::select(-n) %>% 
+  bind_rows(d_exclusions_rs)
+
+d_analysis_nov %<>% filter(!(subid %in% ss_exclude))
+
+## flag trials with less than half looking to AOIs
+trial_filter <- d_analysis_nov %>% 
+  distinct(subid, trial_num_exp, learning_block, gaze_condition, target_looking, time_ms_normalized) %>% 
+  count(subid, trial_num_exp, learning_block, gaze_condition, target_looking) %>% 
+  group_by(trial_num_exp, subid) %>% 
+  mutate(total_samples = sum(n),
+         prop_trial = n / total_samples,
+         good_trial = case_when(
+           target_looking == "away" & prop_trial >= 0.5 ~ "drop",
+           TRUE ~ "keep"
+         )) %>% 
+  distinct(subid, trial_num_exp, good_trial)
+
+d_analysis_nov %<>% left_join(trial_filter)
+
+n_samples_trial <- d_analysis_nov %>% 
+  count(subid, trial_num_exp) %>% 
+  rename(n_samples_trial = n)
+
+d_analysis_nov %<>% left_join(n_samples_trial)
+
+d_analysis_nov %<>% 
+  filter(target_looking != "away", good_trial == "keep") %>% 
+  mutate(age_category = ifelse(age_category == "child", "children", "adults")) %>% 
+  mutate(age_category = factor(age_category, levels = c("children", "adults")))
+```
+
+```{r aggregate prop looking}
+ss_groupings <- list("subid", "gaze_condition", "trial_type", "age_category", "trial_num_learn_block", "trial_num_exp")
+ms_groupings <- list("subid", "gaze_condition", "trial_type", "age_category", "trial_num_learn_block")
+
+ss_novel_face <- aggregate_ss_looking(d_analysis_nov, 
+                                 ss_groupings, 
+                                 ms_groupings, 
+                                 aoi_column = "target_looking", 
+                                 return_ss_df = TRUE) 
+
+ss_novel_obj <- d_analysis_nov %>% 
+  filter(target_looking != "center") %>% 
+  aggregate_ss_looking(df = ., 
+                       ss_groupings, 
+                       ms_groupings, 
+                       aoi_column = "target_looking", 
+                       return_ss_df = TRUE) 
+```
+
+```{r fit prop looking speaker blmm, include = FALSE}
+fit_proplook_face_nov <- ss_novel_face %>% 
+  filter(target_looking == "center", trial_type == "exposure") %>% 
+  brms::brm(data = ., 
+            prop_looking ~ (gaze_condition + age_category + trial_num_learn_block)^2 + 
+              (gaze_condition + trial_num_learn_block | subid),
+            family = gaussian()
+  )
+
+params_proplook_face <- rownames(fixef(fit_proplook_face_nov))
+
+coefs_proplook_face_nov <- fixef(fit_proplook_face_nov) %>% 
+  as_tibble() %>% 
+  mutate(param = params_proplook_face) %>% 
+  mutate_if(is.numeric, round, 2)
+```
+
+```{r fit prop looking target blmm, include = FALSE}
+fit_proplook_target_nov_all <- ss_novel_obj %>% 
+  filter(target_looking == "target", age_category == "adults") %>% 
+  brms::brm(data = ., 
+       prop_looking ~ (gaze_condition + trial_type + trial_num_learn_block)^2 + 
+         (gaze_condition + trial_num_learn_block + trial_type | subid)
+       , family = gaussian()
+  )
+
+params_proplook_targ <- rownames(fixef(fit_proplook_target_nov_all))
+
+coefs_proplook_targ_nov <- fixef(fit_proplook_target_nov_all) %>% 
+  as_tibble() %>% 
+  mutate(param = params_proplook_targ) %>% 
+  mutate_if(is.numeric, round, 2)
+
+## fit separate models for the adults and kids
+## this is totally exploratory and just fit to answer 
+## the question of whether we could measure learning in kids, would we
+## expect to see an effect of the gaze manipulation on learning trajectories
+
+fit_proplook_target_nov_adults <- ss_novel_obj %>% 
+  filter(target_looking == "target", age_category == "adults") %>% 
+  brms::brm(data = ., 
+       prop_looking ~ (gaze_condition + trial_type + trial_num_learn_block)^2 + 
+         (gaze_condition + trial_num_learn_block + trial_type | subid)
+       , family = gaussian()
+  )
+
+params_proplook_targ_adults <- rownames(fixef(fit_proplook_target_nov_adults))
+
+coefs_proplook_targ_nov_adults <- fixef(fit_proplook_target_nov_adults) %>% 
+  as_tibble() %>% 
+  mutate(param = params_proplook_targ_adults) %>% 
+  mutate_if(is.numeric, round, 2)
+
+## Kids model
+fit_proplook_target_nov_kids <- ss_novel_obj %>% 
+  filter(target_looking == "target", age_category == "children") %>% 
+  brms::brm(data = ., 
+       prop_looking ~ (gaze_condition + trial_type + trial_num_learn_block)^2 + 
+         (gaze_condition + trial_num_learn_block + trial_type | subid)
+       , family = gaussian()
+  )
+
+params_proplook_targ_kids <- rownames(fixef(fit_proplook_target_nov_kids))
+
+coefs_proplook_targ_nov_kids <- fixef(fit_proplook_target_nov_kids) %>% 
+  as_tibble() %>% 
+  mutate(param = params_proplook_targ_kids) %>% 
+  mutate_if(is.numeric, round, 2)
+
+## get summary stats for prop looking to target
+ss_novel_obj %>% 
+  filter(target_looking == "target") %>% 
+  group_by(age_category, trial_type, gaze_condition) %>% 
+  summarise(m = mean(prop_looking))
+```
+
+*Learning effects.* Our primary question of interest was how exposure to multiple co-occurrences of word-object pairs would change learners' distribution of attention between the speaker and objects. Figure XXX shows proportion looking to the speaker (XXXA) and the target and distracter objects (XXXB) as a function of trial number within a word learning block. Both children and adults were more likely to fixate on the speaker when she provided a gaze cue ($\beta_{gaze}$ = `r printnum(coefs_proplook_face_nov$Estimate[2] * -1)`, 95% HDI [`r printnum(coefs_proplook_face_nov$Q2.5[2] * -1)`, `r printnum(coefs_proplook_face_nov$Q97.5[2] * -1)`]). Moreover, there was a developmental difference such that children, but not adults, were more likely to increase their fixations to the speaker over the course of the learning block ($\beta_{gaze:tr.num}$ = `r printnum(coefs_proplook_face_nov$Estimate[7])`, 95% HDI [`r printnum(coefs_proplook_face_nov$Q2.5[7])`, `r printnum(coefs_proplook_face_nov$Q97.5[7])`]). 
+
+```{r san-prop-looking-plot, out.width="100%", fig.cap = "Panel A shows participants’ tendency to look at the target object on exposure and test trials as a function of the trial number within a learning block. The horizontal, dashed line represents the tendency to distribute attention equally across the two images. Color indicates gaze condition and error bars represent 95\\% credible intervals. Panel B shows the same information but collapsed across trial to highlight the effect of the gaze cue."}
 
 knitr::include_graphics(here::here(image_path, "speed_acc_novel_proplook.jpeg"))
 ```
 
-*Looking to the speaker.*
+Overall, looking to the target increased as learners were exposed to more word-object pairings ($\beta_{tr.num}$ = `r printnum(coefs_proplook_targ_nov$Estimate[4])`, 95% HDI [`r printnum(coefs_proplook_targ_nov$Q2.5[4])`, `r printnum(coefs_proplook_targ_nov$Q97.5[4])`]) and was higher when the novel word was accompanied by a gaze cue ($\beta_{gaze}$ = `r printnum(coefs_proplook_targ_nov$Estimate[2])`, 95% HDI [`r printnum(coefs_proplook_targ_nov$Q2.5[2])`, `r printnum(coefs_proplook_targ_nov$Q97.5[2])`]). Visual inspection of Figure XXX shows that, on the first Exposure trial, both adults and children used the gaze cue to disambiguate reference, fixating more on the target in the Gaze condition. For children, higher target looking on Exposure trials with gaze remained relatively constant across the learning block. In contrast, adults target looking reached ceiling for both Gaze and No-gaze conditions by trial number two, indicating that they had successfully used the co-occurrence information across trials to map the novel word to its referent. We also saw evidence that adults, but not children, looked more to the target object on Test trials preceded by Exposure trials with a gaze cue earlier in the course of learning, with adults tending to achieve the same level of accuracy on Test trials in the absence of gaze at the end of the learning block. We did not see evidence for an effect of the gaze manipulation on children's looking behavior on Test trials. 
 
-```{r san-prop-looking-speaker-plot, fig.cap = "Children and adults' looking to the speaker as function of trial number within a learning block. All plotting conventions are the same as in Figure XXX."}
+```{r speed-acc-novel exposure-test looking aggregate}
+ss_groupings <- list("subid", "gaze_condition", "trial_type", "age_category", "trial_num_learn_block", "target_word",  "trial_num_exp")
+ms_groupings <- list("subid", "gaze_condition", "trial_type", "age_category", "trial_num_learn_block", "target_word")
 
-knitr::include_graphics(here::here(image_path, "speed_acc_novel_speaker_look.jpeg"))
+ss_novel_learning <- d_analysis_nov %>% 
+  #filter(target_looking != "center") %>% 
+  aggregate_ss_looking(df = .,
+                       ss_groupings, 
+                       ms_groupings, 
+                       aoi_column = "target_looking", 
+                       return_ss_df = TRUE) 
+
+exposure_ss <- ss_novel_learning %>% 
+  filter(target_looking == "target") %>% 
+  select(subid, trial_num_exp, trial_num_learn_block, trial_num_exp, 
+         target_word, age_category, gaze_condition, trial_type, prop_looking) %>% 
+  spread(trial_type, prop_looking) %>% 
+  filter(!is.na(exposure)) %>% 
+  select(-test, -trial_num_exp)
+
+test_ss <- ss_novel_learning %>% 
+  filter(target_looking == "target") %>% 
+  select(subid, trial_num_exp, trial_num_learn_block, trial_num_exp, 
+         target_word, age_category, gaze_condition, trial_type, prop_looking) %>%  
+  spread(trial_type, prop_looking) %>% 
+  filter(!is.na(test)) %>% 
+  select(-exposure, -trial_num_exp)
+
+ss_learning_final <- left_join(exposure_ss, test_ss)
 ```
+
+```{r blmm speed-acc-novel exp-test looking, include=FALSE}
+fit_exp_test_look <- ss_learning_final %>% 
+  brms::brm(data = ., 
+       test ~ (exposure + gaze_condition + age_category + trial_num_learn_block)^2 + (gaze_condition + trial_num_learn_block | subid),
+       family = gaussian()
+       )
+
+params_exp_test <- rownames(fixef(fit_exp_test_look))
+
+coefs_exp_test <- fixef(fit_exp_test_look) %>% 
+  as_tibble() %>% 
+  mutate(param = params_exp_test) %>% 
+  mutate_if(is.numeric, round, 2)
+```
+
+*Relationship between looking on exposure and test.* For both children and adults, more time attending to the target object on exposure trials led to a higher proportion of looking to the target on test trials, especially for adults ($\beta_{exposure:age}$ = `r printnum(coefs_exp_test$Estimate[7])`, 95% HDI [`r printnum(coefs_exp_test$Q2.5[7])`, `r printnum(coefs_exp_test$Q97.5[7])`]) and as the number of word-object exposures increased over the course a learning block ($\beta_{exposure:tr.num}$ = `r printnum(coefs_exp_test$Estimate[8])`, 95% HDI [`r printnum(coefs_exp_test$Q2.5[8])`, `r printnum(coefs_exp_test$Q97.5[8])`]). There was some evidence that learners in the No-gaze context spent less time looking to the target image on Test trials later in the learning block  ($\beta_{gaze:tr.num}$ = `r printnum(coefs_exp_test$Estimate[10])`, 95% HDI [`r printnum(coefs_exp_test$Q2.5[10])`, `r printnum(coefs_exp_test$Q97.5[10])`]). This result dovetails with the findings from Experiment 2, providing evidence that the presence of social information did more than change attention on Exposure trials but instead modulated the relationship between attention during learning and laater memory for the word-object links.
+
+Overall, the time course and the proportion looking analyses suggest that the presence of gaze changed how children and adults allocated attention while processing novel words. In the context of unfamiliar objects, children tended to fixate more on a speaker's face when she provided a post-nominal social cue to reference, a difference in looking behavior that increased as they were exposed to more word-object co-ocurrences. This result stands in contrast to the parallel looking behavior that we found in Experiment 1 when children were processing highly familiar nouns. Morever, in the presence of a speaker who provides a gaze cue, children and adults spent less time fixating on the distracter image, thus modulating the strength of the possible word-object connections that could have been created during the labeling moment. However, these changes in gaze patterns did not generalize to performance differences on Test trials for children in this task. Finally, there evidence that the presence of a social cue to reference modulated the link between attention on exposure trials and fixations at test.
 
 ### First shift RT and Accuracy
 
-*Effect of gaze cue.*
-
-```{r speed-acc-novel-shifts, out.width="90%", fig.cap = "First shift Reaction Time (RT), and Accuracy results for children and adults in Experiment 3. Panel A shows the distribution of pairwise contrasts between RTs in the gaze and no-gaze conditions. The square point represents the mean value for each measure. The vertical dashed line represents the null model of zero condition difference. The width each point represents the 95\\% HDI. Panel B shows the same information but for participants' first shift accuracy."}
+```{r speed-acc-novel-shifts, out.width="80%", fig.cap = "First shift Reaction Time (RT), and Accuracy results for children and adults in Experiment 3. Panel A shows the distribution of pairwise contrasts between RTs in the gaze and no-gaze conditions. The square point represents the mean value for each measure. The vertical dashed line represents the null model of zero condition difference. The width each point represents the 95\\% HDI. Panel B shows the same information but for participants' first shift accuracy."}
 
 knitr::include_graphics(here::here(image_path, "speed_acc_novel_fstshifts.jpeg"))
 ```
 
+```{r speed-acc-nov filter for blmm}
+d_model_nov <- d_novel_fs %>%
+  filter(is.na(block_excluded) | block_excluded != learning_block, 
+         shift_start_location == "center") %>%
+  group_by(subid, learning_block) %>%
+  mutate(n_trials = n()) %>% 
+  filter(rt > 0, 
+         keep_drop == "keep", 
+         n_trials >= 2) %>% 
+  ungroup()
+
+m_rt <- log(d_model_nov$rt) %>% mean()
+sd_rt <- log(d_model_nov$rt) %>% sd()
+
+d_model_nov %<>% 
+  mutate(log_rt = log(rt),
+         keep_rt = case_when(
+           log_rt <= m_rt + 3*sd_rt & log_rt >= m_rt - 3*sd_rt ~ "keep",
+           TRUE ~ "drop"
+         )) %>% 
+  filter(keep_rt == "keep")
+```
+
+```{r blmm speed-acc-nov, include = FALSE}
+# RT
+fit_rt_nov <- brms::brm(log(rt) ~ gaze_on_trial * age_category + (gaze_on_trial|subid), 
+                        data = filter(d_model_nov, trial_type == "exposure"),
+                        family = gaussian(),
+                        silent = TRUE)
+
+params <- rownames(fixef(fit_rt_nov))
+
+coefs_rt_nov <- fixef(fit_rt_nov) %>% 
+  as_tibble() %>% 
+  mutate(param = params) %>% 
+  mutate_if(is.numeric, round, 2)
+
+## summary stats for RT
+ms_rt_nov <- d_model_nov %>% 
+  filter(keep_rt == "keep", trial_type == "exposure") %>% 
+  group_by(age_category, gaze_on_trial) %>% 
+  summarise(m = mean(rt * 1000) %>% round(3))
+
+# accuracy exposure trials
+fit_acc_nov_exp <- brms::brm(correct_num ~ gaze_on_trial * age_category + (gaze_on_trial|subid),
+                        data = filter(d_model_nov, trial_type == "exposure"), 
+                        family = binomial(link = 'logit'),
+                        silent = TRUE)
+
+params_acc <- rownames(fixef(fit_acc_nov_exp))
+
+coefs_acc_nov_exp <- fixef(fit_acc_nov_exp) %>% 
+  as_tibble() %>% 
+  mutate(param = params_acc) %>% 
+  mutate_if(is.numeric, round, 2)
+
+# accuracy test trials
+fit_acc_nov_test <- brms::brm(correct_num ~ gaze_condition * age_category + (gaze_condition|subid),
+                        data = filter(d_model_nov, trial_type == "test"), 
+                        family = binomial(link = 'logit'),
+                        silent = TRUE)
+
+coefs_acc_nov_test <- fixef(fit_acc_nov_test) %>% 
+  as_tibble() %>% 
+  mutate(param = params_acc) %>% 
+  mutate_if(is.numeric, round, 2)
+
+## summary stats for accuracy 
+ms_acc_nov <- d_model_nov %>% 
+  group_by(age_category, gaze_condition, trial_type) %>% 
+  summarise(m = mean(correct_num) %>% round(2))
+```
+
+We next asked how the presence of gaze influenced learners' decision to stop gathering visual information from the speaker and start fixating on the novel objects. To quantify the effect the gaze, we fit a Bayesian linear mixed-effects regression predicting first shift RT as a function of whether there was a gaze cue present on the trial and age group. Both children (Gaze $M_{rt}$ = `r ms_rt_nov$m[1]` ms, No-gaze $M_{rt}$ = `r ms_rt_nov$m[2]` ms)  and adults (Gaze $M_{rt}$ = `r ms_rt_nov$m[3]` ms, No-gaze $M_{rt}$ = `r ms_rt_nov$m[4]` ms) fixated longer on the speaker when she provided a gaze cue ($\beta$ = `r coefs_rt_nov$Estimate[2]`, 95% HDI [`r coefs_rt_nov$Q2.5[2]`, `r  coefs_rt_nov$Q97.5[2]`]). With no evidence of an interaction between gaze condition and age group  ($\beta_{int}$ = `r coefs_rt_nov$Estimate[4]`, 95% HDI [`r coefs_rt_nov$Q2.5[4]`, `r  coefs_rt_nov$Q97.5[4]`]). Moreover, both (Gaze $M_{acc}$ = `r ms_acc_nov$m[1]`, No-gaze $M_{acc}$ = `r ms_acc_nov$m[3]`)  and adults (Gaze $M_{acc}$ = `r ms_acc_nov$m[5]`, No-gaze $M_{acc}$ = `r ms_acc_nov$m[7]`) generated more accurate first shifts in the gaze condition, indicating they were following the gaze cue on Exposure trials ($\beta$ = `r coefs_acc_nov_exp$Estimate[2]`, 95% HDI [`r coefs_acc_nov_exp$Q2.5[2]`, `r  coefs_acc_nov_exp$Q97.5[2]`]). 
+
+Finally, we asked whether the presence of gaze affected subsequent learning by fitting the same accuracy model on Test trials. We found that adults were much more accurate than children ($\beta_{age}$ = `r coefs_acc_nov_test$Estimate[4]`, 95% HDI [`r coefs_acc_nov_test$Q2.5[4]`, `r  coefs_acc_nov_test$Q97.5[4]`]), and that both children and adults generated shifts that landed on the target with similar accuracy regardless of whether the Test trial was preceded by an Exposure trial with a gaze cue ($\beta_{gaze}$ = `r coefs_acc_nov_test$Estimate[2]`, 95% HDI [`r coefs_acc_nov_test$Q2.5[2]`, `r  coefs_acc_nov_test$Q97.5[2]`]). 
+
+Overall, the first shift analyses provide converging, albeit mixed, evidence that learners' modulated their decisions about visual fixation to gather additional a post-nominal gaze cue when it was available. Children but not adults generated slower first shifts away from a speaker's face when there was a Gaze cue to gather. Both children and adults generated a higher proportion of shifts landing on the target image when there was post-nominal gaze cue available. Finally, adults, but not children, generated more accurate first shifts on Test trials that were preceded by Exposure trials with gaze. The absence of condition differences for children's performance on Test trials parallels the timecourse looking analyses and suggest that children were not learning the novel word-object links well enough in either context.
+
 # General Discussion
+
+TODO
 
 \newpage
 
