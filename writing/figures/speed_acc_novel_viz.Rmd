@@ -257,8 +257,8 @@ speed_acc_nov_tc_final <- cowplot::plot_grid(san_face_tc, san_exposure_tc, san_t
 
 ggsave(filename = here::here(image_path, "speed_acc_novel_tc.jpeg"),
        plot = speed_acc_nov_tc_final,
-       width = 13.5,
-       height = 4.5)
+       width = 12.5,
+       height = 5.5)
 ```
 
 # Proportion looking learning effects
@@ -302,7 +302,7 @@ ms_cond <- d_analysis %>%
 
 ### Make key plot of target looking as a function of trial number and trial type.
 
-```{r}
+```{r make prop looking plot}
 speaker_look_plot <- ms_trial_num_center %>% 
   ungroup() %>% 
   mutate(age_category = factor(age_category, levels = c("children", "adults"))) %>% 
@@ -374,16 +374,16 @@ aggregated_acc_plot <- ms_cond %>%
 
 ```{r save-plot}
 acc_plot_final <- cowplot::plot_grid(speaker_look_plot, prop_look_plot, aggregated_acc_plot,
-                                     scale = c(0.85, 0.9, 0.7),
+                                     scale = c(0.9, 0.9, 0.9),
                                      hjust = .001,
                                      ncol = 3,
-                                     rel_widths = c(1.4, 1.2, 1.1), 
+                                     rel_widths = c(1.5, 1.4, 1.2), 
                                      labels = c("(A) Looks to speaker", "(B) Looks to target and distracter"))
 
 ggsave(plot = acc_plot_final, 
           filename = here::here('writing/figures/plots/speed_acc_novel_proplook.jpeg'),
           width = 14,
-          height = 4.5
+          height = 6
           )
 ```
 
