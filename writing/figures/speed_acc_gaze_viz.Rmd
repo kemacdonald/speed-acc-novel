@@ -128,7 +128,7 @@ gaze_timecourse_plot <- ggplot(aes(x = as.numeric(t.rel.noun),
   geom_linerange(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.5) +
   xlab("Time from noun onset (sec)") +
   ylab("Proportion looking") +
-  scale_color_brewer(palette="Dark2") +
+  ggthemes::scale_color_ptol() +
   guides(linetype = F) +
   facet_wrap(~age_code, ncol = 2) +
   geom_text_repel(
@@ -349,4 +349,3 @@ save_plot(gaze_behav_plot,
           base_aspect_ratio = 1)
 ```
 
-# Model-based analyses
