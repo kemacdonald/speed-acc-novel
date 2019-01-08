@@ -6,7 +6,7 @@
 ## PRELIMINARIES
 source(here::here("code/helper_functions/libraries_and_functions.R"))
 raw_data_path <- "data/02_raw_data/"
-#raw_data_path <- "data/test_data/"
+#raw_data_path <- "data/test_data/version_2/"
 trial_info_path <- "data/00_stimuli_information/analysis_order_sheets/"
 aois_path <- "data/00_stimuli_information/analysis_order_sheets/speed-acc-novel-aois.csv"
 

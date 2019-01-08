@@ -114,13 +114,11 @@ trial_filter <- d_analysis %>%
   distinct(subid, trial_num_exp, good_trial)
 
 d_analysis %<>% left_join(trial_filter)
+
+d_analysis %<>% filter(target_looking != "away")
 ```
 
 Check how many samples we have for each trial after removing away looks.
-
-```{r}
-d_analysis %<>% filter(target_looking != "away")
-```
 
 ```{r}
 n_samples_trial <- d_analysis %>% 
@@ -386,6 +384,53 @@ ggsave(plot = acc_plot_final,
           height = 6
           )
 ```
+
+### Make aggregated speaker looking plot
+
+Made this plot for the defense talk.
+
+```{r}
+ss_groupings_tr_num_center <- list("subid", "gaze_condition", "age_category", "trial_num_exp", "trial_num_learn_block")
+ms_groupings_tr_num_center <- list("subid", "gaze_condition", "age_category")
+
+ms_trial_num_center_agg <- d_analysis %>% 
+  filter(trial_type == "exposure") %>%  
+  aggregate_ss_looking(ss_groupings_tr_num_center, ms_groupings_tr_num_center,
+                       aoi_column = "target_looking", 
+                       use_bootstrap = TRUE, 
+                       n_boot = 1000) 
+
+agg_speaker_plot <- ms_trial_num_center_agg %>% 
+  ungroup() %>% 
+  mutate(age_category = factor(age_category, levels = c("children", "adults"))) %>% 
+  filter(target_looking == "center") %>% 
+  ggplot(aes(x = age_category, y = mean, 
+             #lty = as.factor(gaze_block),
+             color = gaze_condition,
+             group = interaction(target_looking, gaze_condition))) +
+  #geom_hline(yintercept = 0.33, lty = "dashed") +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
+                  position = position_dodge(width = 0.2),
+                  size = 1) +
+  scale_x_discrete(expand = c(1,0)) + 
+  #geom_line(position = position_dodge(width = 0.2)) +
+  labs(x = NULL,
+       y = "Prop. looking to speaker",
+       color = "Gaze condition:"
+       ) +
+  lims(y = c(0, 0.9)) +
+  ggthemes::scale_color_ptol() +
+  theme(legend.position = c(0.8, 0.85),
+        panel.border = element_rect(colour = "grey", fill=NA, size=1),
+        text = element_text(size = 22))
+
+ggsave(plot = agg_speaker_plot, 
+          filename = here::here('writing/figures/plots/speed_acc_novel_speaker_agg.jpeg'),
+          width = 5,
+          height = 4
+          )
+```
+
 
 # First shift plots
 
