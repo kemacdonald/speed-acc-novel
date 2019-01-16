@@ -37,7 +37,10 @@ plot_timecourse <- function(df, filter_crit, facet_type) {
     theme(text = element_text(size = 10), legend.position = "top") 
 }
 
-aggregate_ss_looking <- function(df, ss_grouping_cols, ms_grouping_cols, aoi_column, return_ss_df = FALSE, use_bootstrap = FALSE, na_rm = FALSE, n_boot = 1000) {
+aggregate_ss_looking <- function(df, ss_grouping_cols, ms_grouping_cols, 
+                                 aoi_column, return_ss_df = FALSE, 
+                                 use_bootstrap = FALSE, na_rm = FALSE, 
+                                 n_boot = 1000) {
   # create group by to get the total number of looks in each time slice
   total_looks_group_by <- rlang::syms(ss_grouping_cols)
   
@@ -46,15 +49,17 @@ aggregate_ss_looking <- function(df, ss_grouping_cols, ms_grouping_cols, aoi_col
   
   ss_total <- df %>% 
     count(!!! total_looks_group_by) %>% 
-    complete(!!! total_looks_group_by, fill = list(n = 0)) %>% 
     rename(n_total_looks = n)
   
   ss_aois <- df %>%
     count(!!! aoi_looks_group_by) %>%
-    complete(!!! aoi_looks_group_by, fill = list(n = 0)) %>%
     rename(n_aoi_looks = n)
   
   ss_final <- left_join(ss_aois, ss_total) %>%
+    complete(target_looking,
+             nesting(!!! rlang::syms(c(total_looks_group_by, "n_total_looks"))),
+             fill = list(n_aoi_looks = 0)
+    ) %>% 
     mutate(prop_looking = n_aoi_looks / n_total_looks) %>% 
     filter(!is.nan(prop_looking))
   

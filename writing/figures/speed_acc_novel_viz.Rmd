@@ -10,7 +10,8 @@ source(here::here("code/helper_functions/libraries_and_functions.R"))
 source(here::here("code/helper_functions/permutation_helpers.R"))
 source(here::here("code/helper_functions/ewma_helper_funs.R"))
 source(here::here("code/helper_functions/paper_helpers.R"))
-
+library(cowplot)
+library(magick)
 data_path <- "data/03_processed_data/novel_words"
 image_path <- "writing/figures/plots"
 ```
@@ -80,8 +81,7 @@ Check how many trials in each block.
 d_analysis %>% 
   distinct(subid, trial_num_exp, learning_block, gaze_condition) %>% 
   count(subid, learning_block, gaze_condition) %>% 
-  arrange(n) %>% 
-  kable()
+  arrange(n) 
 ```
 
 Make a table of proportion looking to each area of interest: Left, Right, Center, and Away
@@ -94,15 +94,15 @@ d_analysis %>%
   group_by(age_category) %>% 
   mutate(total_looks = sum(count_looks),
          prop_looks = round(count_looks / total_looks, 2)) %>% 
-  arrange(age_category) %>% 
-  kable()
+  arrange(age_category) 
 ```
 
 Create flag for trials with less than half valid samples.
 
 ```{r}
 trial_filter <- d_analysis %>% 
-  distinct(subid, trial_num_exp, learning_block, gaze_condition, target_looking, time_ms_normalized) %>% 
+  distinct(subid, trial_num_exp, learning_block, gaze_condition, target_looking, 
+           time_ms_normalized) %>% 
   count(subid, trial_num_exp, learning_block, gaze_condition, target_looking) %>% 
   group_by(trial_num_exp, subid) %>% 
   mutate(total_samples = sum(n),
@@ -165,7 +165,8 @@ ss_groupings <- list("subid", "time_ms_normalized", "gaze_condition",
 ms_groupings <- list("subid", "time_ms_normalized", "gaze_condition", 
                      "trial_type", "age_category")
 
-ms_time <- aggregate_ss_looking(d_analysis, ss_groupings, ms_groupings, aoi_column = "target_looking") 
+ms_time <- aggregate_ss_looking(d_analysis, ss_groupings, ms_groupings, 
+                                aoi_column = "target_looking") 
 
 # save graph values for timecourse plot
 write_csv(ms_time, here::here(data_path, "speed_acc_novel_tc_gvs.csv"))
@@ -266,8 +267,11 @@ ggsave(filename = here::here(image_path, "speed_acc_novel_tc.jpeg"),
 How does looking to the speaker change across trials within learning block?
 
 ```{r}
-ss_groupings_tr_num_center <- list("subid", "gaze_condition", "trial_type", "age_category", "trial_num_exp", "trial_num_learn_block")
-ms_groupings_tr_num_center <- list("subid", "gaze_condition", "trial_type", "age_category", "trial_num_learn_block")
+ss_groupings_tr_num_center <- list("subid", "gaze_condition", "trial_type",
+                                   "age_category", "trial_num_exp", "trial_num_learn_block")
+
+ms_groupings_tr_num_center <- list("subid", "gaze_condition", "trial_type", 
+                                   "age_category", "trial_num_learn_block")
 
 ms_trial_num_center <- d_analysis %>% 
   aggregate_ss_looking(ss_groupings_tr_num_center, ms_groupings_tr_num_center,
@@ -276,8 +280,10 @@ ms_trial_num_center <- d_analysis %>%
                        n_boot = 1000) 
 
 ## How does looking to target change across trials?
-ss_groupings_tr_num <- list("subid", "gaze_condition", "trial_type", "trial_num_learn_block", "age_category", "trial_num_exp")
-ms_groupings_tr_num <- list("subid", "gaze_condition", "trial_type", "trial_num_learn_block", "age_category")
+ss_groupings_tr_num <- list("subid", "gaze_condition", "trial_type", 
+                            "trial_num_learn_block", "age_category", "trial_num_exp")
+ms_groupings_tr_num <- list("subid", "gaze_condition", "trial_type", 
+                            "trial_num_learn_block", "age_category")
 
 ms_trials <- d_analysis %>% 
   filter(target_looking %in% c("target", "distracter")) %>% 
@@ -304,52 +310,78 @@ ms_cond <- d_analysis %>%
 speaker_look_plot <- ms_trial_num_center %>% 
   ungroup() %>% 
   mutate(age_category = factor(age_category, levels = c("children", "adults"))) %>% 
-  filter(target_looking == "center", trial_type == "exposure") %>% 
+  filter(target_looking == "center") %>% 
   ggplot(aes(x = trial_num_learn_block, y = mean, 
-             #lty = as.factor(gaze_block),
+             lty = gaze_condition,
              color = gaze_condition,
              group = interaction(target_looking, gaze_condition))) +
   geom_hline(yintercept = 0.33, lty = "dashed") +
   geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
                   position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2),
+            size = 1) +
   labs(x = "Trial Number",
        y = "Prop. looking to speaker",
        color = "Gaze condition:"
        ) +
+  guides(lty = F) +
   lims(y = c(0, 0.9)) +
   facet_grid(trial_type~age_category) +
   ggthemes::scale_color_ptol() +
-  theme(legend.position = c(0.8, 0.85),
+  theme(legend.position = c(0.87, 0.91),
         panel.border = element_rect(colour = "grey", fill=NA, size=1),
         text = element_text(size = 12))
 
+## add image of speaker
+face_img <- magick::image_read(here::here("writing/figures/face_img.png")) 
+
+speaker_look_plot <- ggdraw() +
+  draw_image(face_img, scale = 0.13,
+             x = -0.3, y = 0.37) +
+  draw_plot(speaker_look_plot)
+
+```
+
 ### Make key plot of target looking as a function of trial number and trial type
+
+```{r}
 prop_look_plot <- ms_trials %>% 
   ungroup() %>% 
   filter(target_looking == "target") %>% 
   ggplot(aes(x = trial_num_learn_block, y = mean, 
              color = gaze_condition,
+             lty = gaze_condition,
              group = interaction(target_looking, gaze_condition))) +
   geom_hline(yintercept = 0.5, lty = "dashed") +
   geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
                   position = position_dodge(width = 0.2),
                   size = 0.4) +
-  guides(color = F) +
-  geom_line(position = position_dodge(width = 0.2)) +
+  guides(color = F, lty = F) +
+  geom_line(position = position_dodge(width = 0.2),
+            size = 1) +
   labs(x = "Trial Number",
        y = "Prop. looking to target",
        color = "Gaze condition:"
        ) +
   lims(y = c(0, 1.05)) +
-  facet_grid(age_category~trial_type) +
+  facet_grid(trial_type~age_category) +
   ggthemes::scale_color_ptol() +
-  theme(legend.position = c(0.85, 0.1),
+  theme(legend.position = c(0.85, 0.15),
         panel.border = element_rect(colour = "grey", fill=NA, size=1),
         text = element_text(size = 12),
         plot.background=element_blank())
 
-# Plot
+obj_img <- magick::image_read(here::here("writing/figures/novels.png")) 
+
+prop_look_plot <- ggdraw() +
+  draw_image(obj_img, scale = 0.13,
+             x = -0.3, y = 0.37) +
+  draw_plot(prop_look_plot)
+```
+
+Aggregate prop target looking
+
+```{r, include = FALSE}
 aggregated_acc_plot <- ms_cond %>% 
   filter(target_looking == "target") %>% 
   ggplot(aes(x = trial_type, y = mean, 
@@ -370,12 +402,14 @@ aggregated_acc_plot <- ms_cond %>%
         plot.background=element_blank())
 ```
 
+Merge and save plot
+
 ```{r save-plot}
-acc_plot_final <- cowplot::plot_grid(speaker_look_plot, prop_look_plot, aggregated_acc_plot,
-                                     scale = c(0.9, 0.9, 0.9),
+acc_plot_final <- cowplot::plot_grid(speaker_look_plot, prop_look_plot,
+                                     scale = c(0.9, 0.9),
                                      hjust = .001,
-                                     ncol = 3,
-                                     rel_widths = c(1.5, 1.4, 1.2), 
+                                     ncol = 2,
+                                     rel_widths = c(1.5, 1.5), 
                                      labels = c("(A) Looks to speaker", "(B) Looks to target and distracter"))
 
 ggsave(plot = acc_plot_final, 

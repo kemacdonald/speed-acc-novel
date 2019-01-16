@@ -16,7 +16,7 @@ image_path <- "writing/figures/plots"
 
 # global variables
 nboot <- 1000 # number of bootstrap samples to take when making CIs for timecourse plots
-pt_size <- 3
+pt_size <- 3.5
 pt_alpha <- 0.5
 pt_shape <- 21
 pt_width <- 0.15
@@ -122,7 +122,8 @@ gaze_time_gvs %<>%
 gaze_timecourse_plot <- ggplot(aes(x = as.numeric(t.rel.noun), 
                                     y = mean, 
                                     color = gaze_condition,
-                                    linetype = target_looking), 
+                                    linetype = gaze_condition,
+                                   fill = target_looking), 
                                 data = gaze_time_gvs) + 
   geom_line(size = 1) +
   geom_linerange(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.5) +
@@ -141,7 +142,10 @@ gaze_timecourse_plot <- ggplot(aes(x = as.numeric(t.rel.noun),
     segment.color = NA
   ) +
   lims(x = c(0, upper_bound + xlim_expand), 
-       y = c(0,1)) 
+       y = c(0,1)) +
+  theme(
+    legend.position = c(0.13, 0.85)
+  )
 
 gaze_timecourse_plot
 ```
@@ -206,7 +210,8 @@ sums %>%
                      xmax = gaze_condition_m_gaze + gaze_condition_SE_gaze)) +
   geom_abline() +
   guides(color = F) +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_ptol() +
+  #scale_color_brewer(palette = "Dark2") +
   facet_grid(.~age_category) +
   labs(x = "RT (sec) Gaze", y = "RT (sec) No-Gaze") +
   lims(x = lims, y = lims) +
@@ -244,7 +249,8 @@ sums %>%
                      xmax = gaze_condition_m_gaze+gaze_condition_SE_gaze)) +
   geom_abline() +
   guides(color = F) +
-  scale_color_brewer(palette = "Dark2") +
+  #scale_color_brewer(palette = "Dark2") +
+  scale_color_ptol() +
   facet_grid(.~age_category) +
   labs(x = "Prop. Correct (Gaze)", y = "Prop. Correct (No-Gaze)") +
   lims(x = lims, y = lims) +
@@ -255,7 +261,7 @@ sums %>%
 
 Accuracy pairwise differences plot
 
-```{r}
+```{r acc-pairwwise-diffs}
 # get pairwise diffs
 diffs_df <- ss %>% 
   select(m_acc, subid, gaze_condition, age_category) %>% 
@@ -270,7 +276,7 @@ ms_diffs <- diffs_df %>%
 
 # now plot those differs
 pairwise_diffs_plot_acc <- diffs_df %>% 
-  mutate(title = "Pairwise contrast") %>%  # hack to get plots to line up nicely
+  mutate(title = "Accuracy") %>%  # hack to get plots to line up nicely
   ggplot(aes(x = fct_rev(age_category), y = diff)) +
   geom_jitter(shape = pt_shape, 
               width = 0.1, 
@@ -283,7 +289,7 @@ pairwise_diffs_plot_acc <- diffs_df %>%
                   data = ms_diffs,
                   shape = 15,
                   size = 0.7,
-                  color = "brown3") +
+                  color = "brown1") +
   #ylim(-0.45, 0.7) +
   labs(x = NULL, y = "Prop. correct difference") +
   coord_flip() +
@@ -308,7 +314,7 @@ ms_diffs <- diffs_df %>%
   rename(diff = mean)
 
 pairwise_diffs_plot_rt <- diffs_df %>% 
-  mutate(title = "Pairwise contrast") %>%  # hack to get plots to line up nicely
+  mutate(title = "Reaction Time") %>%  # hack to get plots to line up nicely
   ggplot(aes(x = fct_rev(age_category), y = diff)) +
   geom_jitter(shape = pt_shape, 
               width = 0.1, 
@@ -321,7 +327,7 @@ pairwise_diffs_plot_rt <- diffs_df %>%
                   data = ms_diffs,
                   shape = 15,
                   size = 0.7,
-                  color = "brown3") +
+                  color = "brown1") +
   labs(x = NULL, y = "RT difference (sec)") +
   facet_wrap(~title) +
   coord_flip() 
