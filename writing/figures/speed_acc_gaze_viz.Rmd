@@ -138,13 +138,14 @@ gaze_timecourse_plot <- ggplot(aes(x = as.numeric(t.rel.noun),
     aes(label = target_looking),
     color = "grey40",
     size = 4,
-    nudge_x = .1,
+    nudge_x = .1, 
     segment.color = NA
   ) +
   lims(x = c(0, upper_bound + xlim_expand), 
        y = c(0,1)) +
   theme(
-    legend.position = c(0.13, 0.85)
+    legend.position = c(0.13, 0.85),
+    text = element_text(size=30)
   )
 
 gaze_timecourse_plot
@@ -293,7 +294,8 @@ pairwise_diffs_plot_acc <- diffs_df %>%
   #ylim(-0.45, 0.7) +
   labs(x = NULL, y = "Prop. correct difference") +
   coord_flip() +
-  facet_wrap(~title) 
+  facet_wrap(~title) +
+  theme(text = element_text(size=30))
 
 pairwise_diffs_plot_acc
 ```
@@ -330,7 +332,8 @@ pairwise_diffs_plot_rt <- diffs_df %>%
                   color = "brown1") +
   labs(x = NULL, y = "RT difference (sec)") +
   facet_wrap(~title) +
-  coord_flip() 
+  coord_flip() +
+  theme(text = element_text(size=30))
 ```
 
 ### Merge behavioral plots and save

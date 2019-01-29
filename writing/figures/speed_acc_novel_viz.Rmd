@@ -318,8 +318,9 @@ speaker_look_plot <- ms_trial_num_center %>%
   geom_hline(yintercept = 0.33, lty = "dashed") +
   geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
                   position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2),
-            size = 1) +
+  # geom_line(position = position_dodge(width = 0.2),
+  #           size = 1) +
+  geom_smooth(se=F, span = 4) +
   labs(x = "Trial Number",
        y = "Prop. looking to speaker",
        color = "Gaze condition:"
@@ -330,7 +331,7 @@ speaker_look_plot <- ms_trial_num_center %>%
   ggthemes::scale_color_ptol() +
   theme(legend.position = c(0.87, 0.91),
         panel.border = element_rect(colour = "grey", fill=NA, size=1),
-        text = element_text(size = 12))
+        text = element_text(size = 18))
 
 ## add image of speaker
 face_img <- magick::image_read(here::here("writing/figures/face_img.png")) 
@@ -357,8 +358,9 @@ prop_look_plot <- ms_trials %>%
                   position = position_dodge(width = 0.2),
                   size = 0.4) +
   guides(color = F, lty = F) +
-  geom_line(position = position_dodge(width = 0.2),
-            size = 1) +
+  # geom_line(position = position_dodge(width = 0.2),
+  #           size = 1) +
+  geom_smooth(se=F, span = 4) +
   labs(x = "Trial Number",
        y = "Prop. looking to target",
        color = "Gaze condition:"
@@ -368,7 +370,7 @@ prop_look_plot <- ms_trials %>%
   ggthemes::scale_color_ptol() +
   theme(legend.position = c(0.85, 0.15),
         panel.border = element_rect(colour = "grey", fill=NA, size=1),
-        text = element_text(size = 12),
+        text = element_text(size = 18),
         plot.background=element_blank())
 
 obj_img <- magick::image_read(here::here("writing/figures/novels.png")) 
@@ -397,7 +399,7 @@ aggregated_acc_plot <- ms_cond %>%
   facet_grid(~age_category) +
   guides(color = F) +
   ggthemes::scale_color_ptol() +
-  theme(text = element_text(size = 12),
+  theme(text = element_text(size = 18),
         panel.border = element_rect(colour = "grey", fill=NA, size=1),
         plot.background=element_blank())
 ```
