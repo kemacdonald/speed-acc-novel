@@ -412,7 +412,8 @@ acc_plot_final <- cowplot::plot_grid(speaker_look_plot, prop_look_plot,
                                      hjust = .001,
                                      ncol = 2,
                                      rel_widths = c(1.5, 1.5), 
-                                     labels = c("(A) Looks to speaker", "(B) Looks to target and distracter"))
+                                     labels = c("(A) Looks to speaker", 
+                                                "(B) Looks to target object"))
 
 ggsave(plot = acc_plot_final, 
           filename = here::here('writing/figures/plots/speed_acc_novel_proplook.jpeg'),
