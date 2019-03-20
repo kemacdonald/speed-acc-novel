@@ -20,7 +20,7 @@ output: cogsci2016::cogsci_paper
 header-includes:
   - \usepackage{threeparttable}
   - \usepackage{booktabs}
-#final-submission: \cogscifinalcopy
+final-submission: \cogscifinalcopy
 ---
 
 ```{r global_options, include=FALSE}
